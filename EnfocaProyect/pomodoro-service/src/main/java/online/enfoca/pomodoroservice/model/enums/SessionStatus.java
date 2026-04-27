@@ -1,4 +1,8 @@
 package online.enfoca.pomodoroservice.model.enums;
 
-public class SessionStatus {
+public enum SessionStatus {
+    STARTED,
+    COMPLETED,
+    ABORTED,
+    IN_PROGRESS
 }

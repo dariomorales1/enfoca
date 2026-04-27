@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  # Base de datos específica para Pomodoro
+  pomodoro-db:
+    image: postgres:15
+    container_name: pomodoro-db
+    environment:
+      POSTGRES_DB: enfoca
+      POSTGRES_USER: enfoca
+      POSTGRES_PASSWORD: enfoca
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+
+  # RabbitMQ para enviar los eventos de sesión finalizada
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pomodoro-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # Redis para las intensidades o sesiones rápidas
+  redis:
+    image: redis:7
+    container_name: pomodoro-redis
+    ports:
+      - "6379:6379"

@@ -1,4 +1,7 @@
 package online.enfoca.pomodoroservice.model.enums;
 
-public class SessionType {
+public enum SessionType {
+    FOCUS,
+    SHORT_BREAK,
+    LONG_BREAK
 }

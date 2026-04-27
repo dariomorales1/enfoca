@@ -5,23 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51f6c1e8-cdc3-49bd-9e99-26c54552afa2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/compose.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/site/enfoca/backend/BackendApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/site/enfoca/backend/BackendApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/PomodoroServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/PomodoroServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/controller/PomodoroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/controller/PomodoroController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/dto/PomodoroSessionResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/dto/PomodoroSessionResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/dto/StartSessionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/dto/StartSessionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/InvalidSessionStateException.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/InvalidSessionStateException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/mapper/PomodoroMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/mapper/PomodoroMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/entity/PomodoroSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/entity/PomodoroSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/enums/SessionStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/enums/SessionStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/enums/SessionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/model/enums/SessionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/repository/PomodoroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/repository/PomodoroRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/service/PomodoroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/java/online/enfoca/pomodoroservice/service/PomodoroService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/db/migration/V1__Create_pomodoros_tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/src/main/resources/db/migration/V1__Create_pomodoros_tables.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package-info" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="JSX File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,6 +58,10 @@
     &quot;accountId&quot;: &quot;6b616c35-3e5f-4b38-92cc-4319eda87984&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -49,20 +73,34 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "DevDario",
+    "Spring Boot.PomodoroServiceApplication.executor": "Run",
+    "git-widget-placeholder": "feature/pomodoro-backend__front-login-register",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/soulm/Desktop/Enfoca/enfoca",
+    "last_opened_file_path": "C:/Users/soulm/Desktop/Enfoca/enfoca/EnfocaProyect/EnfocaFront/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "MavenSettings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\soulm\Desktop\Enfoca\enfoca\EnfocaProyect\EnfocaFront\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\soulm\Desktop\Enfoca\enfoca\EnfocaProyect\EnfocaFront\public" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -73,7 +111,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.BackendApplication">
+  <component name="RunManager" selected="Spring Boot.PomodoroServiceApplication">
     <configuration name="AiServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="ai-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="online.enfoca.aiservice.AiServiceApplication" />
@@ -152,7 +190,13 @@
       <workItem from="1776210436342" duration="615000" />
       <workItem from="1776372145304" duration="204000" />
       <workItem from="1776375356850" duration="33000" />
-      <workItem from="1777003081236" duration="1269000" />
+      <workItem from="1777003081236" duration="1842000" />
+      <workItem from="1777005616299" duration="186000" />
+      <workItem from="1777142764652" duration="299000" />
+      <workItem from="1777143080966" duration="5658000" />
+      <workItem from="1777156341124" duration="2106000" />
+      <workItem from="1777229243004" duration="7879000" />
+      <workItem from="1777243502418" duration="10027000" />
     </task>
     <servers />
   </component>

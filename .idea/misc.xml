@@ -4,14 +4,7 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/EnfocaProyect/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/common-lib/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/auth-service/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/metrics-service/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/ai-service/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/api-gateway/pom.xml" />
-        <option value="$PROJECT_DIR$/EnfocaProyect/pomodoro-service/pom.xml" />
       </list>
     </option>
   </component>

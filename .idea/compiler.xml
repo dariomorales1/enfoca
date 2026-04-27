@@ -2,18 +2,11 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="common-lib" />
-      </profile>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Annotation profile for EnfocaProyect" enabled="true">
         <sourceOutputDir name="../generated-sources/annotations" />
         <sourceTestOutputDir name="../generated-test-sources/test-annotations" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/4.0.6/spring-boot-configuration-processor-4.0.6.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/4.0.6/spring-boot-configuration-processor-4.0.6.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
@@ -30,17 +23,14 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="backend" target="21" />
       <module name="backend.main" target="21" />
       <module name="backend.test" target="21" />
-      <module name="EnfocaProyect.main" target="21" />
-      <module name="EnfocaProyect.test" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="EnfocaProyect" options="-parameters" />
-      <module name="EnfocaProyect.main" options="-parameters" />
-      <module name="EnfocaProyect.test" options="-parameters" />
       <module name="ai-service" options="-parameters" />
       <module name="ai-service.main" options="-parameters" />
       <module name="ai-service.test" options="-parameters" />
@@ -50,9 +40,6 @@
       <module name="auth-service" options="-parameters" />
       <module name="auth-service.main" options="-parameters" />
       <module name="auth-service.test" options="-parameters" />
-      <module name="backend.main" options="-parameters" />
-      <module name="backend.test" options="-parameters" />
-      <module name="common-lib" options="-parameters" />
       <module name="metrics-service" options="-parameters" />
       <module name="metrics-service.main" options="-parameters" />
       <module name="metrics-service.test" options="-parameters" />

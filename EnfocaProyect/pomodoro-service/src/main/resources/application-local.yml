@@ -1,0 +1,12 @@
+# Perfil local — sobreescribe valores del application.yml para desarrollo
+# /resources/application-local.yml
+spring:
+  jpa:
+    show-sql: true
+  flyway:
+    out-of-order: true
+
+logging:
+  level:
+    cl.enfoca: DEBUG
+    org.springframework.web: DEBUG
