@@ -6,7 +6,6 @@ import Input from '../components/common/Input'; // Asumiendo que reutilizas tu I
 export default function LoginPage() {
     return (
         <SplitCardLayout
-            // Sección Gráfica reutilizable
             graphicContent={
                 <AuthSidebarGraphic
                     headlineText="Eliminate distractions."
@@ -14,10 +13,8 @@ export default function LoginPage() {
                     imageAlt="Setup whit focused atmosphere"
                 />
             }
-            // NO invertimos orden
             invertOrder={false}
         >
-            {/* Contenido específico del Formulario de Login */}
             <h1 className="text-3xl font-semibold mb-2 text-white">Welcome back</h1>
             <p className="text-neutral-400 text-sm mb-8">Resume your deep work session.</p>
 
@@ -48,14 +45,12 @@ export default function LoginPage() {
                 </button>
             </form>
 
-            {/* Separador */}
             <div className="flex items-center my-8">
                 <div className="flex-grow border-t border-neutral-800"></div>
                 <span className="px-4 text-[10px] uppercase tracking-widest text-neutral-500">Or continue with</span>
                 <div className="flex-grow border-t border-neutral-800"></div>
             </div>
 
-            {/* Botones Sociales (Google/Apple) */}
             <div className="grid grid-cols-2 gap-4">
                 <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2.5 rounded-lg text-sm font-medium text-neutral-300 transition-colors">
                     Google
@@ -65,7 +60,6 @@ export default function LoginPage() {
                 </button>
             </div>
 
-            {/* Nota inferior de seguridad */}
             <div className="mt-8 flex items-center justify-center gap-2 text-xs text-neutral-500">
                 <div className="w-1.5 h-1.5 rounded-full bg-violet-600"></div>
                 Secure Academic Gateway
