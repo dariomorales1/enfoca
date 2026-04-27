@@ -5,26 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51f6c1e8-cdc3-49bd-9e99-26c54552afa2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/recovery.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RegisterPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RegisterPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,29 +66,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.PomodoroServiceApplication.executor": "Run",
-    "git-widget-placeholder": "feature/frontend-recuperar-cuenta",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/soulm/Desktop/Enfoca/enfoca/EnfocaProyect/EnfocaFront/public",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "MavenSettings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PomodoroServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/soulm/Desktop/Enfoca/enfoca/EnfocaProyect/EnfocaFront/public&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\soulm\Desktop\Enfoca\enfoca\EnfocaProyect\EnfocaFront\public" />
@@ -195,6 +193,7 @@
       <workItem from="1777156341124" duration="2106000" />
       <workItem from="1777229243004" duration="7879000" />
       <workItem from="1777243502418" duration="10027000" />
+      <workItem from="1777332260863" duration="1233000" />
     </task>
     <servers />
   </component>

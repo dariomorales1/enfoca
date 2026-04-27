@@ -1,7 +1,8 @@
 import React from 'react';
 import SplitCardLayout from '../components/common/SplitCardLayout';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
-import Input from '../components/common/Input'; // Asumiendo que reutilizas tu Input
+import Input from '../components/common/Input';
+import { Link } from 'react-router-dom'
 
 export default function LoginPage() {
     return (
@@ -31,9 +32,9 @@ export default function LoginPage() {
                     type="password"
                     placeholder="••••••••"
                     rightElement={
-                        <a href="#" className="text-xs text-violet-500 hover:text-violet-400 transition-colors">
+                        <Link to="/recover" className="text-xs text-violet-500 hover:text-violet-400 transition-colors">
                             Forgot Password?
-                        </a>
+                        </Link>
                     }
                 />
 
@@ -58,6 +59,13 @@ export default function LoginPage() {
                 <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2.5 rounded-lg text-sm font-medium text-neutral-300 transition-colors">
                     Apple
                 </button>
+            </div>
+
+            <div className="mt-8 text-center text-xs text-neutral-500">
+                Don't have an account?{' '}
+                <Link to="/register" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                    Sign up
+                </Link>
             </div>
 
             <div className="mt-8 flex items-center justify-center gap-2 text-xs text-neutral-500">
