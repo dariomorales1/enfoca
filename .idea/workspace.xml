@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51f6c1e8-cdc3-49bd-9e99-26c54552afa2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/recovery.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +78,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.PomodoroServiceApplication.executor": "Run",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "feature/frontend-recuperar-cuenta",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/soulm/Desktop/Enfoca/enfoca/EnfocaProyect/EnfocaFront/public",
     "node.js.detected.package.eslint": "true",
