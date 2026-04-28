@@ -28,6 +28,7 @@
         <module>auth-service</module>
         <module>metrics-service</module>
         <module>pomodoro-service</module>
+        <module>discovery-service</module>
     </modules>
 
     <scm>

@@ -1,0 +1,11 @@
+eureka:
+  instance:
+    hostname: api-gateway
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+
+spring:
+  data:
+    redis:
+      host: redis
