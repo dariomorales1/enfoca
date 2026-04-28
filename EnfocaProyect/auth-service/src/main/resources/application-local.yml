@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    show-sql: true
+  flyway:
+    out-of-order: true
+
+app:
+  jwt:
+    secret: dGhpcy1pcy1hLXZlcnktc2VjdXJlLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=
+
+logging:
+  level:
+    online.enfoca.authservice: DEBUG
+    org.springframework.web: DEBUG
+    org.flywaydb: DEBUG
