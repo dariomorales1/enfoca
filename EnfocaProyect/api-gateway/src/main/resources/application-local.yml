@@ -1,0 +1,12 @@
+eureka:
+  instance:
+    hostname: localhost
+
+spring:
+  data:
+    redis:
+      host: coherent-hagfish-108591.upstash.io
+      port: 6379
+      password: gQAAAAAAAagvAAIgcDI5NTJmNTBhNzA1OGU0NmIyYjRlNDc0MDZjNDRlYmNiMA
+      ssl:
+        enabled: true
