@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    online.enfoca.authservice: DEBUG
+    org.springframework.web: DEBUG
+    org.flywaydb: DEBUG
