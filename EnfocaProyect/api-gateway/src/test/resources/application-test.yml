@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      default-filters: []
+  docker:
+    compose:
+      enabled: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
+      - org.springframework.boot.data.mongodb.autoconfigure.MongoAutoConfiguration
+      - org.springframework.boot.data.mongodb.autoconfigure.MongoDataAutoConfiguration
+      - org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.RedisAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.RedisReactiveAutoConfiguration
+
+eureka:
+  client:
+    enabled: false
+
+enfoca:
+  jwt:
+    secret-key: dGVzdC1zZWNyZXQta2V5LXBhcmEtcHJ1ZWJhcy1lbmZvY2E=
+  public-routes:
+    - /auth/**
+    - /actuator/health
+    - /api-docs/**
+    - /swagger-ui/**
