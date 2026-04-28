@@ -2,6 +2,7 @@ import React from 'react';
 import SplitCardLayout from '../components/common/SplitCardLayout';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
+import { Link } from 'react-router-dom'
 
 export default function RecoverAccountPage() {
     return (
@@ -40,10 +41,10 @@ export default function RecoverAccountPage() {
 
             <div className="mt-12 flex flex-col items-center gap-4 text-xs">
                 <p className="text-neutral-500">
-                    Remember your password?{' '}
-                    <a href="#" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
                         Login
-                    </a>
+                    </Link>
                 </p>
 
                 <div className="flex items-center gap-2 text-neutral-600 italic">

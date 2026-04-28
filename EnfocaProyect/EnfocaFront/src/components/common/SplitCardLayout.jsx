@@ -1,27 +1,36 @@
-// src/components/common/SplitCardLayout.jsx
 import React from 'react';
 
-export default function SplitCardLayout({ children, graphicContent, invertOrder = false }) {
+export default function SplitCardLayout({children, graphicContent, invertOrder = false}) {
     return (
-        <div className="flex-1 flex items-center justify-center p-4 md:p-8 bg-black">
+        /* h-full ocupa el 100% del espacio que le da el main de App.jsx */
+        <div className="h-full w-full flex items-center justify-center p-4 bg-black">
 
-
+            {/* - h-[80%]: Ahora la tarjeta ocupa el 80% de la altura de su contenedor.
+        - max-h-[580px]: Bajamos el tope para que sea bien compacta.
+        - min-h-[450px]: El mínimo para que no colapse el formulario.
+      */}
             <div className={`
-                    flex max-w-6xl w-full h-[80vh] max-h-[720px]
-                    bg-black border border-neutral-800 rounded-2xl 
-                    overflow-hidden shadow-2xl transition-all
-                    ${invertOrder ? 'flex-row-reverse' : 'flex-row'}
-                `}>
+        flex w-full max-w-5xl h-[80%] max-h-[580px] min-h-[450px]
+        bg-black border border-neutral-800 rounded-2xl 
+        overflow-hidden shadow-2xl transition-all duration-500
+        ${invertOrder ? 'flex-row-reverse' : 'flex-row'}
+      `}>
 
-
-                <div className="w-1/2 flex items-center justify-center p-8 lg:p-10 overflow-y-auto">
-                    <div className="w-full max-w-sm">
+                {/* SECCIÓN DEL FORMULARIO
+            Bajamos el py-4 para que los elementos estén más juntos.
+        */}
+                <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-4">
+                    <div className="w-full max-w-sm flex flex-col justify-between h-full max-h-[500px]">
+                        {/* justify-between hará que si sobra espacio lo reparta,
+        y si falta, los elementos se toquen antes de desbordarse */}
                         {children}
                     </div>
                 </div>
-
-
-                <div className="w-1/2 relative h-full bg-neutral-900 border-neutral-800/50 overflow-hidden">
+                {/* SECCIÓN GRÁFICA */}
+                <div className={`
+          w-1/2 relative hidden lg:block bg-neutral-900
+          ${invertOrder ? 'border-r border-neutral-800/50' : 'border-l border-neutral-800/50'}
+        `}>
                     {graphicContent}
                 </div>
 
