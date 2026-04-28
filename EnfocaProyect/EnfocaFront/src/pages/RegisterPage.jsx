@@ -1,90 +1,166 @@
-import React from 'react';
+import React, {useState} from 'react';
 import SplitCardLayout from '../components/common/SplitCardLayout';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
-import { Link } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom';
+import {authService} from '../services/api';
+import {useAuth} from '../hooks/useAuth';
 
 export default function RegisterPage() {
+    // 1. Estados listos para conectar al backend
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const navigate = useNavigate();
+    const {login} = useAuth();
+
+    // 2. Manejador del envío
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!agreedToTerms) {
+            setError('You must agree to the Terms of Service.');
+            return;
+        }
+
+        setError('');
+        setIsLoading(true);
+
+        try {
+            // Ejemplo de llamada a tu servicio (ajusta según tu API)
+            // const response = await authService.register({ name, email, password });
+            // login(response.data.token, response.data.user);
+            // navigate('/');
+
+            console.log("Registrando...", {name, email, password});
+            setTimeout(() => setIsLoading(false), 1000); // Simulación temporal
+        } catch (err) {
+            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            setIsLoading(false);
+        }
+    };
+
     return (
         <SplitCardLayout
             graphicContent={
                 <AuthSidebarGraphic
                     headlineText="Precision productivity for the academic mind."
                     imageSrc="/deep-work-register.png"
-                    imageAlt="Setup whit focused atmosphere girl"
+                    imageAlt="Setup with focused atmosphere girl"
                 />
             }
-
             invertOrder={true}
         >
-            <div className="mb-6">
-                <h1 className="text-3xl font-semibold mb-2 text-white">Create Account</h1>
-                <p className="text-neutral-400 text-sm">Deep work starts here.</p>
-            </div>
+            {/* Contenedor Flex para distribuir el espacio verticalmente */}
+            <div className="flex flex-col justify-center h-full">
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <Input
-                    label="Full Name"
-                    type="text"
-                    placeholder="Alex Rivers"
-                />
-
-                <Input
-                    label="Email Address"
-                    type="email"
-                    placeholder="alex@university.edu"
-                />
-
-                <Input
-                    label="Password"
-                    type="password"
-                    placeholder="••••••••"
-                />
-
-                {/* Checkbox de Términos y Privacidad */}
-                <div className="flex items-start gap-3 py-2">
-                    <div className="flex items-center h-5">
-                        <input
-                            id="terms"
-                            type="checkbox"
-                            className="w-4 h-4 rounded border-neutral-800 bg-[#111111] accent-violet-600 focus:ring-violet-500"
-                        />
-                    </div>
-                    <label htmlFor="terms" className="text-xs text-neutral-400 leading-normal">
-                        I agree to the <a href="#" className="text-violet-500 hover:underline">Terms of Service</a> and <a href="#" className="text-violet-500 hover:underline">Privacy Policy</a>.
-                    </label>
+                {/* Cabecera dinámica */}
+                <div className="mb-[clamp(0.75rem,2vh,1.5rem)]">
+                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Create
+                        Account</h1>
+                    <p className="text-neutral-400 text-xs lg:text-sm">Deep work starts here.</p>
                 </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-3 rounded-lg transition-colors mt-2"
-                >
-                    Create Account
-                </button>
-            </form>
+                {/* Mensaje de error */}
+                {error && (
+                    <div className="mb-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+                        {error}
+                    </div>
+                )}
 
-            {/* Social Register */}
-            <div className="flex items-center my-6">
-                <div className="flex-grow border-t border-neutral-800"></div>
-                <span className="px-4 text-[10px] uppercase tracking-widest text-neutral-500 font-bold">Or register with</span>
-                <div className="flex-grow border-t border-neutral-800"></div>
-            </div>
+                {/* Formulario más compacto (gap ligeramente menor que el login porque tiene más campos) */}
+                <form className="flex flex-col gap-[clamp(0.5rem,1.2vh,1rem)]" onSubmit={handleSubmit}>
+                    <Input
+                        label="Full Name"
+                        type="text"
+                        placeholder="Alex Rivers"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
 
-            <div className="grid grid-cols-2 gap-4">
-                <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2.5 rounded-lg text-sm font-medium text-neutral-300 transition-colors">
-                    Google
-                </button>
-                <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2.5 rounded-lg text-sm font-medium text-neutral-300 transition-colors">
-                    Apple
-                </button>
-            </div>
+                    <Input
+                        label="Email Address"
+                        type="email"
+                        placeholder="alex@university.edu"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
 
-            {/* Link de retorno al Login */}
-            <div className="mt-8 text-center text-xs text-neutral-500">
-                Already have an account?{' '}
-                <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
-                    Login
-                </Link>
+                    <Input
+                        label="Password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+
+                    {/* Checkbox ajustado */}
+                    <div className="flex items-start gap-2.5 py-1">
+                        <div className="flex items-center mt-0.5">
+                            <input
+                                id="terms"
+                                type="checkbox"
+                                checked={agreedToTerms}
+                                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                className="w-3.5 h-3.5 rounded border-neutral-800 bg-[#111111] accent-violet-600 focus:ring-violet-500 cursor-pointer"
+                            />
+                        </div>
+                        <label htmlFor="terms" className="text-[10px] lg:text-xs text-neutral-400 leading-tight">
+                            I agree to the <a href="#"
+                                              className="text-violet-500 hover:text-violet-400 transition-colors">Terms
+                            of Service</a> and <a href="#"
+                                                  className="text-violet-500 hover:text-violet-400 transition-colors">Privacy
+                            Policy</a>.
+                        </label>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className={`w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-[clamp(0.6rem,1.2vh,0.875rem)] rounded-lg transition-colors mt-1 flex justify-center items-center text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    >
+                        {isLoading ? (
+                            <div
+                                className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        ) : (
+                            'Create Account'
+                        )}
+                    </button>
+                </form>
+
+                {/* Divisor */}
+                <div className="flex items-center my-[clamp(0.75rem,2vh,1.5rem)]">
+                    <div className="flex-grow border-t border-neutral-800"></div>
+                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Or register with</span>
+                    <div className="flex-grow border-t border-neutral-800"></div>
+                </div>
+
+                {/* Botones Sociales (Ajustados al tamaño del Login) */}
+                <div className="grid grid-cols-2 gap-3">
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                        Google
+                    </button>
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                        Apple
+                    </button>
+                </div>
+
+                {/* Link de retorno al Login */}
+                <div className="mt-[clamp(0.75rem,2vh,1.5rem)] text-center text-xs text-neutral-500">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                        Log in
+                    </Link>
+                </div>
             </div>
         </SplitCardLayout>
     );

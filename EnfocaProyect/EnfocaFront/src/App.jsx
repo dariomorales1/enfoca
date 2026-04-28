@@ -1,36 +1,41 @@
-// src/App.jsx
 import React from 'react';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Navbar from './components/common/Navbar';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import Footer from './components/common/Footer';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import RegisterPage from "./pages/RegisterPage.jsx";
-import RecoverAccountPage from "./pages/RecoverAccountPage.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
-import Footer from "./components/common/Footer.jsx";
+import RegisterPage from './pages/RegisterPage';
+import RecoverAccountPage from './pages/RecoverAccountPage';
+import {AuthProvider} from './contexts/AuthProvider';
 
 function App() {
-  return (
-      <Router>
-          {/* min-h-screen asegura que el fondo negro cubra todo,
-          pero permite que la página crezca más allá de la pantalla */}
-          <div className="min-h-screen bg-black flex flex-col font-sans text-white">
+    return (
+        <AuthProvider>
+            <Router>
+                {/* h-screen: Forzamos a que la app mida EXACTAMENTE el alto de la pantalla */}
+                {/* overflow-hidden: Evitamos que la página entera haga scroll */}
+                <div className="h-screen overflow-hidden bg-black flex flex-col font-sans text-white">
 
-              <Navbar />
+                    <Navbar/>
 
-              {/* Eliminamos h-screen y overflow-hidden de aquí */}
-              <main className="flex-1">
-                  <Routes>
-                      <Route path="/" element={<LandingPage />} />
-                      <Route path="/login" element={<LoginPage />} />
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route path="/recover" element={<RecoverAccountPage />} />
-                  </Routes>
-              </main>
+                    {/* Este contenedor ocupará todo el espacio entre Nav y Footer */}
+                    <main className="flex-1 flex flex-col min-h-0">
+                        <Routes>
+                            <Route path="/" element={<LandingPage/>}/>
 
-              <Footer />
-          </div>
-      </Router>
-  );
+                            {/* Para Login, Register y Recover: no queremos scroll */}
+                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/register" element={<RegisterPage/>}/>
+                            <Route path="/recover" element={<RecoverAccountPage/>}/>
+                        </Routes>
+                    </main>
+
+                    {/* El Footer siempre estará visible abajo sin moverse */}
+                    <Footer/>
+                </div>
+            </Router>
+        </AuthProvider>
+    );
 }
 
 export default App;
