@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "users", schema = "auth")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,35 +27,38 @@ public class User {
     @Column(nullable = false, length = 150)
     private String nombre;
 
-    @Column(length = 150)
-    private String universidad;
+    @Column(name = "last_name", length = 100)
+    private String lastName;
 
-    @Column(length = 150)
-    private String carrera;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private Role role = Role.USER;
 
-    @Column
-    private Integer semestre;
+    @Column(columnDefinition = "TEXT")
+    private String biography;
+
+    @Column(name = "avatar_url", length = 500)
+    private String avatarUrl;
 
     @Column(nullable = false)
     @Builder.Default
-    private Integer nivel = 1;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Integer xp = 0;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean verificado = false;
+    private Boolean active = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        if (this.nivel == null) this.nivel = 1;
-        if (this.xp == null) this.xp = 0;
-        if (this.verificado == null) this.verificado = false;
+    void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

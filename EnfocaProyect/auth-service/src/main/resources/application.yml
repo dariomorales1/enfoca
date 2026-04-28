@@ -6,14 +6,14 @@ spring:
     active: local
 
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5433/enfoca_auth
-    username: postgres
-    password: Kaoz1699
+    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5433/enfoca_auth}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:Kaoz1699}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
@@ -27,11 +27,33 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
 server:
-  port: 8082
+  port: 8081
 
 app:
   jwt:
     secret: ${JWT_SECRET}
-    access-token-expiration: 900000
-    refresh-token-expiration: 604800000
+    access-token-expiration: 900000      # 15 min in ms
+    refresh-token-expiration: 604800000  # 7 days in ms
+    issuer: enfoca
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
