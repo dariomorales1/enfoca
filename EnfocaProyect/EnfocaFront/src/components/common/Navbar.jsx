@@ -5,9 +5,9 @@ export default function Navbar() {
     return (
         <nav className="w-full px-6 lg:px-12 py-4 flex items-center justify-between bg-black text-white border-b border-neutral-800/50">
 
-            <div className="flex-shrink-0 cursor-pointer flex items-center gap-3">
-                <img src="/logo.png" alt="Enfoca Focus Target" className="h-12 w-auto object-contain" />
-            </div>
+           <Link to="/login" className="flex-shrink-0 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+               <img src="/logo.png" alt="Enfoca Focus Target" className="h-14 w-auto object-contain" />
+           </Link>
 
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
                 {/* Usamos Link para la navegación interna futura */}

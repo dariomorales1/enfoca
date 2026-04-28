@@ -6,23 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="51f6c1e8-cdc3-49bd-9e99-26c54552afa2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-DW0Z4HR0.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react-dom_client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_compiler-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-dev-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RecoverAccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RegisterPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/RegisterPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
