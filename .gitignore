@@ -1,0 +1,8 @@
+# IntelliJ IDEA (root level)
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+.idea/httpRequests/
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/material_theme_project_new.xml
