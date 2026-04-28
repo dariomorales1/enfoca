@@ -5,7 +5,7 @@ export default function Navbar() {
     return (
         <nav className="w-full px-6 lg:px-12 py-4 flex items-center justify-between bg-black text-white border-b border-neutral-800/50">
 
-           <Link to="/login" className="flex-shrink-0 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+           <Link to="/" className="flex-shrink-0 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
                <img src="/logo.png" alt="Enfoca Focus Target" className="h-14 w-auto object-contain" />
            </Link>
 

@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51f6c1e8-cdc3-49bd-9e99-26c54552afa2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/landingBook.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/landingImage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/pomodoro-bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Footer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/pages/LandingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/logo2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/logo3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/public/logo4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/SplitCardLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EnfocaProyect/EnfocaFront/src/components/common/SplitCardLayout.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

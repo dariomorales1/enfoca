@@ -5,24 +5,29 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import RegisterPage from "./pages/RegisterPage.jsx";
 import RecoverAccountPage from "./pages/RecoverAccountPage.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
+import Footer from "./components/common/Footer.jsx";
 
 function App() {
   return (
       <Router>
-          <div className="h-screen overflow-hidden bg-black flex flex-col font-sans text-white">
+          {/* min-h-screen asegura que el fondo negro cubra todo,
+          pero permite que la página crezca más allá de la pantalla */}
+          <div className="min-h-screen bg-black flex flex-col font-sans text-white">
+
               <Navbar />
 
-              <main className="flex-1 flex flex-col overflow-hidden">
+              {/* Eliminamos h-screen y overflow-hidden de aquí */}
+              <main className="flex-1">
                   <Routes>
-                      {/* Redirigir la raíz al login por defecto */}
-                      <Route path="/" element={<Navigate to="/login" replace />} />
-
-                      {/* Nuestras 3 páginas de autenticación */}
+                      <Route path="/" element={<LandingPage />} />
                       <Route path="/login" element={<LoginPage />} />
                       <Route path="/register" element={<RegisterPage />} />
                       <Route path="/recover" element={<RecoverAccountPage />} />
                   </Routes>
               </main>
+
+              <Footer />
           </div>
       </Router>
   );
