@@ -26,7 +26,6 @@ public class RegisterRequest {
     @Size(min = 2, max = 100)
     private String firstName;
 
-    @NotBlank
-    @Size(min = 2, max = 100)
+    @Size(max = 100)
     private String lastName;
 }

@@ -28,19 +28,19 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/api/auth/refresh",
-                                "/api/auth/forgot-password",
-                                "/api/auth/reset-password",
-                                "/api/auth/ping",
+                                "/auth/register",
+                                "/auth/login",
+                                "/auth/refresh",
+                                "/auth/forgot-password",
+                                "/auth/reset-password",
+                                "/auth/ping",
                                 "/oauth2/authorize",
                                 "/oauth2/login",
                                 "/oauth2/token",
                                 "/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/actuator/health"
+                                "/actuator/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

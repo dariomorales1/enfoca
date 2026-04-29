@@ -19,7 +19,7 @@ public class ProfileBffController {
         this.aggregatorService = aggregatorService;
     }
 
-    @GetMapping("/perfil-completo")
+    @GetMapping("/complete-profile")
     public Mono<ResponseEntity<CompleteProfileResponse>> getCompleteProfile(
             @RequestHeader("X-User-Id") String userId) {
         return aggregatorService.aggregate(userId)

@@ -1,0 +1,31 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOSTNAME:discovery-service}
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
+
+management:
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    diskSpace:
+      enabled: true
+
+logging:
+  level:
+    com.netflix.eureka: WARN
+    com.netflix.discovery: WARN

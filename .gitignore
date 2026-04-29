@@ -6,3 +6,9 @@
 .idea/dataSources/
 .idea/dataSources.local.xml
 .idea/material_theme_project_new.xml
+
+# Variables de entorno — nunca commitear
+.env
+.env.local
+EnfocaProyect/application-local.yml
+EnfocaProyect/**/application-local.yml
