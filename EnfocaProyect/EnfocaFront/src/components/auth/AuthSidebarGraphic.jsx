@@ -1,7 +1,6 @@
-// src/components/auth/AuthSidebarGraphic.jsx
 import React from 'react';
 
-export default function AuthSidebarGraphic({ headlineText, imageSrc, imageAlt }) {
+export default function AuthSidebarGraphic({headlineText, imageSrc, imageAlt}) {
     return (
         <>
             <img
@@ -11,7 +10,6 @@ export default function AuthSidebarGraphic({ headlineText, imageSrc, imageAlt })
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
 
-            {/* Reducimos bottom-12 a bottom-8 y el tamaño de texto a text-3xl */}
             <div className="absolute bottom-8 left-10 right-10 z-10">
                 <p className="text-violet-500 text-[10px] font-bold tracking-widest uppercase mb-2">
                     Deep Work Protocol

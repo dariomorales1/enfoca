@@ -3,18 +3,13 @@ import {Link} from 'react-router-dom';
 
 export default function LandingPage() {
     return (
-        // Agregamos pb-24 aquí para evitar que el Footer corte la última tarjeta
         <div className="flex-1 bg-black text-white overflow-y-auto selection:bg-violet-500/30 pb-24">
             <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16">
 
-                {/* --- HERO SECTION --- */}
                 <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-32">
 
-                    {/* Izquierda: Texto */}
-                    {/* flex-col en móvil, flex-row en tablet (md), y flex-col de nuevo en desktop (lg) */}
                     <div className="flex flex-col md:flex-row lg:flex-col gap-8 md:gap-12 lg:gap-8">
 
-                        {/* Columna 1: Badge y Título */}
                         <div className="flex-1 space-y-6">
                             <div
                                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-400 text-xs font-bold tracking-widest uppercase">
@@ -28,15 +23,12 @@ export default function LandingPage() {
                             </h1>
                         </div>
 
-                        {/* Columna 2: Párrafo y Botones */}
-                        {/* md:pt-10 alinea mejor el texto de la derecha con el título de la izquierda en tablets */}
                         <div className="flex-1 space-y-6 md:pt-10 lg:pt-0">
                             <p className="text-neutral-400 text-lg max-w-md leading-relaxed">
                                 Enfoca transforms academic chaos into cognitive clarity. Technical tools for flow states
                                 and intellectual rigor.
                             </p>
 
-                            {/* flex-wrap previene que los botones se desborden en pantallas medianas ajustadas */}
                             <div className="flex flex-wrap items-center gap-4 pt-2">
                                 <Link to="/register"
                                       className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-lg font-medium transition-colors">
@@ -51,18 +43,15 @@ export default function LandingPage() {
 
                     </div>
 
-                    {/* Derecha: Imagen Hero */}
                     <div
                         className="relative h-[400px] w-full rounded-2xl border border-neutral-800 bg-neutral-900 overflow-hidden flex items-center justify-center">
 
-                        {/* Imagen principal con object-top para priorizar el slogan superior */}
                         <img
                             src="/landingImage.png"
                             alt="Student focused"
                             className="absolute inset-0 w-full h-full object-cover object-top mix-blend-luminosity opacity-50"
                         />
 
-                        {/* Tarjeta Flotante "Sesión Activa" */}
                         <div
                             className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-md border border-neutral-800 rounded-xl p-4 shadow-2xl flex items-center gap-4">
                             <div className="bg-violet-500/20 p-2 rounded-lg">
@@ -82,7 +71,6 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* --- LOGOS SECTION --- */}
                 <section className="border-y border-neutral-900 py-12 mb-32 flex flex-col items-center">
                     <p className="text-[10px] text-neutral-500 font-bold tracking-widest uppercase mb-8">
                         Validated by high-performance institutions
@@ -97,7 +85,6 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* --- BENTO GRID SECTION --- */}
                 <section className="mb-32">
                     <div className="mb-12">
                         <h2 className="text-3xl font-bold mb-4">Designed for cognitive rigor</h2>
@@ -106,7 +93,6 @@ export default function LandingPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
-                        {/* Card 1 (Ancha) */}
                         <div
                             className="md:col-span-2 bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 transition-colors rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center">
                             <div className="relative z-10 w-2/3">
@@ -118,7 +104,6 @@ export default function LandingPage() {
                                     level detected in real-time.
                                 </p>
                             </div>
-                            {/* Pomodoro Image bg */}
                             <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-30 pointer-events-none">
                                 <div
                                     className="w-full h-full bg-gradient-to-r from-[#0a0a0a] to-transparent absolute inset-0 z-10"></div>
@@ -126,11 +111,9 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Card 2 (Alta, Morada) */}
                         <div
                             className="md:col-span-1 bg-[#1e1b4b] border border-[#4a289b] rounded-2xl p-8 flex flex-col justify-between">
                             <div className="flex justify-end">
-                                {/* Corregido: removido 'flex justify-content-end' del img */}
                                 <img
                                     src="/landingBook.png"
                                     alt="Open Book"
@@ -146,7 +129,6 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Card 3 (Cuadrada) */}
                         <div
                             className="md:col-span-1 bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 transition-colors rounded-2xl p-8 relative overflow-hidden">
                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -166,7 +148,6 @@ export default function LandingPage() {
                             <div className="absolute bottom-[-20px] right-4 text-9xl opacity-5 text-white">★</div>
                         </div>
 
-                        {/* Card 4 (Ancha) */}
                         <div
                             className="md:col-span-2 bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 transition-colors rounded-2xl p-8 flex items-center justify-between">
                             <div className="max-w-xs">
@@ -188,7 +169,6 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* --- STATS SECTION --- */}
                 <section className="mb-32 grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-neutral-900 pt-12">
                     <div>
                         <h4 className="text-5xl font-bold mb-2">+45%</h4>
@@ -216,11 +196,8 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* --- CTA SECTION --- */}
-                {/* Cambiado: mb-0 porque el espacio inferior lo da el pb-24 del contenedor principal */}
                 <section
                     className="bg-[#050505] border border-neutral-800 rounded-3xl p-12 md:p-20 text-center relative overflow-hidden mb-0 shadow-2xl">
-                    {/* Decorative gradients */}
                     <div
                         className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-violet-900/10 blur-[100px] pointer-events-none"></div>
 

@@ -4,11 +4,9 @@ import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
 import {Link, useNavigate} from 'react-router-dom';
 import {authService} from '../services/api';
-import {useAuth} from '../hooks/useAuth';
 
 export default function RegisterPage() {
-    // 1. Estados listos para conectar al backend
-    const [name, setName] = useState('');
+    const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -16,9 +14,7 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
-    const {login} = useAuth();
 
-    // 2. Manejador del envío
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -31,15 +27,20 @@ export default function RegisterPage() {
         setIsLoading(true);
 
         try {
-            // Ejemplo de llamada a tu servicio (ajusta según tu API)
-            // const response = await authService.register({ name, email, password });
-            // login(response.data.token, response.data.user);
-            // navigate('/');
+            const registerData = {
+                nombre,
+                email,
+                password
+            };
 
-            console.log("Registrando...", {name, email, password});
-            setTimeout(() => setIsLoading(false), 1000); // Simulación temporal
+            await authService.register(registerData);
+
+            navigate('/login', {state: {message: 'Account created! Please log in.'}});
+
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            const message = err.response?.data?.message || 'Registration failed. Check your data.';
+            setError(message);
+        } finally {
             setIsLoading(false);
         }
     };
@@ -50,36 +51,32 @@ export default function RegisterPage() {
                 <AuthSidebarGraphic
                     headlineText="Precision productivity for the academic mind."
                     imageSrc="/deep-work-register.png"
-                    imageAlt="Setup with focused atmosphere girl"
+                    imageAlt="Student focusing in a library"
                 />
             }
             invertOrder={true}
         >
-            {/* Contenedor Flex para distribuir el espacio verticalmente */}
             <div className="flex flex-col justify-center h-full">
-
-                {/* Cabecera dinámica */}
                 <div className="mb-[clamp(0.75rem,2vh,1.5rem)]">
                     <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Create
                         Account</h1>
                     <p className="text-neutral-400 text-xs lg:text-sm">Deep work starts here.</p>
                 </div>
 
-                {/* Mensaje de error */}
                 {error && (
-                    <div className="mb-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+                    <div
+                        className="mb-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs animate-pulse">
                         {error}
                     </div>
                 )}
 
-                {/* Formulario más compacto (gap ligeramente menor que el login porque tiene más campos) */}
                 <form className="flex flex-col gap-[clamp(0.5rem,1.2vh,1rem)]" onSubmit={handleSubmit}>
                     <Input
                         label="Full Name"
                         type="text"
                         placeholder="Alex Rivers"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
                         required
                     />
 
@@ -101,7 +98,6 @@ export default function RegisterPage() {
                         required
                     />
 
-                    {/* Checkbox ajustado */}
                     <div className="flex items-start gap-2.5 py-1">
                         <div className="flex items-center mt-0.5">
                             <input
@@ -124,7 +120,7 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-[clamp(0.6rem,1.2vh,0.875rem)] rounded-lg transition-colors mt-1 flex justify-center items-center text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        className={`w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-[clamp(0.6rem,1.2vh,0.875rem)] rounded-lg transition-all mt-1 flex justify-center items-center text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : 'active:scale-[0.98]'}`}
                     >
                         {isLoading ? (
                             <div
@@ -135,14 +131,12 @@ export default function RegisterPage() {
                     </button>
                 </form>
 
-                {/* Divisor */}
                 <div className="flex items-center my-[clamp(0.75rem,2vh,1.5rem)]">
                     <div className="flex-grow border-t border-neutral-800"></div>
                     <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Or register with</span>
                     <div className="flex-grow border-t border-neutral-800"></div>
                 </div>
 
-                {/* Botones Sociales (Ajustados al tamaño del Login) */}
                 <div className="grid grid-cols-2 gap-3">
                     <button
                         className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
@@ -154,7 +148,6 @@ export default function RegisterPage() {
                     </button>
                 </div>
 
-                {/* Link de retorno al Login */}
                 <div className="mt-[clamp(0.75rem,2vh,1.5rem)] text-center text-xs text-neutral-500">
                     Already have an account?{' '}
                     <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
