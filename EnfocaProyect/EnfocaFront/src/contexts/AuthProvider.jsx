@@ -37,8 +37,8 @@ export const AuthProvider = ({children}) => {
         setLoading(true);
         try {
             const {data} = await authService.login(credentials);
-            localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
             setIsAuthenticated(true);
             await fetchUserProfile();
             return {success: true};

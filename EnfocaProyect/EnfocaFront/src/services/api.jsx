@@ -25,10 +25,10 @@ api.interceptors.response.use(
 
                 const {data} = await authService.refresh(refreshToken);
 
-                localStorage.setItem('access_token', data.accessToken);
-                localStorage.setItem('refresh_token', data.refreshToken);
+                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('refresh_token', data.refresh_token);
 
-                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
                 return api(originalRequest);
             } catch (refreshError) {
                 localStorage.clear();
@@ -41,33 +41,17 @@ api.interceptors.response.use(
 );
 
 export const authService = {
-    // @PostMapping("/register") -> RegisterRequest
-    register: (userData) => api.post('/api/auth/register', userData),
-
-    // @PostMapping("/login") -> LoginRequest
-    login: (credentials) => api.post('/api/auth/login', credentials),
-
-    // @PostMapping("/refresh") -> RefreshTokenRequest
-    refresh: (refreshToken) => api.post('/api/auth/refresh', {refreshToken}),
-
-    // @PostMapping("/logout") -> LogoutRequest
-    logout: (refreshToken) => api.post('/api/auth/logout', {refreshToken}),
-
-    // @PostMapping("/forgot-password") -> ForgotPasswordRequest
-    forgotPassword: (email) => api.post('/api/auth/forgot-password', {email}),
-
-    // @PostMapping("/reset-password") -> ResetPasswordRequest
-    resetPassword: (data) => api.post('/api/auth/reset-password', data),
+    register: (userData) => api.post('/auth/register', userData),
+    login: (credentials) => api.post('/auth/login', credentials),
+    refresh: (refreshToken) => api.post('/auth/refresh', {refreshToken}),
+    logout: (refreshToken) => api.post('/auth/logout', {refreshToken}),
+    forgotPassword: (email) => api.post('/auth/forgot-password', {email}),
+    resetPassword: (data) => api.post('/auth/reset-password', data),
 };
 
 export const profileService = {
-    // @GetMapping -> Retorna ProfileResponse
     getProfile: () => api.get('/profile'),
-
-    // @PutMapping -> UpdateProfileRequest
     updateProfile: (data) => api.put('/profile', data),
-
-    // @PutMapping("/password") -> ChangePasswordRequest
     changePassword: (data) => api.put('/profile/password', data),
 };
 

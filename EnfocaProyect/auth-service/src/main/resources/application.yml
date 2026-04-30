@@ -5,15 +5,27 @@ spring:
   profiles:
     active: local
 
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
+      lifecycle-management: start_and_stop
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.RedisAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.RedisReactiveAutoConfiguration
+
   datasource:
-    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5433/enfoca_auth}
+    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5434/enfoca_auth}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:Kaoz1699}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
@@ -22,16 +34,18 @@ spring:
 
   flyway:
     enabled: true
-    schemas: auth
-    default-schema: auth
     locations: classpath:db/migration
     baseline-on-migrate: true
 
 eureka:
   client:
-    enabled: false
-    register-with-eureka: false
+    enabled: true
+    register-with-eureka: true
     fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    hostname: localhost
 
 server:
   port: 8081
@@ -39,8 +53,8 @@ server:
 app:
   jwt:
     secret: ${JWT_SECRET}
-    access-token-expiration: 900000      # 15 min in ms
-    refresh-token-expiration: 604800000  # 7 days in ms
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
     issuer: enfoca
 
 management:
@@ -51,6 +65,15 @@ management:
   endpoint:
     health:
       show-details: when_authorized
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    diskSpace:
+      enabled: true
+    db:
+      enabled: true
 
 springdoc:
   api-docs:

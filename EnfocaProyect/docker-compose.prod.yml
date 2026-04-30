@@ -1,0 +1,120 @@
+services:
+
+  discovery-service:
+    image: ${ECR_REGISTRY}/enfoca/discovery-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-discovery
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_HOSTNAME: discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - enfoca-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  api-gateway:
+    image: ${ECR_REGISTRY}/enfoca/api-gateway:${IMAGE_TAG:-latest}
+    container_name: enfoca-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - "8080:8080"
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  auth-service:
+    image: ${ECR_REGISTRY}/enfoca/auth-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-auth
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      DB_URL: ${AUTH_DB_URL}
+      DB_USERNAME: ${AUTH_DB_USERNAME}
+      DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  pomodoro-service:
+    image: ${ECR_REGISTRY}/enfoca/pomodoro-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-pomodoro
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      DB_URL: ${POMODORO_DB_URL}
+      DB_USERNAME: ${POMODORO_DB_USERNAME}
+      DB_PASSWORD: ${POMODORO_DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: enfoca-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - enfoca-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+networks:
+  enfoca-net:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:

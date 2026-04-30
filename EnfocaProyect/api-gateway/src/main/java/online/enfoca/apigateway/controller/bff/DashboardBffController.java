@@ -19,7 +19,7 @@ public class DashboardBffController {
         this.aggregatorService = aggregatorService;
     }
 
-    @GetMapping("/tablero")
+    @GetMapping("/dashboard")
     public Mono<ResponseEntity<DashboardResponse>> getDashboard(
             @RequestHeader("X-User-Id") String userId) {
         return aggregatorService.aggregate(userId)

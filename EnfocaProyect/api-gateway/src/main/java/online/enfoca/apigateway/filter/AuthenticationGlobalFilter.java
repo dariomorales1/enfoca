@@ -7,9 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import online.enfoca.apigateway.config.GatewayPublicRoutesProperties;
 import online.enfoca.apigateway.config.JwtProperties;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,13 +16,16 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class AuthenticationGlobalFilter implements GlobalFilter, Ordered {
+@Order(-100)
+public class AuthenticationGlobalFilter implements WebFilter {
 
     private static final String HEADER_USER_ID = "X-User-Id";
     private static final String HEADER_USER_ROLE = "X-User-Role";
@@ -40,7 +41,7 @@ public class AuthenticationGlobalFilter implements GlobalFilter, Ordered {
     }
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
 
         if (isPublicRoute(path)) {
@@ -104,10 +105,5 @@ public class AuthenticationGlobalFilter implements GlobalFilter, Ordered {
         return response.writeWith(
                 Mono.just(response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8)))
         );
-    }
-
-    @Override
-    public int getOrder() {
-        return -100;
     }
 }

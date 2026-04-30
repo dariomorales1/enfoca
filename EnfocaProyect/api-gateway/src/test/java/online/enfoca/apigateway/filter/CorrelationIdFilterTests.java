@@ -5,10 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.http.HttpHeaders;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -23,7 +22,7 @@ class CorrelationIdFilterTests {
     private CorrelationIdFilter filter;
 
     @Mock
-    private GatewayFilterChain chain;
+    private WebFilterChain chain;
 
     @Test
     void shouldGenerateCorrelationIdWhenMissing() {
@@ -62,6 +61,7 @@ class CorrelationIdFilterTests {
 
     @Test
     void shouldHaveHigherPriorityThanAuthFilter() {
-        assertThat(filter.getOrder()).isLessThan(-100);
+        int correlationOrder = filter.getClass().getAnnotation(org.springframework.core.annotation.Order.class).value();
+        assertThat(correlationOrder).isLessThan(-100);
     }
 }

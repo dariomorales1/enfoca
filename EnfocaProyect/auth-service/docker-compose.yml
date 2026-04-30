@@ -1,0 +1,13 @@
+services:
+  auth-db:
+    image: postgres:15
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: enfoca_auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Kaoz1699
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./src/main/resources/db/init:/docker-entrypoint-initdb.d

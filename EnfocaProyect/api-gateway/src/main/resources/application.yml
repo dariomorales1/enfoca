@@ -12,8 +12,6 @@ spring:
     exclude:
       - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
       - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
-      - org.springframework.boot.data.mongodb.autoconfigure.MongoAutoConfiguration
-      - org.springframework.boot.data.mongodb.autoconfigure.MongoDataAutoConfiguration
       - org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
   data:
     redis:
@@ -25,6 +23,7 @@ spring:
     gateway:
       server:
         webflux:
+          streaming-media-types: "text/event-stream,application/stream+json"
           discovery:
             locator:
               enabled: true
@@ -62,16 +61,22 @@ eureka:
 
 enfoca:
   jwt:
-    secret-key: ${JWT_SECRET_KEY:cambiar_en_produccion}
+    secret-key: ${JWT_SECRET_KEY:dGhpcy1pcy1hLXZlcnktc2VjdXJlLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=}
   public-routes:
-    - /auth/registro
-    - /auth/iniciar-sesion
-    - /auth/refrescar
-    - /planes-estudio/catalogo
-    - /verificar/**
+    - /auth/register
+    - /auth/login
+    - /auth/refresh
+    - /auth/forgot-password
+    - /auth/reset-password
+    - /oauth2/authorize
+    - /oauth2/login
+    - /oauth2/token
+    - /study-plans/catalog
+    - /verify/**
     - /api-docs/**
     - /swagger-ui/**
-    - /actuator/health
+    - /actuator/**
+    - /favicon.ico
 
 resilience4j:
   circuitbreaker:
@@ -134,8 +139,16 @@ management:
         include: health, info, metrics, gateway, circuitbreakers, retries
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: always
   health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    redis:
+      enabled: true
+    diskSpace:
+      enabled: true
     circuitbreakers:
       enabled: true
 

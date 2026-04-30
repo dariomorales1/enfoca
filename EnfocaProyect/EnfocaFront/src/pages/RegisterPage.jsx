@@ -28,18 +28,21 @@ export default function RegisterPage() {
 
         try {
             const registerData = {
-                nombre,
+                firstName: nombre,
                 email,
                 password
             };
 
             await authService.register(registerData);
-
             navigate('/login', {state: {message: 'Account created! Please log in.'}});
 
         } catch (err) {
-            const message = err.response?.data?.message || 'Registration failed. Check your data.';
-            setError(message);
+            if (err.response?.status === 409) {
+                setError('This email is already registered.');
+            } else {
+                const message = err.response?.data?.message || 'Registration failed. Check your data.';
+                setError(message);
+            }
         } finally {
             setIsLoading(false);
         }

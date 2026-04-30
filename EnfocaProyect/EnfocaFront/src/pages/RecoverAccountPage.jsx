@@ -8,7 +8,7 @@ import {authService} from '../services/api';
 export default function RecoverAccountPage() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [status, setStatus] = useState({type: '', message: ''}); // 'success' o 'error'
+    const [status, setStatus] = useState({type: '', message: ''});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,9 +20,9 @@ export default function RecoverAccountPage() {
 
             setStatus({
                 type: 'success',
-                message: 'Instructions have been sent to your email.'
+                message: 'If this email is registered, you will receive reset instructions shortly.'
             });
-            setEmail(''); // Limpiamos el input tras el éxito
+            setEmail('');
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Something went wrong. Please try again.';
             setStatus({type: 'error', message: errorMsg});

@@ -16,8 +16,6 @@ spring:
     exclude:
       - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
       - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
-      - org.springframework.boot.data.mongodb.autoconfigure.MongoAutoConfiguration
-      - org.springframework.boot.data.mongodb.autoconfigure.MongoDataAutoConfiguration
       - org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
       - org.springframework.boot.data.redis.autoconfigure.RedisAutoConfiguration
       - org.springframework.boot.data.redis.autoconfigure.RedisReactiveAutoConfiguration
