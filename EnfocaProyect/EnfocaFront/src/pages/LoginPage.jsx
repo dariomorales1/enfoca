@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const {login} = useAuth(); // Usamos el login del Contexto
+    const {login} = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -22,9 +22,9 @@ export default function LoginPage() {
         const result = await login({email, password});
 
         if (result.success) {
-            navigate('/');
+            navigate('/dashboard');
         } else {
-            setError(result.error || 'Invalid credentials');
+            setError(result.error || 'Credenciales incorrectas');
             setIsLoading(false);
         }
     };
@@ -33,38 +33,37 @@ export default function LoginPage() {
         <SplitCardLayout
             graphicContent={
                 <AuthSidebarGraphic
-                    headlineText="Eliminate distractions."
+                    headlineText="Elimina las distracciones."
                     imageSrc="/deep-work.png"
-                    imageAlt="Setup with focused atmosphere"
+                    imageAlt="Espacio de trabajo enfocado"
                 />
             }
             invertOrder={false}
         >
             <div className="flex flex-col justify-center h-full">
                 <div className="mb-[clamp(1rem,2.5vh,2rem)]">
-                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Welcome back</h1>
-                    <p className="text-neutral-400 text-xs lg:text-sm">Resume your deep work session.</p>
+                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Bienvenido de nuevo</h1>
+                    <p className="text-neutral-400 text-xs lg:text-sm">Retoma tu sesión de trabajo profundo.</p>
                 </div>
 
                 {error && (
-                    <div
-                        className="mb-3 p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs animate-in fade-in duration-300">
+                    <div className="mb-3 p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
                         {error}
                     </div>
                 )}
 
                 <form className="flex flex-col gap-[clamp(0.75rem,1.5vh,1.25rem)]" onSubmit={handleSubmit}>
                     <Input
-                        label="Email Address"
+                        label="Correo electrónico"
                         type="email"
-                        placeholder="name@university.edu"
+                        placeholder="nombre@universidad.edu"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
 
                     <Input
-                        label="Password"
+                        label="Contraseña"
                         type="password"
                         placeholder="••••••••"
                         value={password}
@@ -73,7 +72,7 @@ export default function LoginPage() {
                         rightElement={
                             <Link to="/recover"
                                   className="text-[10px] lg:text-xs text-violet-500 hover:text-violet-400 transition-colors">
-                                Forgot Password?
+                                ¿Olvidaste tu contraseña?
                             </Link>
                         }
                     />
@@ -84,43 +83,38 @@ export default function LoginPage() {
                         className={`w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-[clamp(0.6rem,1.2vh,0.875rem)] rounded-lg transition-all mt-2 flex justify-center items-center text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : 'active:scale-[0.98]'}`}
                     >
                         {isLoading ? (
-                            <div
-                                className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"/>
                         ) : (
-                            'Sign In'
+                            'Iniciar sesión'
                         )}
                     </button>
                 </form>
 
                 <div className="flex items-center my-[clamp(1rem,2.5vh,2rem)]">
-                    <div className="flex-grow border-t border-neutral-800"></div>
-                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500">Or continue with</span>
-                    <div className="flex-grow border-t border-neutral-800"></div>
+                    <div className="flex-grow border-t border-neutral-800"/>
+                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500">O continuar con</span>
+                    <div className="flex-grow border-t border-neutral-800"/>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Google
                     </button>
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Apple
                     </button>
                 </div>
 
                 <div className="mt-[clamp(1rem,2.5vh,2rem)] text-center text-xs text-neutral-500">
-                    Don't have an account?{' '}
-                    <Link to="/register"
-                          className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
-                        Sign up
+                    ¿No tienes cuenta?{' '}
+                    <Link to="/register" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                        Regístrate
                     </Link>
                 </div>
 
-                <div
-                    className="mt-4 flex items-center justify-center gap-2 text-[10px] lg:text-xs text-neutral-600 italic">
-                    <div className="w-1.5 h-1.5 rounded-full bg-violet-600"></div>
-                    Secure Academic Gateway
+                <div className="mt-4 flex items-center justify-center gap-2 text-[10px] lg:text-xs text-neutral-600 italic">
+                    <div className="w-1.5 h-1.5 rounded-full bg-violet-600"/>
+                    Acceso Académico Seguro
                 </div>
             </div>
         </SplitCardLayout>
