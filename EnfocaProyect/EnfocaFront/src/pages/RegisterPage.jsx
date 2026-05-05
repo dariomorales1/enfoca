@@ -19,7 +19,7 @@ export default function RegisterPage() {
         e.preventDefault();
 
         if (!agreedToTerms) {
-            setError('You must agree to the Terms of Service.');
+            setError('Debes aceptar los Términos de servicio para continuar.');
             return;
         }
 
@@ -34,13 +34,13 @@ export default function RegisterPage() {
             };
 
             await authService.register(registerData);
-            navigate('/login', {state: {message: 'Account created! Please log in.'}});
+            navigate('/login', {state: {message: '¡Cuenta creada! Inicia sesión para continuar.'}});
 
         } catch (err) {
             if (err.response?.status === 409) {
-                setError('This email is already registered.');
+                setError('Este correo ya está registrado.');
             } else {
-                const message = err.response?.data?.message || 'Registration failed. Check your data.';
+                const message = err.response?.data?.message || 'Error al registrar. Verifica tus datos.';
                 setError(message);
             }
         } finally {
@@ -52,48 +52,46 @@ export default function RegisterPage() {
         <SplitCardLayout
             graphicContent={
                 <AuthSidebarGraphic
-                    headlineText="Precision productivity for the academic mind."
+                    headlineText="Productividad de precisión para la mente académica."
                     imageSrc="/deep-work-register.png"
-                    imageAlt="Student focusing in a library"
+                    imageAlt="Estudiante enfocado en biblioteca"
                 />
             }
             invertOrder={true}
         >
             <div className="flex flex-col justify-center h-full">
                 <div className="mb-[clamp(0.75rem,2vh,1.5rem)]">
-                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Create
-                        Account</h1>
-                    <p className="text-neutral-400 text-xs lg:text-sm">Deep work starts here.</p>
+                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Crear cuenta</h1>
+                    <p className="text-neutral-400 text-xs lg:text-sm">El trabajo profundo comienza aquí.</p>
                 </div>
 
                 {error && (
-                    <div
-                        className="mb-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs animate-pulse">
+                    <div className="mb-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
                         {error}
                     </div>
                 )}
 
                 <form className="flex flex-col gap-[clamp(0.5rem,1.2vh,1rem)]" onSubmit={handleSubmit}>
                     <Input
-                        label="Full Name"
+                        label="Nombre completo"
                         type="text"
-                        placeholder="Alex Rivers"
+                        placeholder="Alejandro Ríos"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         required
                     />
 
                     <Input
-                        label="Email Address"
+                        label="Correo electrónico"
                         type="email"
-                        placeholder="alex@university.edu"
+                        placeholder="nombre@universidad.edu"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
 
                     <Input
-                        label="Password"
+                        label="Contraseña"
                         type="password"
                         placeholder="••••••••"
                         value={password}
@@ -112,11 +110,10 @@ export default function RegisterPage() {
                             />
                         </div>
                         <label htmlFor="terms" className="text-[10px] lg:text-xs text-neutral-400 leading-tight">
-                            I agree to the <a href="#"
-                                              className="text-violet-500 hover:text-violet-400 transition-colors">Terms
-                            of Service</a> and <a href="#"
-                                                  className="text-violet-500 hover:text-violet-400 transition-colors">Privacy
-                            Policy</a>.
+                            Acepto los{' '}
+                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Términos de servicio</a>
+                            {' '}y la{' '}
+                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Política de privacidad</a>.
                         </label>
                     </div>
 
@@ -126,35 +123,32 @@ export default function RegisterPage() {
                         className={`w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-[clamp(0.6rem,1.2vh,0.875rem)] rounded-lg transition-all mt-1 flex justify-center items-center text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : 'active:scale-[0.98]'}`}
                     >
                         {isLoading ? (
-                            <div
-                                className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/>
                         ) : (
-                            'Create Account'
+                            'Crear cuenta'
                         )}
                     </button>
                 </form>
 
                 <div className="flex items-center my-[clamp(0.75rem,2vh,1.5rem)]">
-                    <div className="flex-grow border-t border-neutral-800"></div>
-                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Or register with</span>
-                    <div className="flex-grow border-t border-neutral-800"></div>
+                    <div className="flex-grow border-t border-neutral-800"/>
+                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">O regístrate con</span>
+                    <div className="flex-grow border-t border-neutral-800"/>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Google
                     </button>
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Apple
                     </button>
                 </div>
 
                 <div className="mt-[clamp(0.75rem,2vh,1.5rem)] text-center text-xs text-neutral-500">
-                    Already have an account?{' '}
+                    ¿Ya tienes cuenta?{' '}
                     <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
-                        Log in
+                        Inicia sesión
                     </Link>
                 </div>
             </div>
