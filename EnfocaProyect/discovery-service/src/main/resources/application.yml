@@ -11,6 +11,7 @@ spring:
       - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
       - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
       - org.springframework.boot.data.redis.autoconfigure.RedisAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.RedisReactiveAutoConfiguration
       - org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
 
 server:
@@ -36,6 +37,11 @@ management:
   endpoint:
     health:
       show-details: when_authorized
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
 
 logging:
   level:
