@@ -1,11 +1,12 @@
+// src/router/ProtectedRoute.jsx
 import React from 'react';
-import {Navigate, Outlet} from 'react-router-dom';
-// Asegúrate de que la ruta a tu hook useAuth sea la correcta
-import {useAuth} from '../contexts/AuthContext';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ProtectedRoute() {
-    const {isAuthenticated, loading} = useAuth();
+    const { isAuthenticated, loading } = useAuth();
 
+    // Detenemos cualquier redirección mientras el AuthProvider inicializa
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-[#0a0a0a]">
@@ -14,10 +15,5 @@ export default function ProtectedRoute() {
         );
     }
 
-    if (!isAuthenticated) {
-        // Usamos directamente el string '/login' en lugar de la variable ROUTES
-        return <Navigate to="/login" replace/>;
-    }
-
-    return <Outlet/>;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }

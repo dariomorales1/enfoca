@@ -10,7 +10,7 @@ export default function PublicRoute() {
 
     if (isAuthenticated) {
         // Usamos directamente el string '/pomodoro' (o '/' si prefieres enviarlo al inicio)
-        return <Navigate to="/pomodoro" replace/>;
+        return <Navigate to="/dashboard" replace/>;
     }
 
     return <Outlet/>;

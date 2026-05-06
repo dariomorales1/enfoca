@@ -19,12 +19,17 @@ export default function LoginPage() {
         setError('');
         setIsLoading(true);
 
-        const result = await login({email, password});
+        try {
+            const result = await login({email, password});
 
-        if (result.success) {
-            navigate('/dashboard');
-        } else {
-            setError(result.error || 'Credenciales incorrectas');
+            if (result && result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result?.error || 'Credenciales incorrectas');
+                setIsLoading(false);
+            }
+        } catch (err) {
+            setError('No se pudo establecer conexión con el servidor');
             setIsLoading(false);
         }
     };
@@ -42,8 +47,7 @@ export default function LoginPage() {
         >
             <div className="flex flex-col justify-center h-full">
                 <div className="mb-[clamp(1rem,2.5vh,2rem)]">
-                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Bienvenido de
-                        nuevo</h1>
+                    <h1 className="text-2xl lg:text-3xl font-semibold mb-1 text-white tracking-tight">Bienvenido de nuevo</h1>
                     <p className="text-neutral-400 text-xs lg:text-sm">Retoma tu sesión de trabajo profundo.</p>
                 </div>
 

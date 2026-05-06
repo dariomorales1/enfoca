@@ -1,46 +1,54 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {useAuth} from '../../contexts/AuthContext.jsx';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 export default function Navbar() {
-    const {user, isAuthenticated, logout} = useAuth();
+    const { user, isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
+    const getUserInitial = () => {
+        const name = user?.nombre || user?.firstName || user?.username || 'U';
+        return name.charAt(0).toUpperCase();
+    };
+
+    const getUserDisplayName = () => {
+        return user?.nombre || user?.firstName || 'Usuario';
+    };
 
     return (
-        <nav
-            className="w-full px-6 lg:px-12 py-4 flex items-center justify-between bg-black text-white border-b border-neutral-800/50">
+        <nav className="w-full px-6 lg:px-12 py-4 flex items-center justify-between bg-black text-white border-b border-neutral-800/50">
 
-            {/* Logo con redirección dinámica */}
             <Link
                 to={isAuthenticated ? "/dashboard" : "/"}
                 className="flex-shrink-0 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
             >
-                <img src="/logo.png" alt="Enfoca" className="h-14 w-auto object-contain"/>
+                <img src="/logo.png" alt="Enfoca" className="h-14 w-auto object-contain" />
             </Link>
 
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
-                {/* Ruta actualizada a /pomodoro */}
                 <Link to="/pomodoro" className="hover:text-white transition-colors">Enfoque</Link>
-                <Link to="/stats" className="hover:text-white transition-colors">Estadísticas</Link>
-                <Link to="/community" className="hover:text-white transition-colors">Comunidad</Link>
-                <Link to="/pricing" className="hover:text-white transition-colors">Precios</Link>
+                <Link to="/study-plan" className="hover:text-white transition-colors">Plan de Estudio</Link>
+                <Link to="/focus-mode" className="hover:text-white transition-colors">Deep Focus</Link>
             </div>
 
             <div className="flex items-center gap-4 text-sm font-medium">
                 {!isAuthenticated ? (
                     <>
-                        <Link to="/login"
-                              className="text-neutral-300 hover:text-white transition-colors hidden sm:block">
+                        <Link to="/login" className="text-neutral-300 hover:text-white transition-colors hidden sm:block">
                             Iniciar sesión
                         </Link>
-                        <Link to="/register"
-                              className="bg-white text-black hover:bg-neutral-200 px-4 py-2 rounded-lg transition-colors inline-block">
+                        <Link to="/register" className="bg-white text-black hover:bg-neutral-200 px-4 py-2 rounded-lg transition-colors inline-block">
                             Registrarse
                         </Link>
                     </>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <Link to="/profile"
-                              className="flex items-center gap-2 hover:text-neutral-300 transition-colors">
+                        <div className="flex items-center gap-2">
                             {user?.avatarUrl ? (
                                 <img
                                     src={user.avatarUrl}
@@ -48,16 +56,15 @@ export default function Navbar() {
                                     className="h-8 w-8 rounded-full border border-neutral-700"
                                 />
                             ) : (
-                                <div
-                                    className="h-8 w-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs">
-                                    {user?.firstName?.charAt(0) || user?.nombre?.charAt(0) || 'U'}
+                                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center text-xs font-bold text-white">
+                                    {getUserInitial()}
                                 </div>
                             )}
-                            <span className="hidden lg:inline">{user?.firstName || user?.nombre || 'Usuario'}</span>
-                        </Link>
+                            <span className="hidden lg:inline text-neutral-300">{getUserDisplayName()}</span>
+                        </div>
                         <button
-                            onClick={logout}
-                            className="text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                            onClick={handleLogout}
+                            className="text-red-400 hover:text-red-300 transition-colors cursor-pointer bg-transparent border-none p-0"
                         >
                             Cerrar sesión
                         </button>
