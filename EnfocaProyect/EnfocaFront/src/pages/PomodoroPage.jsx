@@ -81,16 +81,16 @@ export default function PomodoroPage() {
                     </div>
 
                     {/* --- COLUMNA DERECHA --- */}
-                    <div className="lg:col-span-4 flex flex-col gap-4 self-stretch">
+                    <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
 
                         {/* JOB QUEUE CARD */}
-                        <div className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-4 flex flex-col lg:h-0 lg:min-h-90 overflow-hidden">
+                        <div className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-4 flex flex-col flex-grow lg:h-0 lg:min-h-0 overflow-hidden">
                             <div className="flex items-center justify-between mb-4 flex-shrink-0">
                                 <h2 className="text-[9px] font-mono text-neutral-400 tracking-widest uppercase">Job_Queue</h2>
                                 <button className="w-5 h-5 rounded border border-neutral-700 flex items-center justify-center text-xs text-neutral-400 hover:bg-neutral-800 transition-colors">+</button>
                             </div>
 
-                            <div className="space-y-3 overflow-y-auto pr-1  min-h-0 custom-scrollbar">
+                            <div className="space-y-3 overflow-y-auto pr-1 flex-grow min-h-0 custom-scrollbar">
                                 <div className="border border-neutral-700 bg-neutral-900/30 p-3 rounded-xl flex gap-3">
                                     <div className="w-3.5 h-3.5 rounded border border-violet-500 bg-violet-500/20 mt-0.5"></div>
                                     <h3 className="text-xs font-medium text-neutral-200">Cognitive Psychology Review</h3>
@@ -105,11 +105,11 @@ export default function PomodoroPage() {
                         </div>
 
                         {/* RUNTIME METRICS CARD */}
-                        <div className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-4 lg:min-h-36 flex-shrink-0">
-                            <h2 className="text-[12px] font-mono text-neutral-400 tracking-widest uppercase mb-4">Runtime_Metrics</h2>
+                        <div className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-4 flex-shrink-0">
+                            <h2 className="text-[9px] font-mono text-neutral-400 tracking-widest uppercase mb-4">Runtime_Metrics</h2>
                             <div className="flex items-center gap-4">
-                                <div className="relative w-15 h-15 rounded-full border-2 border-neutral-800 flex items-center justify-center">
-                                    <span className="text-[10px] font-bold text-white">75%</span>
+                                <div className="relative w-20 h-20 rounded-full border-2 border-neutral-800 flex items-center justify-center">
+                                    <span className="text-[20px] font-medium text-white">75%</span>
                                 </div>
                                 <div>
                                     <h3 className="text-xs font-bold text-white">3H 20M ACTIVE</h3>
