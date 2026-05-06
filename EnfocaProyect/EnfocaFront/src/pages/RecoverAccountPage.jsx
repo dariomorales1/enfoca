@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import SplitCardLayout from '../components/common/SplitCardLayout';
+import SplitCardLayout from '../layouts/SplitCardLayout.jsx';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
 import {Link} from 'react-router-dom';
@@ -88,7 +88,8 @@ export default function RecoverAccountPage() {
                 <div className="mt-12 flex flex-col items-center gap-4 text-xs">
                     <p className="text-neutral-500">
                         ¿Ya tienes cuenta?{' '}
-                        <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                        <Link to="/login"
+                              className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
                             Inicia sesión
                         </Link>
                     </p>

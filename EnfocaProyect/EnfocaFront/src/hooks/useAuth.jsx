@@ -1,5 +1,6 @@
 import {useContext} from 'react';
-import {AuthContext} from '../contexts/AuthProvider';
+// AQUÍ ESTÁ LA CORRECCIÓN: Apuntamos al archivo AuthContext correcto
+import {AuthContext} from '../contexts/AuthContext';
 
 export const useAuth = () => {
     const context = useContext(AuthContext);

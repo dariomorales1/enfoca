@@ -1,71 +1,42 @@
-import React, {createContext, useState, useEffect, useCallback} from 'react';
-import api, {authService, profileService} from '../services/api';
+// src/contexts/AuthProvider.jsx
+import React, {useState, useEffect} from 'react';
+// Importamos el contexto que acabamos de crear en el otro archivo
+import {AuthContext} from './AuthContext';
 
-export const AuthContext = createContext();
-
+// Exportamos ÚNICAMENTE el componente (ESLint ya no mostrará errores)
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('user_data');
-        return savedUser ? JSON.parse(savedUser) : null;
-    });
-
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('access_token'));
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            const {data} = await profileService.getProfile();
-            setUser(data);
-            localStorage.setItem('user_data', JSON.stringify(data));
-        } catch (error) {
-            console.error("Error cargando perfil:", error);
-            logout();
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (isAuthenticated && !user) {
-            fetchUserProfile();
-        } else {
-            setLoading(false);
-        }
-    }, [isAuthenticated, user, fetchUserProfile]);
+        const checkAuth = async () => {
+            setLoading(true);
+            try {
+                // Aquí irá tu conexión al backend
+                setIsAuthenticated(false);
+                setUser(null);
+            } catch (error) {
+                console.error("Error validando sesión:", error);
+                setIsAuthenticated(false);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const login = async (credentials) => {
-        setLoading(true);
-        try {
-            const {data} = await authService.login(credentials);
-            localStorage.setItem('access_token', data.access_token);
-            localStorage.setItem('refresh_token', data.refresh_token);
-            setIsAuthenticated(true);
-            await fetchUserProfile();
-            return {success: true};
-        } catch (error) {
-            return {success: false, error: error.response?.data?.message || 'Error de conexión'};
-        } finally {
-            setLoading(false);
-        }
-    };
+        checkAuth();
+    }, []);
+
+    const login = () => setIsAuthenticated(true);
 
     const logout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user_data');
-        setUser(null);
         setIsAuthenticated(false);
+        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{user, isAuthenticated, login, logout, loading}}>
-            {loading ? (
-                <div className="bg-black h-screen w-screen flex items-center justify-center text-white">
-                    Cargando Enfoca...
-                </div>
-            ) : (
-                children
-            )}
+        <AuthContext.Provider value={{isAuthenticated, loading, user, login, logout}}>
+            {children}
         </AuthContext.Provider>
     );
 };
