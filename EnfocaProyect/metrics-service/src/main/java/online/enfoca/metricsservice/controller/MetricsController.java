@@ -56,12 +56,13 @@ public class MetricsController {
     @GetMapping("/heatmap")
     public ResponseEntity<List<HeatmapEntryDTO>> getMonthlyHeatmap(
             @AuthenticationPrincipal UserDetails user,
-            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getYear()}")
-            @Min(2024) int year,
-            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getMonthValue()}")
-            @Min(1) @Max(12) int month) {
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
         Long userId = extractUserId(user);
-        return ResponseEntity.ok(metricsService.getMonthlyHeatmap(userId, year, month));
+        LocalDate now = LocalDate.now();
+        int resolvedYear  = (year  != null) ? year  : now.getYear();
+        int resolvedMonth = (month != null) ? month : now.getMonthValue();
+        return ResponseEntity.ok(metricsService.getMonthlyHeatmap(userId, resolvedYear, resolvedMonth));
     }
 
     // ── AI Insight semanal ───────────────────────────────────────
@@ -95,7 +96,6 @@ public class MetricsController {
     // ── Helper ───────────────────────────────────────────────────
 
     private Long extractUserId(UserDetails user) {
-        // El username viene del JWT como el userId en string
         return Long.parseLong(user.getUsername());
     }
 }
