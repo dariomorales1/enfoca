@@ -1,0 +1,97 @@
+/* DashboardLayout.css */
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+    background: #0a0a0a;
+    color: #cdccca;
+    overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.dashboard-sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #111111;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 0.75rem;
+    gap: 0;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+    margin-bottom: 2rem;
+}
+.brand-icon {
+    font-size: 1.4rem;
+    color: #a86fdf;
+    line-height: 1;
+}
+.brand-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #fff;
+}
+.brand-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.3);
+}
+
+/* Nav items */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: all 150ms ease;
+}
+.nav-item:hover {
+    color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.05);
+}
+.nav-item.active {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+
+/* Start button */
+.sidebar-start-btn {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.625rem;
+    background: #7c3aed;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 150ms ease;
+}
+.sidebar-start-btn:hover {
+    background: #6d28d9;
+}
+
+/* ── Main content ── */
+.dashboard-main {
+    flex: 1;
+    overflow-y: auto;
+    background: #0a0a0a;
+}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+    baseURL: 'http://localhost:8080',
 });
 
 api.interceptors.request.use((config) => {
@@ -22,8 +22,7 @@ api.interceptors.response.use(
 
             try {
                 const refreshToken = localStorage.getItem('refresh_token');
-
-                const {data} = await authService.refresh(refreshToken);
+                const { data } = await authService.refresh(refreshToken);
 
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('refresh_token', data.refresh_token);
@@ -41,18 +40,27 @@ api.interceptors.response.use(
 );
 
 export const authService = {
-    register: (userData) => api.post('/auth/register', userData),
-    login: (credentials) => api.post('/auth/login', credentials),
-    refresh: (refreshToken) => api.post('/auth/refresh', {refreshToken}),
-    logout: (refreshToken) => api.post('/auth/logout', {refreshToken}),
-    forgotPassword: (email) => api.post('/auth/forgot-password', {email}),
-    resetPassword: (data) => api.post('/auth/reset-password', data),
+    register:       (userData)      => api.post('/auth/register', userData),
+    login:          (credentials)   => api.post('/auth/login', credentials),
+    refresh:        (refreshToken)  => api.post('/auth/refresh', { refreshToken }),
+    logout:         (refreshToken)  => api.post('/auth/logout', { refreshToken }),
+    forgotPassword: (email)         => api.post('/auth/forgot-password', { email }),
+    resetPassword:  (data)          => api.post('/auth/reset-password', data),
 };
 
 export const profileService = {
-    getProfile: () => api.get('/profile'),
-    updateProfile: (data) => api.put('/profile', data),
+    getProfile:     ()     => api.get('/profile'),
+    updateProfile:  (data) => api.put('/profile', data),
     changePassword: (data) => api.put('/profile/password', data),
+};
+
+// ── Métricas ─────────────────────────────────────────────────────
+export const metricsService = {
+    getSummary:   ()             => api.get('/api/metrics/summary'),
+    getLast7Days: ()             => api.get('/api/metrics/daily'),
+    getLast4Weeks:()             => api.get('/api/metrics/weekly'),
+    getHeatmap:   (year, month)  => api.get('/api/metrics/heatmap', { params: { year, month } }),
+    getInsight:   ()             => api.get('/api/metrics/insight/latest'),
 };
 
 export default api;

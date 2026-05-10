@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage';
 import RecoverAccountPage from './pages/RecoverAccountPage';
 import DashboardPage from './pages/DashboardPage';
 import StudyPlanPage from './pages/StudyPlanPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 import { AuthProvider } from './contexts/AuthProvider';
 
 function PublicLayout({ children }) {
@@ -27,23 +28,23 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    {/* Public routes */}
+                    {/* Rutas públicas */}
                     <Route path="/" element={<PublicLayout><LandingPage /></PublicLayout>} />
                     <Route path="/login" element={<PublicLayout><LoginPage /></PublicLayout>} />
                     <Route path="/register" element={<PublicLayout><RegisterPage /></PublicLayout>} />
                     <Route path="/recover" element={<PublicLayout><RecoverAccountPage /></PublicLayout>} />
 
-                    {/* Protected routes */}
+                    {/* Rutas protegidas — DashboardLayout usa <Outlet /> */}
                     <Route
-                        path="/"
                         element={
                             <ProtectedRoute>
                                 <DashboardLayout />
                             </ProtectedRoute>
                         }
                     >
-                        <Route path="dashboard" element={<DashboardPage />} />
-                        <Route path="study-plans" element={<StudyPlanPage />} />
+                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/analytics" element={<AnalyticsPage />} />
+                        <Route path="/study-plans" element={<StudyPlanPage />} />
                     </Route>
 
                     <Route path="*" element={<Navigate to="/" replace />} />
