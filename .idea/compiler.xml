@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="metrics-service" />
+        <module name="gamification-service" />
       </profile>
       <profile name="Annotation profile for EnfocaProyect" enabled="true">
         <sourceOutputDir name="../generated-sources/annotations" />
@@ -151,6 +152,7 @@
       <module name="discovery-service" options="-parameters" />
       <module name="discovery-service.main" options="-parameters" />
       <module name="discovery-service.test" options="-parameters" />
+      <module name="gamification-service" options="-parameters" />
       <module name="metrics-service" options="-parameters" />
       <module name="metrics-service.main" options="-parameters" />
       <module name="metrics-service.test" options="-parameters" />
