@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: ai-service
+  profiles:
+    active: local
+  docker:
+    compose:
+      enabled: false
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.netflix.eureka.server.EurekaServerAutoConfiguration
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+  datasource:
+    url: ${AI_DB_URL:jdbc:postgresql://127.0.0.1:5435/enfoca_planes}
+    username: ${AI_DB_USERNAME:postgres}
+    password: ${AI_DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: planes
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    out-of-order: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3000ms
+
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: false
+
+enfoca:
+  ia:
+    proveedor-principal: groq
+    groq:
+      api-key: ${GROQ_API_KEY:}
+      url: https://api.groq.com/openai/v1/chat/completions
+      modelo: llama-3.3-70b-versatile
+    gemini:
+      api-key: ${GEMINI_API_KEY:}
+      url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    limites:
+      max-llamadas-por-hora: 10
+      ttl-cache-horas: 24
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    diskSpace:
+      enabled: true
+
+logging:
+  level:
+    online.enfoca.aiservice: INFO

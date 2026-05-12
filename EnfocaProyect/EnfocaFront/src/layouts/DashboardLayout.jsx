@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const IconDashboard = () => (
@@ -38,10 +39,11 @@ const IconBell = () => (
         <path d="M13.73 21a2 2 0 0 1-3.46 0" />
     </svg>
 );
-const IconSettings = () => (
+const IconLogout = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
     </svg>
 );
 const IconSupport = () => (
@@ -62,8 +64,14 @@ const NAV_ITEMS = [
 export default function DashboardLayout() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [loggingOut, setLoggingOut] = useState(false);
 
-    const handleLogout = () => { logout(); navigate('/login'); };
+    const handleLogout = () => {
+        setLoggingOut(true);
+        setTimeout(() => {
+            logout(() => navigate('/login'));
+        }, 1500);
+    };
 
     const displayName = user?.firstName || user?.nombre || user?.username || 'Usuario';
     const initials = displayName.charAt(0).toUpperCase();
@@ -71,9 +79,19 @@ export default function DashboardLayout() {
     return (
         <div className="flex h-screen bg-[#0a0a0a] text-white overflow-hidden">
 
+            {/* Overlay de cierre de sesión */}
+            {loggingOut && (
+                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center gap-4">
+                    <div className="w-8 h-8 border-2 border-violet-600/30 border-t-violet-600 rounded-full animate-spin"/>
+                    <span className="text-neutral-400 text-xs tracking-widest uppercase">Cerrando sesión...</span>
+                </div>
+            )}
+
             {/* Sidebar */}
             <aside className="w-[220px] flex-shrink-0 hidden md:flex flex-col border-r border-neutral-900 bg-[#0d0d0d]">
-                <div className="px-5 py-6 flex items-center gap-3">
+
+                {/* Logo → Landing page */}
+                <Link to="/" className="px-5 py-6 flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <div className="w-8 h-8 rounded-md bg-violet-600 flex items-center justify-center">
                         <span className="text-xs font-black text-white tracking-tighter">E</span>
                     </div>
@@ -81,7 +99,7 @@ export default function DashboardLayout() {
                         <div className="text-sm font-black tracking-widest text-white leading-none">ENFOCA</div>
                         <div className="text-[9px] tracking-widest text-neutral-600 uppercase mt-0.5">Rigor Académico</div>
                     </div>
-                </div>
+                </Link>
 
                 <nav className="flex-1 px-3 flex flex-col gap-0.5">
                     {NAV_ITEMS.map(({ to, label, icon }) => (
@@ -107,25 +125,28 @@ export default function DashboardLayout() {
                     ))}
                 </nav>
 
-                <div className="px-3 pb-5 flex flex-col gap-3">
-                    <button
-                        onClick={() => navigate('/focus')}
-                        className="w-full bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold tracking-widest uppercase py-3 rounded-lg transition-colors active:scale-[0.98]"
-                    >
-                        Iniciar Sesión
-                    </button>
+                <div className="px-3 pb-5 flex flex-col gap-1">
                     <button className="flex items-center gap-3 px-3 py-2 text-neutral-600 hover:text-neutral-400 text-sm transition-colors rounded-lg hover:bg-neutral-800/50">
                         <IconSupport />
                         Soporte
                     </button>
-                    <div className="flex items-center gap-2.5 px-1">
+
+                    {/* Cerrar sesión explícito */}
+                    <button
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="flex items-center gap-3 px-3 py-2 text-neutral-600 hover:text-red-400 text-sm transition-colors rounded-lg hover:bg-red-500/5"
+                    >
+                        <IconLogout />
+                        Cerrar sesión
+                    </button>
+
+                    {/* Fila de usuario */}
+                    <div className="flex items-center gap-2.5 px-1 pt-2 border-t border-neutral-900 mt-1">
                         <div className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                             {initials}
                         </div>
                         <span className="text-sm text-neutral-300 flex-1 truncate">{displayName}</span>
-                        <button onClick={handleLogout} className="text-neutral-600 hover:text-neutral-400 transition-colors" title="Cerrar sesión">
-                            <IconSettings />
-                        </button>
                     </div>
                 </div>
             </aside>

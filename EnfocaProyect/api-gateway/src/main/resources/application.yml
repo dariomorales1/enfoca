@@ -71,7 +71,8 @@ enfoca:
     - /oauth2/authorize
     - /oauth2/login
     - /oauth2/token
-    - /study-plans/catalog
+    - /planes-estudio/catalogo
+    - /planes-estudio/ping
     - /verify/**
     - /api-docs/**
     - /swagger-ui/**

@@ -1,13 +1,22 @@
-import React, {useContext} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useContext, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthProvider';
 
 export default function Navbar() {
     const context = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [loggingOut, setLoggingOut] = useState(false);
 
     if (!context) return null;
 
     const {user, isAuthenticated, logout} = context;
+
+    const handleLogout = () => {
+        setLoggingOut(true);
+        setTimeout(() => {
+            logout(() => navigate('/login'));
+        }, 1800);
+    };
 
     return (
         <nav className="w-full px-6 lg:px-12 py-4 flex items-center justify-between bg-black text-white border-b border-neutral-800/50">
@@ -35,18 +44,34 @@ export default function Navbar() {
                     </>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <Link to="/profile" className="flex items-center gap-2 hover:text-neutral-300 transition-colors">
+                        {/* Clic en avatar → dashboard */}
+                        <Link to="/dashboard" className="flex items-center gap-2 hover:text-neutral-300 transition-colors">
                             {user?.avatarUrl ? (
                                 <img src={user.avatarUrl} alt="Avatar" className="h-8 w-8 rounded-full border border-neutral-700"/>
                             ) : (
-                                <div className="h-8 w-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs">
+                                <div className="h-8 w-8 rounded-full bg-violet-600/30 border border-violet-500/30 flex items-center justify-center text-xs font-bold text-violet-300">
                                     {user?.firstName?.charAt(0) || user?.nombre?.charAt(0) || 'U'}
                                 </div>
                             )}
-                            <span className="hidden lg:inline">{user?.firstName || user?.nombre}</span>
+                            <span className="hidden lg:inline text-neutral-300">
+                                {user?.firstName || user?.nombre}
+                            </span>
                         </Link>
-                        <button onClick={logout} className="text-red-400 hover:text-red-300 transition-colors cursor-pointer">
-                            Cerrar sesión
+
+                        {/* Cerrar sesión con estado de carga */}
+                        <button
+                            onClick={handleLogout}
+                            disabled={loggingOut}
+                            className="flex items-center gap-2 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-60"
+                        >
+                            {loggingOut ? (
+                                <>
+                                    <div className="w-3.5 h-3.5 border-2 border-neutral-600 border-t-neutral-300 rounded-full animate-spin"/>
+                                    <span className="text-xs">Cerrando...</span>
+                                </>
+                            ) : (
+                                'Cerrar sesión'
+                            )}
                         </button>
                     </div>
                 )}

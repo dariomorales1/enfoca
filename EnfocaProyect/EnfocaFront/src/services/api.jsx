@@ -55,4 +55,13 @@ export const profileService = {
     changePassword: (data) => api.put('/profile/password', data),
 };
 
+export const planService = {
+    crear: (data) => api.post('/planes-estudio', data),
+    listar: () => api.get('/planes-estudio'),
+    obtener: (id) => api.get(`/planes-estudio/${id}`),
+    eliminar: (id) => api.delete(`/planes-estudio/${id}`),
+    validar: (id, data) => api.post(`/planes-estudio/${id}/validaciones`, data),
+    catalogo: () => api.get('/planes-estudio/catalogo'),
+};
+
 export default api;

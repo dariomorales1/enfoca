@@ -7,6 +7,6 @@ spring:
     redis:
       host: coherent-hagfish-108591.upstash.io
       port: 6379
-      password: gQAAAAAAAagvAAIgcDI5NTJmNTBhNzA1OGU0NmIyYjRlNDc0MDZjNDRlYmNiMA
+      password: gQAAAAAAAagvAAIgcDI4MjdlYzI1YTM4NTY0YmM3OTFkNTU5MTg0NzZlZDMwMQ
       ssl:
         enabled: true

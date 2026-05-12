@@ -1,25 +1,29 @@
 import React, {createContext, useState, useEffect, useCallback} from 'react';
-import api, {authService, profileService} from '../services/api';
+import {profileService, authService} from '../services/api';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('user_data');
-        return savedUser ? JSON.parse(savedUser) : null;
+        const saved = localStorage.getItem('user_data');
+        return saved ? JSON.parse(saved) : null;
     });
-
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('access_token'));
     const [loading, setLoading] = useState(true);
 
-    const fetchUserProfile = useCallback(async () => {
+    // Carga inicial del perfil cuando hay token guardado
+    const cargarPerfil = useCallback(async () => {
         try {
             const {data} = await profileService.getProfile();
             setUser(data);
             localStorage.setItem('user_data', JSON.stringify(data));
-        } catch (error) {
-            console.error("Error cargando perfil:", error);
-            logout();
+        } catch {
+            // Si falla la carga inicial, limpiar sesión
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user_data');
+            setIsAuthenticated(false);
+            setUser(null);
         } finally {
             setLoading(false);
         }
@@ -27,11 +31,11 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         if (isAuthenticated && !user) {
-            fetchUserProfile();
+            cargarPerfil();
         } else {
             setLoading(false);
         }
-    }, [isAuthenticated, user, fetchUserProfile]);
+    }, [isAuthenticated, user, cargarPerfil]);
 
     const login = async (credentials) => {
         setLoading(true);
@@ -39,29 +43,40 @@ export const AuthProvider = ({children}) => {
             const {data} = await authService.login(credentials);
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('refresh_token', data.refresh_token);
+
+            // Intentar cargar perfil — si falla, el login igual es exitoso
+            try {
+                const {data: perfil} = await profileService.getProfile();
+                setUser(perfil);
+                localStorage.setItem('user_data', JSON.stringify(perfil));
+            } catch {
+                // Sin perfil por ahora, el dashboard lo cargará después
+            }
+
             setIsAuthenticated(true);
-            await fetchUserProfile();
             return {success: true};
         } catch (error) {
-            return {success: false, error: error.response?.data?.message || 'Error de conexión'};
+            return {success: false, error: error.response?.data?.message || 'Credenciales incorrectas'};
         } finally {
             setLoading(false);
         }
     };
 
-    const logout = () => {
+    const logout = (callback) => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user_data');
         setUser(null);
         setIsAuthenticated(false);
+        if (callback) callback();
     };
 
     return (
         <AuthContext.Provider value={{user, isAuthenticated, login, logout, loading}}>
             {loading ? (
-                <div className="bg-black h-screen w-screen flex items-center justify-center text-white">
-                    Cargando Enfoca...
+                <div className="bg-[#0a0a0a] h-screen w-screen flex flex-col items-center justify-center gap-4">
+                    <div className="w-8 h-8 border-2 border-violet-600/30 border-t-violet-600 rounded-full animate-spin"/>
+                    <span className="text-neutral-500 text-xs tracking-widest uppercase">Cargando Enfoca...</span>
                 </div>
             ) : (
                 children

@@ -5,12 +5,18 @@ spring:
 
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
   flyway:
     out-of-order: true
 
 app:
   jwt:
     secret: dGhpcy1pcy1hLXZlcnktc2VjdXJlLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=
+  resend:
+    api-key: re_HU3kVQNn_Kz4B4yrGfNTHe4Gewn3yUsta
+    from: noreply@enfoca.online
+    frontend-url: http://localhost:5173
 
 logging:
   level:
