@@ -54,7 +54,15 @@ export const profileService = {
     changePassword: (data) => api.put('/profile/password', data),
 };
 
-// ── Métricas ─────────────────────────────────────────────────────
+export const planService = {
+    crear: (data) => api.post('/planes-estudio', data),
+    listar: () => api.get('/planes-estudio'),
+    obtener: (id) => api.get(`/planes-estudio/${id}`),
+    eliminar: (id) => api.delete(`/planes-estudio/${id}`),
+    validar: (id, data) => api.post(`/planes-estudio/${id}/validaciones`, data),
+    catalogo: () => api.get('/planes-estudio/catalogo'),
+};
+
 export const metricsService = {
     getSummary:   ()             => api.get('/api/metrics/summary'),
     getLast7Days: ()             => api.get('/api/metrics/daily'),

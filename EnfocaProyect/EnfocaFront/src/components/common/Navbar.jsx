@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
 export default function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+    const [loggingOut, setLoggingOut] = useState(false);
 
     const getUserInitial = () => {
         const name = user?.nombre || user?.firstName || user?.username || 'U';
@@ -18,6 +14,13 @@ export default function Navbar() {
 
     const getUserDisplayName = () => {
         return user?.nombre || user?.firstName || 'Usuario';
+    };
+
+    const handleLogout = () => {
+        setLoggingOut(true);
+        setTimeout(() => {
+            logout(() => navigate('/login'));
+        }, 1800);
     };
 
     return (
@@ -48,7 +51,7 @@ export default function Navbar() {
                     </>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
+                        <Link to="/dashboard" className="flex items-center gap-2 hover:text-neutral-300 transition-colors">
                             {user?.avatarUrl ? (
                                 <img
                                     src={user.avatarUrl}
@@ -56,17 +59,28 @@ export default function Navbar() {
                                     className="h-8 w-8 rounded-full border border-neutral-700"
                                 />
                             ) : (
-                                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center text-xs font-bold text-white">
+                                <div className="h-8 w-8 rounded-full bg-violet-600/30 border border-violet-500/30 flex items-center justify-center text-xs font-bold text-violet-300">
                                     {getUserInitial()}
                                 </div>
                             )}
-                            <span className="hidden lg:inline text-neutral-300">{getUserDisplayName()}</span>
-                        </div>
+                            <span className="hidden lg:inline text-neutral-300">
+                                {getUserDisplayName()}
+                            </span>
+                        </Link>
+
                         <button
                             onClick={handleLogout}
-                            className="text-red-400 hover:text-red-300 transition-colors cursor-pointer bg-transparent border-none p-0"
+                            disabled={loggingOut}
+                            className="flex items-center gap-2 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-60"
                         >
-                            Cerrar sesión
+                            {loggingOut ? (
+                                <>
+                                    <div className="w-3.5 h-3.5 border-2 border-neutral-600 border-t-neutral-300 rounded-full animate-spin"/>
+                                    <span className="text-xs">Cerrando...</span>
+                                </>
+                            ) : (
+                                'Cerrar sesión'
+                            )}
                         </button>
                     </div>
                 )}

@@ -1,0 +1,30 @@
+Genera un plan de estudio detallado para la siguiente solicitud:
+
+- Materia o área: {materia}
+- Tiempo disponible: {tiempo}
+- Objetivo principal: {objetivo}
+- Nivel del estudiante: {nivel}
+
+REGLAS:
+1. Divide el contenido en 3 a 6 módulos temáticos progresivos (de fundamentos a aplicación).
+2. Cada módulo debe tener entre 2 y 5 temas específicos y accionables.
+3. Estima los pomodoros (25 min c/u) necesarios por tema según su complejidad.
+4. Los títulos deben ser concretos, no genéricos.
+
+Devuelve SOLO este JSON:
+{
+  "titulo": "string",
+  "modulos": [
+    {
+      "titulo": "string",
+      "orden": 1,
+      "temas": [
+        {
+          "titulo": "string",
+          "orden": 1,
+          "pomodoros_estimados": 3
+        }
+      ]
+    }
+  ]
+}

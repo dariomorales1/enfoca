@@ -1,0 +1,14 @@
+El siguiente plan de estudio obtuvo valoraciones bajas. Mejóralo manteniendo
+el mismo título, objetivo y nivel, pero reestructurando módulos y temas
+para mayor efectividad pedagógica.
+
+PLAN ACTUAL:
+{plan_json}
+
+CRITERIOS DE MEJORA:
+1. Títulos de temas más específicos y accionables.
+2. Progresión pedagógica más clara (simple → complejo).
+3. Estimaciones de tiempo más realistas.
+4. Cobertura completa del objetivo declarado.
+
+Devuelve SOLO el JSON con la misma estructura del plan original.
