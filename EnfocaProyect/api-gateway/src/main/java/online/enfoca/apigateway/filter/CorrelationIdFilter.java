@@ -2,6 +2,7 @@ package online.enfoca.apigateway.filter;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -19,6 +20,7 @@ public class CorrelationIdFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String correlationId = exchange.getRequest().getHeaders().getFirst(HEADER_CORRELATION_ID);
+
         if (correlationId == null || correlationId.isBlank()) {
             correlationId = UUID.randomUUID().toString();
         }
@@ -33,9 +35,20 @@ public class CorrelationIdFilter implements WebFilter {
                 .request(mutatedRequest)
                 .build();
 
-        return chain.filter(mutatedExchange)
-                .then(Mono.fromRunnable(() ->
-                        mutatedExchange.getResponse().getHeaders()
-                                .add(HEADER_CORRELATION_ID, finalCorrelationId)));
+        mutatedExchange.getResponse().beforeCommit(() -> {
+            ServerHttpResponse response = mutatedExchange.getResponse();
+
+            // Reemplazamos containsKey por getFirst() != null para evitar el error del IDE
+            if (!response.isCommitted() && response.getHeaders().getFirst(HEADER_CORRELATION_ID) == null) {
+                try {
+                    response.getHeaders().add(HEADER_CORRELATION_ID, finalCorrelationId);
+                } catch (UnsupportedOperationException e) {
+                    // Manejo silencioso en caso de que los headers sean ReadOnly
+                }
+            }
+            return Mono.empty();
+        });
+
+        return chain.filter(mutatedExchange);
     }
 }

@@ -28,17 +28,6 @@ const IconAnalytics = () => (
         <line x1="6" y1="20" x2="6" y2="14" />
     </svg>
 );
-const IconSearch = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-);
-const IconBell = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-    </svg>
-);
 const IconLogout = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -79,7 +68,6 @@ export default function DashboardLayout() {
     return (
         <div className="flex h-screen bg-[#0a0a0a] text-white overflow-hidden">
 
-            {/* Overlay de cierre de sesión */}
             {loggingOut && (
                 <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center gap-4">
                     <div className="w-8 h-8 border-2 border-violet-600/30 border-t-violet-600 rounded-full animate-spin"/>
@@ -87,40 +75,34 @@ export default function DashboardLayout() {
                 </div>
             )}
 
-            {/* Sidebar */}
             <aside className="w-[220px] flex-shrink-0 hidden md:flex flex-col border-r border-neutral-900 bg-[#0d0d0d]">
 
-                {/* Logo → Landing page */}
                 <Link to="/" className="px-5 py-6 flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <div className="w-8 h-8 rounded-md bg-violet-600 flex items-center justify-center">
                         <span className="text-xs font-black text-white tracking-tighter">E</span>
                     </div>
                     <div>
-                        <div className="text-sm font-black tracking-widest text-white leading-none">ENFOCA</div>
-                        <div className="text-[9px] tracking-widest text-neutral-600 uppercase mt-0.5">Rigor Académico</div>
+                        <div className="text-sm font-bold text-white tracking-wider">ENFOCA</div>
+                        <div className="text-[10px] text-neutral-500 tracking-widest uppercase">ACADEMIC RIGOR</div>
                     </div>
                 </Link>
 
-                <nav className="flex-1 px-3 flex flex-col gap-0.5">
+                <nav className="flex-1 px-3 py-2 flex flex-col gap-0.5">
                     {NAV_ITEMS.map(({ to, label, icon }) => (
                         <NavLink
                             key={to}
                             to={to}
                             end={to === '/dashboard'}
                             className={({ isActive }) =>
-                                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                                     isActive
-                                        ? 'bg-violet-600/20 text-violet-300'
-                                        : 'text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800/50'
+                                        ? 'bg-white/5 text-white'
+                                        : 'text-neutral-500 hover:text-neutral-200 hover:bg-white/5'
                                 }`
                             }
                         >
-                            {({ isActive }) => (
-                                <>
-                                    <span className={isActive ? 'text-violet-400' : ''}>{icon}</span>
-                                    {label}
-                                </>
-                            )}
+                            {icon}
+                            {label}
                         </NavLink>
                     ))}
                 </nav>
@@ -131,7 +113,6 @@ export default function DashboardLayout() {
                         Soporte
                     </button>
 
-                    {/* Cerrar sesión explícito */}
                     <button
                         onClick={handleLogout}
                         disabled={loggingOut}
@@ -141,7 +122,6 @@ export default function DashboardLayout() {
                         Cerrar sesión
                     </button>
 
-                    {/* Fila de usuario */}
                     <div className="flex items-center gap-2.5 px-1 pt-2 border-t border-neutral-900 mt-1">
                         <div className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                             {initials}
@@ -151,28 +131,9 @@ export default function DashboardLayout() {
                 </div>
             </aside>
 
-            {/* Main */}
-            <div className="flex-1 flex flex-col min-w-0">
-                <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 md:px-6 border-b border-neutral-900">
-                    <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-white">Panel</span>
-                        <span className="hidden sm:inline text-neutral-700">|</span>
-                        <span className="hidden sm:inline text-xs text-neutral-500">Sesión activa: Física Cuántica</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-full">
-                            <span className="text-base">🔥</span>
-                            <span className="text-xs font-bold text-white tracking-wide">12 días</span>
-                        </div>
-                        <button className="text-neutral-600 hover:text-neutral-400 transition-colors"><IconSearch /></button>
-                        <button className="text-neutral-600 hover:text-neutral-400 transition-colors"><IconBell /></button>
-                    </div>
-                </header>
-
-                <main className="flex-1 overflow-y-auto">
-                    <Outlet />
-                </main>
-            </div>
+            <main className="flex-1 overflow-auto">
+                <Outlet />
+            </main>
         </div>
     );
 }

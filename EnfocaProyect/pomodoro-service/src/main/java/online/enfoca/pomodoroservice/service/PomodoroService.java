@@ -29,13 +29,30 @@ public class PomodoroService {
         session.setSessionType(request.sessionType());
         session.setDurationMinutes(request.durationMinutes());
 
+        session.setStatus(SessionStatus.PREPARING);
+
+        PomodoroSession savedSession = repository.save(session);
+
+        log.info("[POMODORO PREPARING] Session created | ID: {} | User: {}",
+                savedSession.getId(), savedSession.getUserId());
+
+        return savedSession;
+    }
+
+    public PomodoroSession beginSession(Long id) {
+        PomodoroSession session = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pomodoro session with id " + id + " not found"));
+
+        if (session.getStatus() != SessionStatus.PREPARING) {
+            throw new InvalidSessionStateException("Session cannot be started because it is not in PREPARING state");
+        }
         session.setStartTime(LocalDateTime.now());
         session.setStatus(SessionStatus.STARTED);
 
         PomodoroSession savedSession = repository.save(session);
 
-        log.info("[POMODORO START] Session iniciate | ID: {} | User: {} | Minutes: {}",
-                savedSession.getId(), savedSession.getUserId(), savedSession.getDurationMinutes());
+        log.info("[POMODORO STARTED] Timer running | ID: {} | Start Time: {}",
+                savedSession.getId(), savedSession.getStartTime());
 
         return savedSession;
     }

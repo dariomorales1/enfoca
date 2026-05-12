@@ -8,6 +8,8 @@
   transition: border-color 0.3s;
   margin-bottom: 24px;
 
+
+
   &:hover {
     border-color: var(--accent-border);
   }
@@ -181,4 +183,100 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+/* ── Analytics Page ─────────────────────────────────── */
+.analytics-page {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 960px;
+}
+
+.analytics-header { display: flex; flex-direction: column; gap: 0.25rem; }
+.analytics-title  { font-size: 1.5rem; font-weight: 700; color: #cdccca; letter-spacing: 0.05em; }
+.analytics-sub    { font-size: 0.7rem; color: #5a5957; letter-spacing: 0.15em; }
+
+/* KPIs */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.kpi-card {
+  background: #1c1b19;
+  border: 1px solid #262523;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 0.35rem;
+}
+.kpi-label { font-size: 0.65rem; color: #5a5957; letter-spacing: 0.12em; }
+.kpi-value { font-size: 1.75rem; font-weight: 700; color: #cdccca; font-variant-numeric: tabular-nums; }
+.kpi-sub   { font-size: 0.65rem; color: #797876; }
+
+/* Charts */
+.chart-card {
+  background: #1c1b19;
+  border: 1px solid #262523;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+.chart-card-header { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 1rem; }
+.chart-title { font-size: 0.7rem; font-weight: 600; color: #cdccca; letter-spacing: 0.12em; }
+.chart-sub   { font-size: 0.6rem; color: #5a5957; letter-spacing: 0.1em; }
+
+/* Tooltip */
+.chart-tooltip {
+  background: #201f1d;
+  border: 1px solid #393836;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+}
+.tooltip-label { font-size: 0.7rem; color: #797876; margin-bottom: 0.2rem; }
+.tooltip-value { font-size: 0.95rem; font-weight: 600; color: #a86fdf; }
+
+/* Heatmap */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 0.75rem;
+}
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  transition: transform 0.15s ease;
+  cursor: default;
+}
+.heatmap-cell:hover { transform: scale(1.2); }
+.heatmap-empty { color: #5a5957; font-size: 0.8rem; padding: 1rem 0; }
+.heatmap-legend { display: flex; align-items: center; gap: 0.5rem; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.heatmap-legend span { font-size: 0.6rem; color: #5a5957; }
+
+/* AI Insight */
+.insight-card {
+  background: linear-gradient(135deg, #1c1b19, #22211f);
+  border: 1px solid #393836;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+.insight-badge {
+  font-size: 0.6rem; letter-spacing: 0.15em;
+  color: #a86fdf; font-weight: 700;
+}
+.insight-text { font-size: 0.9rem; color: #cdccca; line-height: 1.6; max-width: 65ch; }
+.insight-week { font-size: 0.65rem; color: #5a5957; }
+
+/* Skeletons */
+.analytics-loading { padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.skeleton-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+.skeleton-kpi   { height: 90px; border-radius: 0.5rem; }
+.skeleton-chart { height: 200px; border-radius: 0.5rem; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .analytics-page { padding: 1rem; }
 }

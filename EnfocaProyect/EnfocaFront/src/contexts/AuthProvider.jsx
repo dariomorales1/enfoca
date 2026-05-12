@@ -1,7 +1,6 @@
-import React, {createContext, useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import {AuthContext} from './AuthContext';
 import {profileService, authService} from '../services/api';
-
-export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(() => {
@@ -11,14 +10,12 @@ export const AuthProvider = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('access_token'));
     const [loading, setLoading] = useState(true);
 
-    // Carga inicial del perfil cuando hay token guardado
     const cargarPerfil = useCallback(async () => {
         try {
             const {data} = await profileService.getProfile();
             setUser(data);
             localStorage.setItem('user_data', JSON.stringify(data));
         } catch {
-            // Si falla la carga inicial, limpiar sesión
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('user_data');
@@ -44,7 +41,6 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('refresh_token', data.refresh_token);
 
-            // Intentar cargar perfil — si falla, el login igual es exitoso
             try {
                 const {data: perfil} = await profileService.getProfile();
                 setUser(perfil);

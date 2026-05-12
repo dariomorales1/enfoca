@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import SplitCardLayout from '../components/common/SplitCardLayout';
+import SplitCardLayout from '../layouts/SplitCardLayout.jsx';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
 import {Link, useNavigate} from 'react-router-dom';
@@ -19,12 +19,17 @@ export default function LoginPage() {
         setError('');
         setIsLoading(true);
 
-        const result = await login({email, password});
+        try {
+            const result = await login({email, password});
 
-        if (result.success) {
-            navigate('/dashboard');
-        } else {
-            setError(result.error || 'Credenciales incorrectas');
+            if (result && result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result?.error || 'Credenciales incorrectas');
+                setIsLoading(false);
+            }
+        } catch (err) {
+            setError('No se pudo establecer conexión con el servidor');
             setIsLoading(false);
         }
     };
@@ -97,22 +102,26 @@ export default function LoginPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Google
                     </button>
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Apple
                     </button>
                 </div>
 
                 <div className="mt-[clamp(1rem,2.5vh,2rem)] text-center text-xs text-neutral-500">
                     ¿No tienes cuenta?{' '}
-                    <Link to="/register" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
+                    <Link to="/register"
+                          className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
                         Regístrate
                     </Link>
                 </div>
 
-                <div className="mt-4 flex items-center justify-center gap-2 text-[10px] lg:text-xs text-neutral-600 italic">
+                <div
+                    className="mt-4 flex items-center justify-center gap-2 text-[10px] lg:text-xs text-neutral-600 italic">
                     <div className="w-1.5 h-1.5 rounded-full bg-violet-600"/>
                     Acceso Académico Seguro
                 </div>

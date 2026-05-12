@@ -27,6 +27,12 @@ public class PomodoroController {
         return new ResponseEntity<>(PomodoroMapper.toResponse(session), HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}/begin")
+    public ResponseEntity<PomodoroSessionResponse> begin(@PathVariable Long id) {
+        PomodoroSession session = service.beginSession(id);
+        return ResponseEntity.ok(PomodoroMapper.toResponse(session));
+    }
+
     @PatchMapping("/{id}/finish")
     public ResponseEntity<PomodoroSessionResponse> finish(
             @PathVariable Long id,

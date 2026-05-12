@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import SplitCardLayout from '../components/common/SplitCardLayout';
+import SplitCardLayout from '../layouts/SplitCardLayout.jsx';
 import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
 import {Link, useNavigate} from 'react-router-dom';
@@ -111,9 +111,11 @@ export default function RegisterPage() {
                         </div>
                         <label htmlFor="terms" className="text-[10px] lg:text-xs text-neutral-400 leading-tight">
                             Acepto los{' '}
-                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Términos de servicio</a>
+                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Términos de
+                                servicio</a>
                             {' '}y la{' '}
-                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Política de privacidad</a>.
+                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Política de
+                                privacidad</a>.
                         </label>
                     </div>
 
@@ -137,10 +139,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Google
                     </button>
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
+                    <button
+                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
                         Apple
                     </button>
                 </div>
