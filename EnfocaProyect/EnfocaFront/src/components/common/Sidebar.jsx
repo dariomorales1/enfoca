@@ -8,7 +8,7 @@ export default function Sidebar() {
         {name: 'Dashboard', path: '/dashboard', icon: '⊞'},
         {name: 'Focus Mode', path: '/pomodoro', icon: '🕒'},
         {name: 'Study Plans', path: '/study-plan', icon: '📖'},
-        {name: 'Analytics', path: '/stats', icon: '📈'},
+        {name: 'Analytics', path: '/analytics', icon: '📈'},
     ];
 
     return (

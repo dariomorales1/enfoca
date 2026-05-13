@@ -6,6 +6,7 @@ import DashboardPage from '../pages/DashboardPage'; // Nueva
 import PomodoroPage from '../pages/PomodoroPage';
 import FocusModePage from '../pages/FocusModePage';
 import StudyPlanPage from '../pages/StudyPlanPage'; // Nueva
+import AnalyticsPage from '../pages/AnalyticsPage';
 
 // Rutas Públicas (Accesibles sin iniciar sesión)
 export const PUBLIC_ROUTES = [
@@ -55,6 +56,12 @@ export const PRIVATE_ROUTES = [
         element: StudyPlanPage,
         name: 'Plan de Estudio',
         icon: 'BookOpenIcon'
+    },
+    {
+        path: '/analytics',
+        element: AnalyticsPage,
+        name: 'Analytics',
+        icon: 'ChartIcon'
     }
 ];
 

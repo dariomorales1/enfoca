@@ -1,8 +1,16 @@
+import { useContext } from 'react';
+import { useGamification } from '../hooks/useGamification.jsx';
+import { useMetrics } from '../hooks/useMetrics';
+import { usePlanes } from '../hooks/usePlanes';
+import { AuthContext } from '../contexts/AuthContext';
+
 import StatCard from '../components/dashboard/StatCard';
 import WeeklyChart from '../components/dashboard/WeeklyChart';
 import FocusEngine from '../components/dashboard/FocusEngine';
 import CurriculumCard from '../components/dashboard/CurriculumCard';
+import GamificationPanel from '../components/dashboard/GamificationPanel';
 
+// ── Iconos ────────────────────────────────────────────────────────────────────
 const IconClock = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 15" />
@@ -25,98 +33,119 @@ const IconBolt = () => (
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
     </svg>
 );
-const IconSigma = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M18 4H6l7 8-7 8h12" />
-    </svg>
-);
-const IconUpload = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" />
-        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-    </svg>
-);
-const IconGlobe = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="12" cy="12" r="9" />
-        <line x1="3.05" y1="9" x2="20.95" y2="9" /><line x1="3.05" y1="15" x2="20.95" y2="15" />
-        <path d="M12 3a14.5 14.5 0 0 1 0 18 14.5 14.5 0 0 1 0-18" />
-    </svg>
+
+// ── Skeleton genérico ─────────────────────────────────────────────────────────
+const Skeleton = ({ className }) => (
+    <div className={`bg-neutral-800/60 rounded animate-pulse ${className}`} />
 );
 
-const CURRICULUM = [
-    {
-        code: 'MTH-402',
-        title: 'Integración Multivariable',
-        efficiency: 75.0,
-        topic: 'Tema: Integrales triples en coordenadas esféricas y campos vectoriales.',
-        accent: 'violet',
-        icon: <IconSigma />,
-    },
-    {
-        code: 'BIO-612',
-        title: 'Edición Génica CRISPR',
-        efficiency: 42.8,
-        topic: 'Tema: Análisis de secuenciación molecular CAS9 y unión a objetivos.',
-        accent: 'emerald',
-        icon: <IconUpload />,
-    },
-    {
-        code: 'HIS-101',
-        title: 'Revolución Industrial',
-        efficiency: 88.2,
-        topic: 'Tema: Cambio socioeconómico y mecanización en la Europa del siglo XIX.',
-        accent: 'amber',
-        icon: <IconGlobe />,
-    },
-];
+// ── Skeleton de StatCard ──────────────────────────────────────────────────────
+const StatCardSkeleton = () => (
+    <div className="rounded-xl border border-neutral-900 bg-neutral-950 p-4 flex flex-col gap-3">
+        <Skeleton className="h-3 w-20" />
+        <Skeleton className="h-7 w-16" />
+        <Skeleton className="h-3 w-10" />
+    </div>
+);
 
+// ── Skeleton de CurriculumCard ────────────────────────────────────────────────
+const CurriculumCardSkeleton = () => (
+    <div className="rounded-xl border border-neutral-900 bg-neutral-950 p-4 flex flex-col gap-3 animate-pulse">
+        <div className="flex items-center gap-2">
+            <Skeleton className="h-6 w-6 rounded" />
+            <Skeleton className="h-3 w-16" />
+        </div>
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-1.5 w-full rounded-full" />
+    </div>
+);
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmtHoras(minutos) {
+    if (minutos == null) return '—';
+    const h = minutos / 60;
+    return h % 1 === 0 ? String(h) : h.toFixed(1);
+}
+
+function accentFromIndex(i) {
+    const NIVEL_ACCENT = { BASICO: 'emerald', INTERMEDIO: 'amber', AVANZADO: 'violet' };
+}
+
+// ── Componente principal ──────────────────────────────────────────────────────
 export default function DashboardPage() {
+    const { user } = useContext(AuthContext);
+
+    // Datos reales desde hooks
+    const { perfil, loading: loadingGam }         = useGamification();
+    const { summary, loading: loadingMetrics }     = useMetrics();
+    const { planes, loading: loadingPlanes }       = usePlanes();
+    const NIVEL_ACCENT = { BASICO: 'emerald', INTERMEDIO: 'amber', AVANZADO: 'violet' };
     return (
         <div className="p-4 md:p-6 flex flex-col gap-5">
 
-            {/* Métricas */}
+            {/* ── Métricas ──────────────────────────────────────────────── */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                <StatCard
-                    label="Horas Enfocadas"
-                    value="124.5"
-                    badge="+12%"
-                    badgeColor="green"
-                    icon={<IconClock />}
-                />
-                <StatCard
-                    label="XP Trabajo Profundo"
-                    value="2.450"
-                    badge="NIV 24"
-                    badgeColor="neutral"
-                    icon={<IconTarget />}
-                />
-                <StatCard
-                    label="Tasa de Retención"
-                    value="92"
-                    unit="%"
-                    icon={<IconLayers />}
-                />
-                <StatCard
-                    label="Racha Activa"
-                    value="12"
-                    unit="DÍAS"
-                    icon={<IconBolt />}
-                    accent="text-amber-400"
-                />
+                {loadingMetrics ? (
+                    <>
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                    </>
+                ) : (
+                    <>
+                        <StatCard
+                            label="Horas Enfocadas"
+                            value={fmtHoras(summary?.minutosTotales)}
+                            badge={summary?.variacionSemanal != null
+                                ? `${summary.variacionSemanal > 0 ? '+' : ''}${summary.variacionSemanal}%`
+                                : null}
+                            badgeColor="green"
+                            icon={<IconClock />}
+                        />
+                        <StatCard
+                            label="XP Trabajo Profundo"
+                            value={perfil
+                                ? perfil.xpTotal.toLocaleString('es-CL')
+                                : '—'}
+                            badge={perfil ? `NIV ${perfil.nivel}` : '...'}
+                            badgeColor="neutral"
+                            icon={<IconTarget />}
+                        />
+                        <StatCard
+                            label="Tasa de Retención"
+                            value={summary?.tasaRetencion ?? '—'}
+                            unit="%"
+                            icon={<IconLayers />}
+                        />
+                        <StatCard
+                            label="Racha Activa"
+                            value={summary?.rachaDias ?? '—'}
+                            unit="DÍAS"
+                            icon={<IconBolt />}
+                            accent="text-amber-400"
+                        />
+                    </>
+                )}
             </div>
 
-            {/* Gráfico + Motor */}
+            {/* ── Gráfico + Motor + Gamificación ────────────────────────── */}
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
                 <WeeklyChart />
-                <FocusEngine />
+                <div className="flex flex-col gap-4">
+                    <FocusEngine />
+                    <GamificationPanel />
+                </div>
             </div>
 
-            {/* Currículo activo */}
+            {/* ── Currículo activo ──────────────────────────────────────── */}
             <div>
                 <div className="flex items-end justify-between mb-4">
                     <div>
-                        <h2 className="text-xs font-bold tracking-widest text-white uppercase">Currículo Activo</h2>
+                        <h2 className="text-xs font-bold tracking-widest text-white uppercase">
+                            Currículo Activo
+                        </h2>
                         <p className="text-[10px] text-neutral-600 tracking-wider mt-0.5">
                             Planes de estudio principales y progreso modular
                         </p>
@@ -131,28 +160,64 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {CURRICULUM.map((c) => (
-                        <CurriculumCard key={c.code} {...c} />
-                    ))}
+                    {loadingPlanes ? (
+                        <>
+                            <CurriculumCardSkeleton />
+                            <CurriculumCardSkeleton />
+                            <CurriculumCardSkeleton />
+                        </>
+                    ) : planes.length === 0 ? (
+                        <div className="col-span-full flex flex-col items-center gap-3 py-12 text-center">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" strokeWidth="1" className="text-neutral-700">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <line x1="9" y1="9" x2="15" y2="9" />
+                                <line x1="9" y1="12" x2="15" y2="12" />
+                                <line x1="9" y1="15" x2="12" y2="15" />
+                            </svg>
+                            <p className="text-xs text-neutral-600 tracking-wide">
+                                Sin planes activos
+                            </p>
+                            <p className="text-[10px] text-neutral-700 max-w-[28ch]">
+                                Crea tu primer plan de estudio para ver tu progreso aquí.
+                            </p>
+                        </div>
+                    ) : (
+                        planes.slice(0, 6).map((plan, i) => (
+                            <CurriculumCard
+                                key={plan.id}
+                                code={`${plan.nivel?.slice(0, 3) ?? 'PLN'}-${String(plan.id).slice(-4).toUpperCase()}`}
+                                title={plan.titulo}
+                                efficiency={plan.progreso?.porcentaje ?? Math.round(plan.ratioValidaciones * 100)}
+                                topic={plan.objetivo}
+                                accent={accentFromIndex(i)}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
 
-            {/* Footer */}
+            {/* ── Footer ────────────────────────────────────────────────── */}
             <footer className="mt-2 pt-5 border-t border-neutral-900 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                     <div className="w-5 h-5 border border-neutral-700 rounded flex items-center justify-center">
                         <span className="text-[8px] font-black text-neutral-500">E</span>
                     </div>
-                    <span className="text-[10px] tracking-widest text-neutral-600 uppercase font-semibold">Enfoca OS</span>
+                    <span className="text-[10px] tracking-widest text-neutral-600 uppercase font-semibold">
+                        Enfoca OS
+                    </span>
                 </div>
                 <div className="flex items-center gap-6">
                     {['Manifiesto', 'Arquitectura', 'Nodos'].map((link) => (
-                        <button key={link} className="text-[10px] tracking-widest text-neutral-700 hover:text-neutral-500 uppercase transition-colors">
+                        <button key={link}
+                                className="text-[10px] tracking-widest text-neutral-700 hover:text-neutral-500 uppercase transition-colors">
                             {link}
                         </button>
                     ))}
                 </div>
-                <span className="text-[10px] text-neutral-800 font-mono">v2.4.0-ESTABLE // BUILD_200431</span>
+                <span className="text-[10px] text-neutral-800 font-mono">
+                    v2.4.0-ESTABLE // {user?.id ? `UID_${user.id}` : 'BUILD_200431'}
+                </span>
             </footer>
         </div>
     );
