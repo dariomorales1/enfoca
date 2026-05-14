@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Sidebar from '../components/common/Sidebar';
-import { profileService, authService } from '../services/api';
+import { profileService } from '../services/api';
 
 const IconEye = ({ open }) => open ? (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -62,8 +62,8 @@ export default function ProfilePage() {
     const { user } = useAuth();
     const navigate  = useNavigate();
 
-    const [nombre,    setNombre]    = useState(user?.nombre     ?? '');
-    const [lastName,  setLastName]  = useState(user?.last_name  ?? user?.lastName ?? '');
+    const [nombre,    setNombre]    = useState(user?.first_name ?? user?.nombre    ?? '');
+    const [lastName,  setLastName]  = useState(user?.last_name  ?? user?.lastName  ?? '');
     const [email]                   = useState(user?.email      ?? '');
 
     const [profileStatus, setProfileStatus] = useState(null);
@@ -78,13 +78,11 @@ export default function ProfilePage() {
     const [pwStatus,   setPwStatus]   = useState(null);
     const [pwCountdown, setPwCountdown] = useState(3);
 
-    const [recoverStatus, setRecoverStatus] = useState(null);
-
     const handleProfileSave = async (e) => {
         e.preventDefault();
         setProfileStatus('loading');
         try {
-            await profileService.updateProfile({ nombre, lastName });
+            await profileService.updateProfile({ first_name: nombre, last_name: lastName });
             setProfileStatus('success');
         } catch {
             setProfileStatus('error');
@@ -123,15 +121,6 @@ export default function ProfilePage() {
         }
     };
 
-    const handleRecoverEmail = async () => {
-        setRecoverStatus('loading');
-        try {
-            await authService.forgotPassword(email);
-            setRecoverStatus('sent');
-        } catch {
-            setRecoverStatus('error');
-        }
-    };
 
     const firstName = nombre.split(' ')[0] || 'Usuario';
     const initial   = firstName.charAt(0).toUpperCase();
@@ -221,32 +210,6 @@ export default function ProfilePage() {
                         </form>
                     </section>
 
-                    {/* Recuperar por correo */}
-                    <section className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-5 flex flex-col gap-3">
-                        <h2 className="text-xs font-bold tracking-widest text-white uppercase">Olvidé mi contraseña</h2>
-                        <p className="text-xs text-neutral-500">
-                            Te enviaremos un enlace a <span className="text-neutral-300">{email}</span> para que puedas cambiar tu contraseña desde tu correo.
-                        </p>
-
-                        {recoverStatus === 'sent' && (
-                            <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
-                                Correo enviado. Revisa tu bandeja de entrada.
-                            </div>
-                        )}
-                        {recoverStatus === 'error' && (
-                            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
-                                No se pudo enviar el correo. Intenta de nuevo.
-                            </div>
-                        )}
-
-                        <button
-                            onClick={handleRecoverEmail}
-                            disabled={recoverStatus === 'loading' || recoverStatus === 'sent'}
-                            className="self-start px-5 py-2 rounded-lg border border-neutral-700 hover:border-violet-500 text-neutral-300 hover:text-white text-sm font-semibold transition-all disabled:opacity-50"
-                        >
-                            {recoverStatus === 'loading' ? 'Enviando...' : 'Enviar correo de recuperación'}
-                        </button>
-                    </section>
 
                 </div>
             </div>

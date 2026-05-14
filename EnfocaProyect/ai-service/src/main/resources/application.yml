@@ -33,6 +33,8 @@ spring:
 
   flyway:
     enabled: true
+    schemas: planes
+    default-schema: planes
     locations: classpath:db/migration
     out-of-order: true
     baseline-on-migrate: true

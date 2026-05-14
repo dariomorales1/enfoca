@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -139,6 +140,25 @@ public class ServicioPlanEstudio {
             log.info("Plan {} alcanzó {} validaciones — ejecutando auto-indexado inmediato", planId, UMBRAL_VALIDACIONES);
             evaluarPlan(plan);
         }
+    }
+
+    @Transactional
+    public TemaResponse toggleTema(UUID temaId, String usuarioId) {
+        Tema tema = temaRepositorio.findById(temaId)
+                .orElseThrow(() -> new NoSuchElementException("Tema no encontrado: " + temaId));
+
+        PlanEstudio plan = tema.getModulo().getPlan();
+        if (!usuarioId.equals(plan.getUsuarioId())) {
+            throw new SecurityException("Acceso no autorizado al tema");
+        }
+
+        boolean nuevoEstado = !tema.isCompletado();
+        tema.setCompletado(nuevoEstado);
+        tema.setCompletadoEn(nuevoEstado ? LocalDateTime.now() : null);
+        temaRepositorio.save(tema);
+
+        log.info("Tema {} marcado completado={} por usuario {}", temaId, nuevoEstado, usuarioId);
+        return TemaResponse.desde(tema);
     }
 
     @Transactional(readOnly = true)

@@ -34,6 +34,12 @@ const IconFocus = () => (
         <path d="M3 9V5h4M21 9V5h-4M3 15v4h4M21 15v4h-4"/>
     </svg>
 );
+const IconLibrary = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+);
 const IconLogout = () => (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -44,8 +50,8 @@ const IconLogout = () => (
 
 const menuItems = [
     { name: 'Panel',           path: '/dashboard',  icon: <IconDashboard /> },
-    { name: 'Modo Enfoque',    path: '/pomodoro',   icon: <IconTimer /> },
     { name: 'Plan de Estudio', path: '/study-plan', icon: <IconBook /> },
+    { name: 'Biblioteca',      path: '/library',    icon: <IconLibrary /> },
     { name: 'Análisis',        path: '/analytics',  icon: <IconChart /> },
     { name: 'Deep Focus',      path: '/focus-mode', icon: <IconFocus /> },
 ];
@@ -55,7 +61,7 @@ export default function Sidebar() {
     const navigate  = useNavigate();
     const { user, logout } = useAuth();
 
-    const firstName = (user?.nombre || user?.firstName || 'Usuario').split(' ')[0];
+    const firstName = (user?.first_name || user?.nombre || user?.firstName || 'Usuario').split(' ')[0];
     const initial   = firstName.charAt(0).toUpperCase();
 
     const handleLogout = () => {
@@ -66,13 +72,8 @@ export default function Sidebar() {
         <aside className="w-60 flex-shrink-0 h-screen bg-[#0c0c0c] border-r border-neutral-800 flex flex-col sticky top-0">
 
             {/* Logo */}
-            <div className="px-6 pt-6 pb-4">
-                <div className="flex items-center gap-2 text-white font-bold text-lg tracking-tighter">
-                    <div className="w-7 h-7 bg-violet-600 rounded-full flex items-center justify-center text-[11px] font-black">
-                        E
-                    </div>
-                    ENFOCA
-                </div>
+            <div className="px-4 pt-5 pb-4">
+                <img src="/logo.png" alt="Enfoca" className="w-full h-12 object-contain object-left" />
             </div>
 
             {/* Navegación */}
@@ -97,10 +98,10 @@ export default function Sidebar() {
             </nav>
 
             {/* Usuario + Cerrar sesión */}
-            <div className="px-4 py-4 border-t border-neutral-800">
+            <div className="px-4 pt-3 pb-4 border-t border-neutral-800 flex flex-col gap-1">
                 <Link
                     to="/profile"
-                    className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-neutral-800/50 transition-all group mb-1"
+                    className="flex items-center gap-3 px-2 py-2.5 rounded-xl hover:bg-neutral-800/50 transition-all group"
                 >
                     <div className="w-8 h-8 rounded-full bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-xs font-bold text-violet-300 flex-shrink-0">
                         {initial}
@@ -111,9 +112,11 @@ export default function Sidebar() {
                     </div>
                 </Link>
 
+                <div className="border-t border-neutral-800/60 my-1" />
+
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-2 py-2 rounded-xl text-neutral-500 hover:text-red-400 hover:bg-red-500/5 transition-all text-sm"
+                    className="w-full flex items-center gap-3 px-2 py-2.5 rounded-xl text-neutral-500 hover:text-red-400 hover:bg-red-500/5 transition-all text-sm"
                 >
                     <IconLogout />
                     Cerrar sesión

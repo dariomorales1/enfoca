@@ -6,7 +6,7 @@ import { useAuth } from './hooks/useAuth';
 import Navbar from './components/common/Navbar.jsx';
 import Footer from './components/common/Footer.jsx';
 
-const SIDEBAR_ROUTES = ['/dashboard', '/study-plan', '/analytics', '/pomodoro', '/focus-mode', '/settings/password', '/profile'];
+const SIDEBAR_ROUTES = ['/dashboard', '/study-plan', '/analytics', '/pomodoro', '/focus-mode', '/settings/password', '/profile', '/library'];
 
 function AppContent() {
     const { isAuthenticated } = useAuth();

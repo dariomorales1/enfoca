@@ -9,9 +9,8 @@ export default function CurriculumCard({ code, title, efficiency, topic, accent 
 
     return (
         <div className="bg-[#111111] border border-neutral-800/60 rounded-xl p-5 flex flex-col gap-4">
-            <div className="flex items-start justify-between">
+            <div>
                 <span className={`text-[10px] font-bold tracking-widest uppercase ${colors.code}`}>{code}</span>
-                <span className="text-neutral-700">{icon}</span>
             </div>
 
             <h4 className="text-sm font-semibold text-white leading-tight">{title}</h4>

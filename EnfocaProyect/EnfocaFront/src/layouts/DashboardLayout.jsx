@@ -69,7 +69,7 @@ export default function DashboardLayout() {
         }, 1500);
     };
 
-    const displayName = user?.firstName || user?.nombre || user?.username || 'Usuario';
+    const displayName = user?.first_name || user?.firstName || user?.nombre || 'Usuario';
     const initials = displayName.charAt(0).toUpperCase();
 
     return (

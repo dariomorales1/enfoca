@@ -18,10 +18,10 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
-        #default_schema: pomodoro
+        default_schema: pomodoro
         format_sql: true
     show-sql: false
 
@@ -29,6 +29,8 @@ spring:
     enabled: true
     schemas: pomodoro
     locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
 
   data:
     redis:

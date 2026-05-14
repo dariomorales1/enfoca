@@ -7,8 +7,6 @@ import {
     XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
 } from 'recharts';
 
-
-// ── Heatmap helpers ──────────────────────────────────────────────
 const INTENSITY_COLORS = ['#1a1a2e', '#3b2f6e', '#5c3fa8', '#7c54d4', '#a86fdf'];
 
 function HeatmapGrid({ data }) {
@@ -27,7 +25,6 @@ function HeatmapGrid({ data }) {
     );
 }
 
-// ── Tooltip custom ───────────────────────────────────────────────
 function CustomTooltip({ active, payload, label }) {
     if (!active || !payload?.length) return null;
     return (
@@ -38,18 +35,16 @@ function CustomTooltip({ active, payload, label }) {
     );
 }
 
-// ── KPI Card ─────────────────────────────────────────────────────
 function KpiCard({ label, value, sub }) {
     return (
-        <div className="kpi-card">
-            <span className="kpi-label">{label}</span>
-            <span className="kpi-value">{value}</span>
-            {sub && <span className="kpi-sub">{sub}</span>}
+        <div className="bg-[#1c1b19] border border-[#262523] rounded-xl p-5 flex flex-col gap-1.5">
+            <span className="text-[0.65rem] text-[#797876] tracking-widest uppercase">{label}</span>
+            <span className="text-3xl font-bold text-white tabular-nums">{value}</span>
+            {sub && <span className="text-[0.7rem] text-[#5a5957]">{sub}</span>}
         </div>
     );
 }
 
-// ── Page ─────────────────────────────────────────────────────────
 export default function AnalyticsPage() {
     const [summary,  setSummary]  = useState(null);
     const [daily,    setDaily]    = useState([]);
@@ -87,12 +82,12 @@ export default function AnalyticsPage() {
     if (loading) return (
         <div className="flex h-screen bg-[#0c0c0c]">
             <Sidebar />
-            <div className="analytics-loading flex-1">
+            <div className="flex-1 p-6 flex flex-col gap-4">
                 <div className="skeleton skeleton-heading" />
-                <div className="skeleton-row">
-                    {[1,2,3,4].map(i => <div key={i} className="skeleton skeleton-kpi" />)}
+                <div className="flex gap-4">
+                    {[1,2,3,4].map(i => <div key={i} className="skeleton skeleton-kpi flex-1" />)}
                 </div>
-                <div className="skeleton skeleton-chart" />
+                <div className="skeleton skeleton-chart flex-1" />
             </div>
         </div>
     );
@@ -103,89 +98,101 @@ export default function AnalyticsPage() {
     return (
         <div className="flex h-screen bg-[#0c0c0c] overflow-hidden">
             <Sidebar />
-            <div className="analytics-page flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto p-6 flex flex-col gap-4">
 
-            {/* ── Header ── */}
-            <div className="analytics-header">
-                <h1 className="analytics-title">Analytics</h1>
-                <span className="analytics-sub">PERFORMANCE OVERVIEW</span>
-            </div>
-
-            {/* ── KPIs ── */}
-            <div className="kpi-grid">
-                <KpiCard label="HOURS TOTAL"   value={hoursTotal}                        sub="acumulado" />
-                <KpiCard label="HOURS / WEEK"  value={hoursWeek}                         sub="esta semana" />
-                <KpiCard label="RETENTION"     value={`${summary?.retentionRate ?? 0}%`} sub="últimos 30 días" />
-                <KpiCard label="STREAK"        value={`${summary?.currentStreak ?? 0}`}  sub="días consecutivos" />
-            </div>
-
-            {/* ── Gráfico línea — 7 días ── */}
-            <div className="chart-card">
-                <div className="chart-card-header">
-                    <span className="chart-title">ACTIVIDAD DIARIA</span>
-                    <span className="chart-sub">ÚLTIMOS 7 DÍAS — MINUTOS DE ENFOQUE</span>
+                {/* Encabezado */}
+                <div>
+                    <h1 className="text-2xl font-bold text-white tracking-wide">Análisis</h1>
+                    <span className="text-[0.7rem] text-[#797876] tracking-widest uppercase">Resumen de rendimiento</span>
                 </div>
-                <ResponsiveContainer width="100%" height={200}>
-                    <AreaChart data={daily} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-                        <defs>
-                            <linearGradient id="gradDaily" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%"  stopColor="#7c54d4" stopOpacity={0.4} />
-                                <stop offset="95%" stopColor="#7c54d4" stopOpacity={0}   />
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#262523" />
-                        <XAxis dataKey="name" tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <YAxis tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Area type="monotone" dataKey="min" stroke="#a86fdf" strokeWidth={2} fill="url(#gradDaily)" />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </div>
 
-            {/* ── Gráfico barras — 4 semanas ── */}
-            <div className="chart-card">
-                <div className="chart-card-header">
-                    <span className="chart-title">DISTRIBUCIÓN SEMANAL</span>
-                    <span className="chart-sub">ÚLTIMAS 4 SEMANAS — MINUTOS TOTALES</span>
+                {/* KPIs */}
+                <div className="grid grid-cols-4 gap-4">
+                    <KpiCard label="Horas Totales"  value={hoursTotal}                        sub="acumulado" />
+                    <KpiCard label="Horas / Semana" value={hoursWeek}                         sub="esta semana" />
+                    <KpiCard label="Retención"      value={`${summary?.retentionRate ?? 0}%`} sub="últimos 30 días" />
+                    <KpiCard label="Racha"          value={`${summary?.currentStreak ?? 0}`}  sub="días consecutivos" />
                 </div>
-                <ResponsiveContainer width="100%" height={180}>
-                    <BarChart data={weekly} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#262523" vertical={false} />
-                        <XAxis dataKey="name" tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <YAxis tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Bar dataKey="min" fill="#5c3fa8" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
 
-            {/* ── Heatmap ── */}
-            <div className="chart-card">
-                <div className="chart-card-header">
-                    <span className="chart-title">HEATMAP MENSUAL</span>
-                    <span className="chart-sub">
-            {now.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }).toUpperCase()}
-          </span>
-                </div>
-                <HeatmapGrid data={heatmap} />
-                <div className="heatmap-legend">
-                    {INTENSITY_COLORS.map((c, i) => (
-                        <div key={i} className="legend-item">
-                            <div className="legend-dot" style={{ background: c }} />
-                            <span>{i === 0 ? 'Sin actividad' : i === 4 ? 'Máximo' : ''}</span>
+                {/* Fila 1: Actividad diaria (2/3) + Distribución semanal (1/3) */}
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-2 bg-[#1c1b19] border border-[#262523] rounded-xl p-5 flex flex-col">
+                        <div className="mb-3">
+                            <p className="text-xs font-semibold text-[#cdccca] tracking-widest uppercase">Actividad Diaria</p>
+                            <p className="text-[0.65rem] text-[#797876] tracking-widest uppercase mt-0.5">Últimos 7 días — minutos de enfoque</p>
                         </div>
-                    ))}
-                </div>
-            </div>
+                        <ResponsiveContainer width="100%" height={180}>
+                            <AreaChart data={daily} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="gradDaily" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%"  stopColor="#7c54d4" stopOpacity={0.4} />
+                                        <stop offset="95%" stopColor="#7c54d4" stopOpacity={0}   />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#262523" />
+                                <XAxis dataKey="name" tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <YAxis tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Area type="monotone" dataKey="min" stroke="#a86fdf" strokeWidth={2} fill="url(#gradDaily)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
 
-            {/* ── AI Insight ── */}
-            {insight && (
-                <div className="insight-card">
-                    <div className="insight-badge">AI INSIGHT</div>
-                    <p className="insight-text">{insight.insightText}</p>
-                    <span className="insight-week">Semana del {insight.weekStart}</span>
+                    <div className="bg-[#1c1b19] border border-[#262523] rounded-xl p-5 flex flex-col">
+                        <div className="mb-3">
+                            <p className="text-xs font-semibold text-[#cdccca] tracking-widest uppercase">Distribución Semanal</p>
+                            <p className="text-[0.65rem] text-[#797876] tracking-widest uppercase mt-0.5">Últimas 4 semanas — minutos totales</p>
+                        </div>
+                        <ResponsiveContainer width="100%" height={180}>
+                            <BarChart data={weekly} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#262523" vertical={false} />
+                                <XAxis dataKey="name" tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <YAxis tick={{ fill: '#797876', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                                <Bar dataKey="min" fill="#5c3fa8" radius={[4, 4, 0, 0]} activeBar={{ fill: '#7c54d4' }} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
-            )}
+
+                {/* Fila 2: Mapa de calor (2/3) + Análisis IA (1/3) */}
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-2 bg-[#1c1b19] border border-[#262523] rounded-xl p-5">
+                        <div className="mb-3">
+                            <p className="text-xs font-semibold text-[#cdccca] tracking-widest uppercase">Mapa de Calor Mensual</p>
+                            <p className="text-[0.65rem] text-[#797876] tracking-widest uppercase mt-0.5">
+                                {now.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }).toUpperCase()}
+                            </p>
+                        </div>
+                        <HeatmapGrid data={heatmap} />
+                        <div className="heatmap-legend">
+                            {INTENSITY_COLORS.map((c, i) => (
+                                <div key={i} className="legend-item">
+                                    <div className="legend-dot" style={{ background: c }} />
+                                    <span>{i === 0 ? 'Sin actividad' : i === 4 ? 'Máximo' : ''}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-[#201f1d] border border-[#393836] rounded-xl p-5 flex flex-col gap-3">
+                        <span className="text-[0.65rem] text-[#a86fdf] tracking-widest font-semibold uppercase">Análisis IA</span>
+                        {insight ? (
+                            <>
+                                <p className="text-sm text-[#cdccca] leading-relaxed flex-1">{insight.summary}</p>
+                                {insight.bestDay && (
+                                    <p className="text-xs text-[#a86fdf]">Mejor día: {insight.bestDay}</p>
+                                )}
+                                {insight.recommendation && (
+                                    <p className="text-[0.7rem] text-[#797876] italic leading-relaxed">{insight.recommendation}</p>
+                                )}
+                                <span className="text-[0.7rem] text-[#5a5957]">Semana del {insight.weekStart}</span>
+                            </>
+                        ) : (
+                            <p className="text-sm text-[#5a5957]">Sin análisis disponible esta semana.</p>
+                        )}
+                    </div>
+                </div>
 
             </div>
         </div>

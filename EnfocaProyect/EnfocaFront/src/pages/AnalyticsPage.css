@@ -1,51 +1,4 @@
-/* AnalyticsPage.css */
-.analytics-page {
-    padding: 2rem;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    box-sizing: border-box;
-}
-
-.analytics-header { display: flex; flex-direction: column; gap: 0.25rem; }
-.analytics-title  { font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: 0.05em; }
-.analytics-sub    { font-size: 0.7rem; color: #797876; letter-spacing: 0.15em; }
-
-/* KPIs */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-}
-.kpi-card {
-    background: #1c1b19;
-    border: 1px solid #262523;
-    border-radius: 0.75rem;
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-.kpi-label { font-size: 0.65rem; color: #797876; letter-spacing: 0.15em; }
-.kpi-value { font-size: 2rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
-.kpi-sub   { font-size: 0.7rem; color: #5a5957; }
-
-/* Chart cards */
-.chart-card {
-    background: #1c1b19;
-    border: 1px solid #262523;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-.chart-card-header { display: flex; flex-direction: column; gap: 0.2rem; }
-.chart-title { font-size: 0.75rem; font-weight: 600; color: #cdccca; letter-spacing: 0.1em; }
-.chart-sub   { font-size: 0.65rem; color: #797876; letter-spacing: 0.1em; }
+/* AnalyticsPage.css — only component-level styles not expressible in Tailwind */
 
 /* Tooltip */
 .chart-tooltip {
@@ -75,23 +28,7 @@
 .legend-dot  { width: 10px; height: 10px; border-radius: 2px; }
 .legend-item span { font-size: 0.65rem; color: #797876; }
 
-/* Insight */
-.insight-card {
-    background: #201f1d;
-    border: 1px solid #393836;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-.insight-badge { font-size: 0.65rem; color: #a86fdf; letter-spacing: 0.15em; font-weight: 600; }
-.insight-text  { font-size: 0.9rem; color: #cdccca; line-height: 1.6; }
-.insight-week  { font-size: 0.7rem; color: #5a5957; }
-
-/* Loading */
-.analytics-loading { padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.skeleton-row { display: flex; gap: 1rem; }
+/* Loading skeletons */
 @keyframes shimmer {
     0%   { background-position: -200% 0; }
     100% { background-position:  200% 0; }
@@ -103,10 +40,5 @@
     border-radius: 0.5rem;
 }
 .skeleton-heading { height: 2rem; width: 200px; }
-.skeleton-kpi     { height: 100px; flex: 1; }
+.skeleton-kpi     { height: 100px; }
 .skeleton-chart   { height: 250px; }
-
-@media (max-width: 768px) {
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .analytics-page { padding: 1rem; }
-}

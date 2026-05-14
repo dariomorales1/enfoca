@@ -55,26 +55,29 @@ export const profileService = {
 };
 
 export const pomodoroService = {
-    iniciar: ()               => api.post('/pomodoro/sesiones/iniciar'),
-    completar: (id, duracion) => api.post(`/pomodoro/sesiones/${id}/completar`, { duracion }),
-    historial: ()             => api.get('/pomodoro/sesiones'),
+    iniciar:   (data)            => api.post('/pomodoro-sessions/start', data),
+    comenzar:  (id)              => api.patch(`/pomodoro-sessions/${id}/begin`),
+    completar: (id, status = 'COMPLETED') => api.patch(`/pomodoro-sessions/${id}/finish`, null, { params: { status } }),
+    historial: ()                => api.get('/pomodoro-sessions'),
 };
 
 export const planService = {
-    crear: (data) => api.post('/planes-estudio', data),
-    listar: () => api.get('/planes-estudio'),
-    obtener: (id) => api.get(`/planes-estudio/${id}`),
-    eliminar: (id) => api.delete(`/planes-estudio/${id}`),
-    validar: (id, data) => api.post(`/planes-estudio/${id}/validaciones`, data),
-    catalogo: () => api.get('/planes-estudio/catalogo'),
+    crear:      (data)    => api.post('/planes-estudio', data),
+    listar:     ()        => api.get('/planes-estudio'),
+    obtener:    (id)      => api.get(`/planes-estudio/${id}`),
+    eliminar:   (id)      => api.delete(`/planes-estudio/${id}`),
+    validar:    (id,data) => api.post(`/planes-estudio/${id}/validaciones`, data),
+    catalogo:   ()        => api.get('/planes-estudio/catalogo'),
+    toggleTema: (temaId)  => api.patch(`/planes-estudio/temas/${temaId}/completado`),
 };
 
 export const metricsService = {
-    getSummary:   ()             => api.get('/api/metrics/summary'),
-    getLast7Days: ()             => api.get('/api/metrics/daily'),
-    getLast4Weeks:()             => api.get('/api/metrics/weekly'),
-    getHeatmap:   (year, month)  => api.get('/api/metrics/heatmap', { params: { year, month } }),
-    getInsight:   ()             => api.get('/api/metrics/insight/latest'),
+    getSummary:      ()                        => api.get('/api/metrics/summary'),
+    getLast7Days:    ()                        => api.get('/api/metrics/daily'),
+    getLast4Weeks:   ()                        => api.get('/api/metrics/weekly'),
+    getHeatmap:      (year, month)             => api.get('/api/metrics/heatmap', { params: { year, month } }),
+    getInsight:      ()                        => api.get('/api/metrics/insight/latest'),
+    registrarSesion: (focusedSeconds, cycles)  => api.post('/api/metrics/session', null, { params: { focusedSeconds, cycles } }),
 };
 
 export default api;

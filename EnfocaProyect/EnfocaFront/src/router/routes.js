@@ -10,6 +10,7 @@ import AnalyticsPage from '../pages/AnalyticsPage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ProfilePage from '../pages/ProfilePage';
+import LibraryPage from '../pages/LibraryPage';
 
 export const PUBLIC_ROUTES = [
     { path: '/',               element: LandingPage,        name: 'Inicio' },
@@ -24,6 +25,7 @@ export const PRIVATE_ROUTES = [
     { path: '/pomodoro',         element: PomodoroPage,       name: 'Modo Enfoque' },
     { path: '/focus-mode',       element: FocusModePage,      name: 'Deep Focus' },
     { path: '/study-plan',       element: StudyPlanPage,      name: 'Plan de Estudio' },
+    { path: '/library',          element: LibraryPage,        name: 'Biblioteca' },
     { path: '/analytics',        element: AnalyticsPage,      name: 'Análisis' },
     { path: '/settings/password',element: ChangePasswordPage, name: 'Cambiar Contraseña' },
     { path: '/profile',          element: ProfilePage,        name: 'Mi Perfil' },

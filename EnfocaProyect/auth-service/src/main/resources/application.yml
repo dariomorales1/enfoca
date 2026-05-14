@@ -34,8 +34,11 @@ spring:
 
   flyway:
     enabled: true
+    schemas: auth
+    default-schema: auth
     locations: classpath:db/migration
     baseline-on-migrate: true
+    baseline-version: 0
 
 eureka:
   client:

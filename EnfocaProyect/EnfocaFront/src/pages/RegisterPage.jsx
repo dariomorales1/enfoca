@@ -4,6 +4,7 @@ import AuthSidebarGraphic from '../components/auth/AuthSidebarGraphic';
 import Input from '../components/common/Input';
 import {Link, useNavigate} from 'react-router-dom';
 import {authService} from '../services/api';
+import LegalModal from '../components/common/LegalModal';
 
 export default function RegisterPage() {
     const [nombre, setNombre] = useState('');
@@ -14,6 +15,7 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
+    const [modal, setModal] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -111,11 +113,13 @@ export default function RegisterPage() {
                         </div>
                         <label htmlFor="terms" className="text-[10px] lg:text-xs text-neutral-400 leading-tight">
                             Acepto los{' '}
-                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Términos de
-                                servicio</a>
+                            <button type="button" onClick={() => setModal('terminos')} className="text-violet-500 hover:text-violet-400 transition-colors underline">
+                                Términos y Condiciones
+                            </button>
                             {' '}y la{' '}
-                            <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors">Política de
-                                privacidad</a>.
+                            <button type="button" onClick={() => setModal('privacidad')} className="text-violet-500 hover:text-violet-400 transition-colors underline">
+                                Política de Privacidad
+                            </button>.
                         </label>
                     </div>
 
@@ -132,23 +136,6 @@ export default function RegisterPage() {
                     </button>
                 </form>
 
-                <div className="flex items-center my-[clamp(0.75rem,2vh,1.5rem)]">
-                    <div className="flex-grow border-t border-neutral-800"/>
-                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">O regístrate con</span>
-                    <div className="flex-grow border-t border-neutral-800"/>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
-                        Google
-                    </button>
-                    <button
-                        className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
-                        Apple
-                    </button>
-                </div>
-
                 <div className="mt-[clamp(0.75rem,2vh,1.5rem)] text-center text-xs text-neutral-500">
                     ¿Ya tienes cuenta?{' '}
                     <Link to="/login" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
@@ -156,6 +143,8 @@ export default function RegisterPage() {
                     </Link>
                 </div>
             </div>
+
+            {modal && <LegalModal tipo={modal} onClose={() => setModal(null)} />}
         </SplitCardLayout>
     );
 }

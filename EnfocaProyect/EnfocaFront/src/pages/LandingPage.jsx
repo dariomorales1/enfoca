@@ -29,9 +29,9 @@ export default function LandingPage() {
                                       className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                                     Comenzar <span className="text-lg">→</span>
                                 </Link>
-                                <button className="px-6 py-3 rounded-lg font-medium border border-neutral-700 hover:bg-neutral-900 transition-colors">
+                                <a href="#metodologia" className="px-6 py-3 rounded-lg font-medium border border-neutral-700 hover:bg-neutral-900 transition-colors">
                                     Metodología
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -71,11 +71,37 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* Features */}
-                <section className="mb-32">
+                {/* Metodología */}
+                <section id="metodologia" className="mb-32 scroll-mt-8">
                     <div className="mb-12">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-400 text-xs font-bold tracking-widest uppercase mb-6">
+                            <div className="w-1.5 h-1.5 rounded-full bg-violet-500"/>
+                            Metodología
+                        </div>
                         <h2 className="text-3xl font-bold mb-4">Diseñado para el rigor cognitivo</h2>
-                        <p className="text-neutral-400">Eliminamos las distracciones para que puedas enfocarte en lo que realmente importa: el crecimiento intelectual.</p>
+                        <p className="text-neutral-400 max-w-2xl leading-relaxed">
+                            Enfoca combina las técnicas de estudio más efectivas respaldadas por la neurociencia con herramientas digitales de alto rendimiento. Nuestra metodología está basada en tres pilares fundamentales.
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6">
+                            <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-4 text-xl">⏱</div>
+                            <h3 className="text-white font-bold mb-2">Deep Work</h3>
+                            <p className="text-neutral-400 text-sm leading-relaxed">Bloques de enfoque intenso sin interrupciones, basados en el método Pomodoro extendido. De 25 a 50 minutos de concentración máxima seguidos de pausas estratégicas.</p>
+                        </div>
+                        <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6">
+                            <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-4 text-xl">🧠</div>
+                            <h3 className="text-white font-bold mb-2">Planes de Estudio con IA</h3>
+                            <p className="text-neutral-400 text-sm leading-relaxed">Generamos hojas de ruta personalizadas según tu materia, nivel y tiempo disponible. La inteligencia artificial estructura el contenido para una retención óptima a largo plazo.</p>
+                        </div>
+                        <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6">
+                            <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-4 text-xl">📊</div>
+                            <h3 className="text-white font-bold mb-2">Análisis de Rendimiento</h3>
+                            <p className="text-neutral-400 text-sm leading-relaxed">Métricas detalladas de tus sesiones, rachas activas y tasa de retención. Visualiza tu progreso y ajusta tu estrategia de estudio con datos reales.</p>
+                        </div>
+                    </div>
+                    <div className="mb-12">
+                        <h2 className="sr-only">Características</h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">

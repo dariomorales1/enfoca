@@ -52,19 +52,30 @@ const IconHistory = () => (
     </svg>
 );
 
+
 const DIAS = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
 
 function mapearDatosSemana(rawDias) {
     if (!rawDias?.length) return null;
-    const hoy = new Date().getDay();
-    // getDay(): 0=DOM, 1=LUN... convertir a índice LUN=0
+    const hoy     = new Date().getDay();
     const indicHoy = hoy === 0 ? 6 : hoy - 1;
-    return rawDias.map((item, i) => ({
-        day: DIAS[i] || DIAS[i % 7],
-        cycles: item.ciclosEnfoque ?? item.focusCycles ?? item.cycles ?? 0,
-        current: i === indicHoy,
-    }));
+    const semana  = DIAS.map((day, i) => ({ day, cycles: 0, current: i === indicHoy }));
+    rawDias.forEach(item => {
+        const fecha   = new Date(item.date + 'T00:00:00');
+        const diaSem  = fecha.getDay();
+        const indice  = diaSem === 0 ? 6 : diaSem - 1;
+        semana[indice].cycles = item.sessionsCount ?? 0;
+    });
+    return semana;
 }
+
+const calcularEficiencia = (plan) => {
+    if (!plan?.modulos) return plan?.progreso?.porcentaje ?? 0;
+    const total = plan.modulos.reduce((acc, m) => acc + (m.temas?.length ?? 0), 0);
+    if (total === 0) return 0;
+    const done = plan.modulos.reduce((acc, m) => acc + (m.temas?.filter(t => t.completado).length ?? 0), 0);
+    return Math.round((done / total) * 100);
+};
 
 export default function DashboardPage() {
     const [resumen, setResumen] = useState(null);
@@ -126,18 +137,19 @@ export default function DashboardPage() {
     const curriculumItems = planes.length > 0
         ? planes.slice(0, 3).map((p, i) => ({
             code: p.id ? p.id.toString().slice(-6).toUpperCase() : String(i + 1).padStart(3, '0'),
-            title: p.titulo ?? p.title ?? 'Plan sin título',
-            efficiency: p.progreso?.porcentaje ?? p.progreso ?? p.progress ?? 0,
-            topic: p.objetivo ?? p.descripcion ?? p.description ?? '',
+            title: p.titulo ?? 'Plan sin título',
+            efficiency: calcularEficiencia(p),
+            topic: p.objetivo ?? p.nivel ?? '',
             accent: ACCENTS[i % ACCENTS.length],
             icon: <IconBook />,
         }))
         : CURRICULUM_FALLBACK;
 
-    const horasEnfocadas = resumen?.horasEnfocadas ?? resumen?.focusHours ?? null;
-    const xpTotal = resumen?.xpTotal ?? resumen?.deepWorkXp ?? null;
-    const tasaRetencion = resumen?.tasaRetencion ?? resumen?.retentionRate ?? null;
-    const rachaActiva = resumen?.rachaActiva ?? resumen?.activeStreak ?? null;
+    const horasEnfocadas = resumen?.focusedMinutesTotal != null
+        ? (resumen.focusedMinutesTotal / 60).toFixed(1)
+        : null;
+    const tasaRetencion = resumen?.retentionRate ?? null;
+    const rachaActiva   = resumen?.currentStreak ?? null;
 
     if (cargando) {
         return (
@@ -158,53 +170,49 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <StatCard
                     label="Horas Enfocadas"
-                    value={horasEnfocadas !== null ? horasEnfocadas.toFixed(1) : '—'}
-                    badge={resumen?.variacionHoras ? `${resumen.variacionHoras > 0 ? '+' : ''}${resumen.variacionHoras}%` : undefined}
+                    value={horasEnfocadas ?? '—'}
+                    unit={horasEnfocadas != null ? 'HRS' : undefined}
+                    badge={resumen?.focusedMinutesWeek != null ? `${(resumen.focusedMinutesWeek / 60).toFixed(1)}h semana` : undefined}
                     badgeColor="green"
                     icon={<IconClock />}
                     accent="text-violet-400"
                 />
                 <StatCard
-                    label="XP Trabajo Profundo"
-                    value={xpTotal !== null ? xpTotal.toLocaleString('es-CL') : '—'}
-                    badge={resumen?.nivel ? `NIV ${resumen.nivel}` : undefined}
+                    label="Sesiones Hoy"
+                    value={resumen?.sessionsToday ?? '—'}
+                    unit={resumen?.sessionsToday != null ? 'HOY' : undefined}
+                    badge={resumen?.focusedMinutesToday != null ? `${resumen.focusedMinutesToday} min` : undefined}
                     badgeColor="neutral"
                     icon={<IconStar />}
                     accent="text-yellow-400"
                 />
                 <StatCard
                     label="Tasa de Retención"
-                    value={tasaRetencion !== null ? tasaRetencion : '—'}
-                    unit={tasaRetencion !== null ? '%' : undefined}
+                    value={tasaRetencion != null ? tasaRetencion.toFixed(1) : '—'}
+                    unit={tasaRetencion != null ? '%' : undefined}
                     icon={<IconShield />}
                     accent="text-emerald-400"
                 />
                 <StatCard
                     label="Racha Activa"
-                    value={rachaActiva !== null ? rachaActiva : '—'}
-                    unit={rachaActiva !== null ? 'DÍAS' : undefined}
+                    value={rachaActiva ?? '—'}
+                    unit={rachaActiva != null ? 'DÍAS' : undefined}
+                    badge={resumen?.longestStreak != null ? `Récord: ${resumen.longestStreak}d` : undefined}
                     icon={<IconFire />}
                     accent="text-orange-400"
                 />
             </div>
 
-            <WeeklyChart data={datosSemana} />
+            <div className="mt-2">
+                <WeeklyChart data={datosSemana} />
+            </div>
 
-            <div>
-                <div className="flex items-end justify-between mb-4">
-                    <div>
-                        <h2 className="text-xs font-bold tracking-widest text-white uppercase">Currículo Activo</h2>
-                        <p className="text-[10px] text-neutral-600 tracking-wider mt-0.5">
-                            Planes de estudio principales y progreso modular
-                        </p>
-                    </div>
-                    <button className="flex items-center gap-1 text-[10px] font-semibold text-violet-400 hover:text-violet-300 tracking-wider uppercase transition-colors">
-                        Ver Registro
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <line x1="7" y1="17" x2="17" y2="7" />
-                            <polyline points="7 7 17 7 17 17" />
-                        </svg>
-                    </button>
+            <div className="mt-4">
+                <div className="mb-4">
+                    <h2 className="text-sm font-bold tracking-widest text-white uppercase">Currículo Activo</h2>
+                    <p className="text-xs text-neutral-500 tracking-wider mt-0.5">
+                        Planes de estudio principales y progreso modular
+                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -214,22 +222,6 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <footer className="mt-2 pt-5 border-t border-neutral-900 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 border border-neutral-700 rounded flex items-center justify-center">
-                        <span className="text-[8px] font-black text-neutral-500">E</span>
-                    </div>
-                    <span className="text-[10px] tracking-widest text-neutral-600 uppercase font-semibold">Enfoca OS</span>
-                </div>
-                <div className="flex items-center gap-6">
-                    {['Manifiesto', 'Arquitectura', 'Nodos'].map((link) => (
-                        <button key={link} className="text-[10px] tracking-widest text-neutral-700 hover:text-neutral-500 uppercase transition-colors">
-                            {link}
-                        </button>
-                    ))}
-                </div>
-                <span className="text-[10px] text-neutral-800 font-mono">v2.4.0-ESTABLE // BUILD_200431</span>
-            </footer>
             </div>
         </div>
     );

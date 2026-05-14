@@ -12,11 +12,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Kaoz1699
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: America/Santiago
+      PGTZ: America/Santiago
     ports:
       - "5434:5432"
     volumes:
       - auth-db-data:/var/lib/postgresql/data
-      - ./auth-service/src/main/resources/db/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -31,6 +32,8 @@ services:
       POSTGRES_USER: enfoca
       POSTGRES_PASSWORD: enfoca
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: America/Santiago
+      PGTZ: America/Santiago
     ports:
       - "5433:5432"
     volumes:
@@ -49,12 +52,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: America/Santiago
+      PGTZ: America/Santiago
     ports:
       - "5435:5432"
     volumes:
       - ai-db-data:/var/lib/postgresql/data
-      - ./ai-service/src/main/resources/db/migration/V1__crear_esquema_planes.sql:/docker-entrypoint-initdb.d/01_schema.sql
-      - ./ai-service/src/main/resources/db/migration/V2__fix_usuario_id_varchar.sql:/docker-entrypoint-initdb.d/02_fix_varchar.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -69,6 +72,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: America/Santiago
+      PGTZ: America/Santiago
     ports:
       - "5436:5432"
     volumes:
@@ -87,6 +92,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: America/Santiago
+      PGTZ: America/Santiago
     ports:
       - "5437:5432"
     volumes:
@@ -164,6 +171,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: auth-service
       EUREKA_INSTANCE_INSTANCEID: auth-service:8081
+      TZ: America/Santiago
     restart: unless-stopped
 
   ai-service:
@@ -190,6 +198,7 @@ services:
       EUREKA_INSTANCE_INSTANCEID: ai-service:8085
       GROQ_API_KEY: ${GROQ_API_KEY}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      TZ: America/Santiago
     restart: unless-stopped
 
   pomodoro-service:
@@ -217,6 +226,7 @@ services:
       EUREKA_URL: http://discovery-service:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: pomodoro-service
       EUREKA_INSTANCE_INSTANCEID: pomodoro-service:8082
+      TZ: America/Santiago
     restart: unless-stopped
 
   gamification-service:
@@ -243,6 +253,7 @@ services:
       EUREKA_INSTANCE_HOSTNAME: gamification-service
       EUREKA_INSTANCE_INSTANCEID: gamification-service:8088
       SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      TZ: America/Santiago
     restart: unless-stopped
 
   metrics-service:
@@ -267,6 +278,8 @@ services:
       EUREKA_URL: http://discovery-service:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: metrics-service
       EUREKA_INSTANCE_INSTANCEID: metrics-service:8083
+      METRICS_TIMEZONE: America/Santiago
+      TZ: America/Santiago
     restart: unless-stopped
 
   api-gateway:
@@ -289,6 +302,7 @@ services:
       EUREKA_INSTANCE_HOSTNAME: api-gateway
       EUREKA_INSTANCE_INSTANCEID: api-gateway:8080
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      TZ: America/Santiago
     restart: unless-stopped
 
 # ================================================================

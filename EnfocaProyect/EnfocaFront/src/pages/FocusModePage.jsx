@@ -44,10 +44,15 @@ export default function FocusModePage() {
     const [phase, setPhase]       = useState('PREPARING');
     const [prepLeft, setPrepLeft] = useState(PREP_TIME);
     const [timeLeft, setTimeLeft] = useState(FOCUS_TIME);
-    const [muted, setMuted]       = useState(false);
+    const [volume,   setVolume]   = useState(0.7);
+    const lastVolume = useRef(0.7);
 
     const audioRef = useRef(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (audioRef.current) audioRef.current.volume = volume;
+    }, [volume]);
 
     useEffect(() => {
         const el = document.documentElement;
@@ -95,10 +100,11 @@ export default function FocusModePage() {
         navigate('/dashboard');
     };
 
-    const toggleMute = () => {
-        if (audioRef.current) audioRef.current.muted = !muted;
-        setMuted((m) => !m);
+    const handleVolume = (val) => {
+        if (val > 0) lastVolume.current = val;
+        setVolume(val);
     };
+    const toggleMute = () => handleVolume(volume > 0 ? 0 : lastVolume.current);
 
     const elapsed  = FOCUS_TIME - timeLeft;
     const progress = (elapsed / FOCUS_TIME) * 100;
@@ -109,7 +115,7 @@ export default function FocusModePage() {
     return (
         <div className="h-screen w-screen bg-black text-white flex flex-col overflow-hidden select-none">
 
-            <audio ref={audioRef} src={STREAM_URL} muted={muted} />
+            <audio ref={audioRef} src={STREAM_URL} />
 
             {/* Fondo */}
             <div className="absolute inset-0 z-0">
@@ -123,28 +129,46 @@ export default function FocusModePage() {
 
             {/* Header */}
             <div className="relative z-10 flex-shrink-0 px-8 py-4 flex justify-between items-center">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-5">
                     <span className="uppercase tracking-[0.3em] text-[10px] font-bold text-neutral-400">ENFOCA</span>
-                    <button
-                        onClick={toggleMute}
-                        className={`flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest transition-colors ${
-                            phase === 'RUNNING' ? 'text-violet-400 hover:text-violet-300' : 'text-neutral-600 hover:text-neutral-400'
-                        }`}
-                    >
-                        <IconVolume muted={muted} />
-                        <span>LOFI RADIO</span>
-                        {phase === 'RUNNING' && !muted && (
-                            <span className="flex gap-px ml-1">
-                                {[1, 2, 3].map((i) => (
-                                    <span
-                                        key={i}
-                                        className="w-px bg-violet-400 rounded-full animate-pulse"
-                                        style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.15}s` }}
-                                    />
-                                ))}
-                            </span>
-                        )}
-                    </button>
+
+                    {/* LOFI RADIO + control de volumen */}
+                    <div className="flex items-center gap-3">
+                        <div className={`flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest ${
+                            phase === 'RUNNING' ? 'text-violet-400' : 'text-neutral-600'
+                        }`}>
+                            <span>LOFI RADIO</span>
+                            {phase === 'RUNNING' && volume > 0 && (
+                                <span className="flex gap-px ml-0.5">
+                                    {[1, 2, 3].map(i => (
+                                        <span key={i} className="w-px bg-violet-400 rounded-full animate-pulse"
+                                            style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.15}s` }} />
+                                    ))}
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Icono mute / volumen */}
+                        <button
+                            onClick={toggleMute}
+                            className="text-neutral-600 hover:text-violet-400 transition-colors flex-shrink-0"
+                            title={volume === 0 ? 'Activar sonido' : 'Silenciar'}
+                        >
+                            <IconVolume muted={volume === 0} />
+                        </button>
+
+                        {/* Slider */}
+                        <input
+                            type="range"
+                            min="0" max="1" step="0.05"
+                            value={volume}
+                            onChange={e => handleVolume(parseFloat(e.target.value))}
+                            className="w-20 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full"
+                        />
+                        <span className="text-[9px] font-mono text-neutral-700 w-6 tabular-nums">
+                            {Math.round(volume * 100)}
+                        </span>
+                    </div>
                 </div>
                 <button
                     onClick={handleClose}

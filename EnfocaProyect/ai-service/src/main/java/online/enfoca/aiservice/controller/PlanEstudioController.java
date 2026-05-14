@@ -57,6 +57,13 @@ public class PlanEstudioController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PatchMapping("/temas/{temaId}/completado")
+    public ResponseEntity<TemaResponse> toggleTema(
+            @PathVariable UUID temaId,
+            @RequestHeader("X-User-Id") String usuarioId) {
+        return ResponseEntity.ok(servicio.toggleTema(temaId, usuarioId));
+    }
+
     @GetMapping("/catalogo")
     public ResponseEntity<List<PlanEstudioResponse>> catalogo() {
         return ResponseEntity.ok(servicio.obtenerCatalogo());

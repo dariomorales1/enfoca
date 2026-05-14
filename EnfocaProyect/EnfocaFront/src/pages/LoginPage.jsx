@@ -151,21 +151,6 @@ export default function LoginPage() {
                     </button>
                 </form>
 
-                <div className="flex items-center my-[clamp(1rem,2.5vh,2rem)]">
-                    <div className="flex-grow border-t border-neutral-800" />
-                    <span className="px-4 text-[9px] uppercase tracking-widest text-neutral-500">O continuar con</span>
-                    <div className="flex-grow border-t border-neutral-800" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
-                        Google
-                    </button>
-                    <button className="flex justify-center items-center gap-2 bg-black border border-neutral-800 hover:bg-neutral-800 py-2 rounded-lg text-xs font-medium text-neutral-300 transition-colors">
-                        Apple
-                    </button>
-                </div>
-
                 <div className="mt-[clamp(1rem,2.5vh,2rem)] text-center text-xs text-neutral-500">
                     ¿No tienes cuenta?{' '}
                     <Link to="/register" className="text-violet-500 hover:text-violet-400 font-medium transition-colors">
