@@ -14,7 +14,9 @@ export default function BadgeGenerator({ title = "NUEVO TEMA" }) {
             */}
             <svg
                 viewBox="0 0 500 500"
-                className="w-full h-full drop-shadow-2xl transition-transform group-hover:scale-105 duration-300"
+                // Sombra más ligera en móvil para mejor rendimiento de renderizado
+                // active:scale-95 para dar feedback táctil si en el futuro se hace clickeable
+                className="w-full h-full drop-shadow-lg sm:drop-shadow-2xl transition-transform group-hover:scale-105 active:scale-95 duration-300"
                 xmlns="http://www.w3.org/2000/svg"
             >
                 {/* Imagen del badge ocupando exactamente el viewBox completo */}

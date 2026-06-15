@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import AppRouter from './router/AppRouter';
-import { AuthProvider } from './contexts/AuthProvider.jsx';
-import { useAuth } from './hooks/useAuth';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import { useAuth } from './contexts/AuthContext.jsx'; // ✅ Ruta correcta
 import Navbar from './components/common/Navbar.jsx';
 import Footer from './components/common/Footer.jsx';
 

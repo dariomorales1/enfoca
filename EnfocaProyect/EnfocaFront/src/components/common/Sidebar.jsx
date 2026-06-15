@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
+// (Mantenemos todos tus iconos originales intactos)
 const IconDashboard = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <rect x="3" y="3" width="7" height="7" rx="1.5"/>
@@ -47,13 +48,20 @@ const IconLogout = () => (
         <line x1="21" y1="12" x2="9" y2="12"/>
     </svg>
 );
-
 const IconCalendar = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
         <line x1="16" y1="2" x2="16" y2="6" />
         <line x1="8" y1="2" x2="8" y2="6" />
         <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+);
+
+// Nuevo icono para cerrar el menú en móvil
+const IconClose = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
 );
 
@@ -65,7 +73,8 @@ const menuItems = [
     { name: 'Calendario',      path: '/calendar',   icon: <IconCalendar/>}
 ];
 
-export default function Sidebar() {
+// Agregamos el prop onMobileClose
+export default function Sidebar({ onMobileClose }) {
     const location = useLocation();
     const navigate  = useNavigate();
     const { user, logout } = useAuth();
@@ -73,16 +82,34 @@ export default function Sidebar() {
     const firstName = (user?.first_name || user?.nombre || user?.firstName || 'Usuario').split(' ')[0];
     const initial   = firstName.charAt(0).toUpperCase();
 
-    const handleLogout = () => {
-        logout(() => navigate('/login'));
+    // CORRECCIÓN: Actualizado para usar async/await y navegar directamente
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        await logout();
+        navigate('/login');
+    };
+
+    // Función unificada para cerrar el menú al hacer clic en cualquier enlace
+    const handleNavigation = () => {
+        if (onMobileClose) {
+            onMobileClose();
+        }
     };
 
     return (
         <aside className="w-60 flex-shrink-0 h-screen bg-[#0c0c0c] border-r border-neutral-800 flex flex-col sticky top-0">
 
-            {/* Logo */}
-            <div className="px-4 pt-5 pb-4">
-                <img src="/logo.png" alt="Enfoca" className="w-full h-12 object-contain object-left" />
+            {/* Logo y Botón de cierre en móvil */}
+            <div className="px-4 pt-5 pb-4 flex justify-between items-center">
+                <img src="/logo.png" alt="Enfoca" className="h-8 md:h-12 w-auto object-contain object-left" />
+
+                {/* Solo visible en pantallas pequeñas */}
+                <button
+                    onClick={handleNavigation}
+                    className="lg:hidden p-1 text-neutral-500 hover:text-white transition-colors"
+                >
+                    <IconClose />
+                </button>
             </div>
 
             {/* Navegación */}
@@ -93,6 +120,7 @@ export default function Sidebar() {
                         <Link
                             key={item.path}
                             to={item.path}
+                            onClick={handleNavigation}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
                                 active
                                     ? 'bg-violet-600/15 text-white border border-violet-500/20'
@@ -110,6 +138,7 @@ export default function Sidebar() {
             <div className="px-4 pt-3 pb-4 border-t border-neutral-800 flex flex-col gap-1">
                 <Link
                     to="/profile"
+                    onClick={handleNavigation}
                     className="flex items-center gap-3 px-2 py-2.5 rounded-xl hover:bg-neutral-800/50 transition-all group"
                 >
                     <div className="w-8 h-8 rounded-full bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-xs font-bold text-violet-300 flex-shrink-0">

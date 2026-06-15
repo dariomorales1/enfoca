@@ -6,6 +6,7 @@ import { getPlanImage, getPlanBgFallback } from '../utils/planImage';
 const NIVEL_LABEL = { BASICO: 'Básico', INTERMEDIO: 'Intermedio', AVANZADO: 'Avanzado' };
 const NIVEL_COLOR = { BASICO: 'bg-emerald-600', INTERMEDIO: 'bg-amber-600', AVANZADO: 'bg-violet-600' };
 
+// (Iconos se mantienen intactos)
 const StarIcon = () => (
     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-amber-400">
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -45,10 +46,12 @@ function PlanCard({ plan, index, onClick, badge, showProgress, tieneCertificado 
     return (
         <button
             onClick={() => onClick(plan)}
-            className="group text-left bg-[#111111] border border-neutral-800/60 rounded-xl overflow-hidden hover:border-violet-500/30 transition-all hover:-translate-y-0.5 active:scale-95"
+            // Agregamos flex flex-col y h-full para que todas las tarjetas tengan la misma altura
+            // aunque el título ocupe 1 o 2 líneas
+            className="group w-full h-full text-left bg-[#111111] border border-neutral-800/60 rounded-xl overflow-hidden hover:border-violet-500/30 transition-all hover:-translate-y-0.5 active:scale-95 flex flex-col"
         >
             {/* Portada */}
-            <div className={`h-36 bg-gradient-to-b ${getPlanBgFallback(index)} to-neutral-900 relative flex items-end p-3 overflow-hidden`}>
+            <div className={`h-32 sm:h-36 bg-gradient-to-b ${getPlanBgFallback(index)} to-neutral-900 relative flex items-end p-3 overflow-hidden shrink-0`}>
                 <img
                     src={getPlanImage(plan.titulo)}
                     alt={plan.titulo}
@@ -71,7 +74,7 @@ function PlanCard({ plan, index, onClick, badge, showProgress, tieneCertificado 
                         </span>
                     )}
                     {tieneCertificado && (
-                        <span className="flex items-center gap-1 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded bg-amber-500 text-black">
+                        <span className="flex items-center gap-1 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded bg-amber-500 text-black mt-1 sm:mt-0">
                             <IconMedal /> Certificado
                         </span>
                     )}
@@ -79,25 +82,28 @@ function PlanCard({ plan, index, onClick, badge, showProgress, tieneCertificado 
             </div>
 
             {/* Info */}
-            <div className="p-4 flex flex-col gap-2.5">
-                <h4 className="text-sm font-semibold text-white group-hover:text-violet-300 transition-colors leading-tight line-clamp-2">
-                    {plan.titulo}
-                </h4>
+            <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between gap-3">
+                <div className="flex flex-col gap-2">
+                    <h4 className="text-sm sm:text-base font-semibold text-white group-hover:text-violet-300 transition-colors leading-tight line-clamp-2">
+                        {plan.titulo}
+                    </h4>
 
-                <div className="flex items-center justify-between text-[10px] text-neutral-600">
-                    <span>{plan.modulos?.length ?? 0} módulos</span>
-                    {rating && (
-                        <span className="flex items-center gap-1">
-                            <StarIcon /> {rating}
-                            <span className="text-neutral-700 ml-1 flex items-center gap-0.5">
-                                <UsersIcon /> {plan.totalValidaciones}
+                    <div className="flex items-center justify-between text-[10px] text-neutral-600">
+                        <span>{plan.modulos?.length ?? 0} módulos</span>
+                        {rating && (
+                            <span className="flex items-center gap-1">
+                                <StarIcon /> {rating}
+                                <span className="text-neutral-700 ml-1 flex items-center gap-0.5">
+                                    <UsersIcon /> {plan.totalValidaciones}
+                                </span>
                             </span>
-                        </span>
-                    )}
+                        )}
+                    </div>
                 </div>
 
+                {/* Progress siempre abajo gracias a flex-1 en el contenedor padre */}
                 {showProgress && progreso !== null && (
-                    <div>
+                    <div className="mt-1">
                         <div className="flex justify-between text-[9px] font-mono text-neutral-700 mb-1">
                             <span>Progreso</span><span>{progreso}%</span>
                         </div>
@@ -115,9 +121,10 @@ function PlanCard({ plan, index, onClick, badge, showProgress, tieneCertificado 
 }
 
 const SkeletonGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    // Transición suave de columnas: 1 -> 2 -> 3 -> 4
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-[#111111] border border-neutral-800/60 rounded-xl overflow-hidden animate-pulse">
+            <div key={i} className="bg-[#111111] border border-neutral-800/60 rounded-xl overflow-hidden animate-pulse h-64">
                 <div className="h-36 bg-neutral-800/40"/>
                 <div className="p-4 flex flex-col gap-2">
                     <div className="h-3 bg-neutral-800 rounded w-3/4"/>
@@ -146,7 +153,6 @@ export default function LibraryPage() {
             setCatalogo(cat);
             setMisPlanes(mis);
             setEnRevision(rev);
-            // Conjunto de planMaestroId con certificado
             setCertIds(new Set(certs.map(c => c.planMaestroId)));
         }).finally(() => setLoading(false));
     }, []);
@@ -157,19 +163,18 @@ export default function LibraryPage() {
     const abrirPlan = (plan) => navigate(`/plan-detail/${plan.id}`);
 
     return (
-        <div className="p-4 md:p-8 flex flex-col gap-10">
+        // Quitamos p-4 md:p-8 y delegamos paddings. Usamos gap-8 sm:gap-12 para separar secciones
+        <div className="w-full flex flex-col gap-8 sm:gap-12">
 
             {/* ── Biblioteca Comunitaria ── */}
-            <section className="flex flex-col gap-5">
-                <div className="flex items-end justify-between">
-                    <div>
-                        <h2 className="text-xl font-bold text-white">Biblioteca Comunitaria</h2>
-                        <p className="text-neutral-500 text-sm mt-1">Planes valorados y curados por la comunidad.</p>
-                    </div>
+            <section className="flex flex-col gap-4 sm:gap-6">
+                <div className="flex flex-col">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">Biblioteca Comunitaria</h2>
+                    <p className="text-neutral-500 text-xs sm:text-sm mt-1">Planes valorados y curados por la comunidad.</p>
                 </div>
 
                 {loading ? <SkeletonGrid /> : catalogo.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {catalogo.map((plan, i) => (
                             <PlanCard
                                 key={plan.id}
@@ -182,9 +187,9 @@ export default function LibraryPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-16 gap-3 border border-dashed border-neutral-800 rounded-2xl">
+                    <div className="flex flex-col items-center justify-center py-16 px-4 gap-3 border border-dashed border-neutral-800 rounded-2xl w-full">
                         <div className="text-neutral-700"><BookIcon /></div>
-                        <p className="text-sm text-neutral-500">Aún no hay planes comunitarios disponibles</p>
+                        <p className="text-sm text-neutral-500 text-center">Aún no hay planes comunitarios disponibles</p>
                         <p className="text-xs text-neutral-700 max-w-xs text-center">
                             Los planes con alta valoración de la comunidad aparecerán aquí
                         </p>
@@ -194,14 +199,14 @@ export default function LibraryPage() {
 
             {/* ── Planes en Evaluación ── */}
             {enRevision.length > 0 && (
-                <section className="flex flex-col gap-5">
-                    <div>
-                        <h2 className="text-xl font-bold text-white">Planes en Evaluación</h2>
-                        <p className="text-neutral-500 text-sm mt-1">
-                            Planes generados por la comunidad que aún necesitan valoraciones para entrar a la biblioteca.
+                <section className="flex flex-col gap-4 sm:gap-6">
+                    <div className="flex flex-col">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white">Planes en Evaluación</h2>
+                        <p className="text-neutral-500 text-xs sm:text-sm mt-1">
+                            Planes generados por la comunidad que aún necesitan valoraciones.
                         </p>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {enRevision.map((plan, i) => (
                             <PlanCard
                                 key={plan.id}
@@ -218,21 +223,23 @@ export default function LibraryPage() {
 
             {/* ── Mis Planes ── */}
             {misPlanes.length > 0 && (
-                <section className="flex flex-col gap-5">
-                    <div className="flex items-end justify-between">
-                        <div>
-                            <h2 className="text-xl font-bold text-white">Mis Planes</h2>
-                            <p className="text-neutral-500 text-sm mt-1">Planes generados y guardados por ti.</p>
+                <section className="flex flex-col gap-4 sm:gap-6">
+                    {/* Convertimos a flex-col en móvil para que el botón no aplaste el texto */}
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-0">
+                        <div className="flex flex-col">
+                            <h2 className="text-xl sm:text-2xl font-bold text-white">Mis Planes</h2>
+                            <p className="text-neutral-500 text-xs sm:text-sm mt-1">Planes generados y guardados por ti.</p>
                         </div>
                         <button
                             onClick={() => navigate('/study-plan')}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600/10 border border-violet-500/20 text-violet-400 hover:bg-violet-600/20 text-xs font-semibold transition-all"
+                            // En móvil ocupa todo el ancho (w-full) para mayor accesibilidad táctil
+                            className="w-full sm:w-auto flex justify-center items-center gap-2 px-5 py-2.5 sm:px-4 sm:py-2 rounded-xl bg-violet-600/10 border border-violet-500/20 text-violet-400 hover:bg-violet-600/20 text-xs font-semibold transition-all"
                         >
-                            + Nuevo
+                            + Nuevo Plan
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {misPlanes.map((plan, i) => (
                             <PlanCard
                                 key={plan.id}

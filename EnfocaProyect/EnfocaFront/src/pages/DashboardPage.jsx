@@ -1,4 +1,4 @@
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { useGamification } from '../hooks/useGamification.jsx';
 import { useMetrics } from '../hooks/useMetrics';
 import { usePlanes } from '../hooks/usePlanes';
@@ -7,6 +7,7 @@ import WeeklyChart from '../components/dashboard/WeeklyChart';
 import CurriculumCard from '../components/dashboard/CurriculumCard';
 import GamificationPanel from '../components/dashboard/GamificationPanel';
 
+// (Iconos se mantienen intactos)
 const IconClock = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <circle cx="12" cy="12" r="10"/>
@@ -50,9 +51,10 @@ const Skeleton = ({ className }) => (
 
 const StatCardSkeleton = () => (
     <div className="rounded-xl border border-neutral-900 bg-neutral-950 p-4 flex flex-col gap-3">
-        <Skeleton className="h-3 w-20" />
-        <Skeleton className="h-7 w-16" />
-        <Skeleton className="h-3 w-10" />
+        {/* Cambié anchos fijos por porcentajes/w-full para que no se deformen en móvil */}
+        <Skeleton className="h-3 w-[40%]" />
+        <Skeleton className="h-7 w-[30%]" />
+        <Skeleton className="h-3 w-[20%]" />
     </div>
 );
 
@@ -111,93 +113,97 @@ export default function DashboardPage() {
         : CURRICULUM_FALLBACK;
 
     return (
-        <div className="p-4 md:p-6 flex flex-col gap-5">
+        // Quitamos p-4 md:p-6 porque MainLayout y DashboardLayout ya manejan los paddings.
+        // Aumentamos los gaps para que las secciones respiren al apilarse en móvil.
+        <div className="flex flex-col gap-6 sm:gap-8 w-full">
 
-                {/* StatCards */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    {loadingMetrics || loadingGam ? (
+            {/* StatCards */}
+            {/* Flujo: 1 col (móvil) -> 2 cols (sm) -> 3 cols (lg) -> 5 cols (xl) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+                {loadingMetrics || loadingGam ? (
+                    <>
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                    </>
+                ) : (
+                    <>
+                        <StatCard
+                            label="Horas Enfocadas"
+                            value={horasEnfocadas ?? '—'}
+                            unit={horasEnfocadas != null ? 'HRS' : undefined}
+                            badge={summary?.focusedMinutesWeek != null ? `${(summary.focusedMinutesWeek / 60).toFixed(1)}h semana` : undefined}
+                            badgeColor="green"
+                            icon={<IconClock />}
+                            accent="text-violet-400"
+                        />
+                        <StatCard
+                            label="XP Trabajo Profundo"
+                            value={perfil ? perfil.xpTotal.toLocaleString('es-CL') : '—'}
+                            badge={perfil ? `NIV ${perfil.nivel}` : undefined}
+                            badgeColor="neutral"
+                            icon={<IconTarget />}
+                            accent="text-violet-400"
+                        />
+                        <StatCard
+                            label="Sesiones Hoy"
+                            value={summary?.sessionsToday ?? '—'}
+                            unit={summary?.sessionsToday != null ? 'HOY' : undefined}
+                            badge={summary?.focusedMinutesToday != null ? `${summary.focusedMinutesToday} min` : undefined}
+                            badgeColor="neutral"
+                            icon={<IconStar />}
+                            accent="text-yellow-400"
+                        />
+                        <StatCard
+                            label="Tasa de Retención"
+                            value={tasaRetencion != null ? tasaRetencion.toFixed(1) : '—'}
+                            unit={tasaRetencion != null ? '%' : undefined}
+                            icon={<IconShield />}
+                            accent="text-emerald-400"
+                        />
+                        <StatCard
+                            label="Racha Activa"
+                            value={rachaActiva ?? '—'}
+                            unit={rachaActiva != null ? 'DÍAS' : undefined}
+                            badge={summary?.longestStreak != null ? `Récord: ${summary.longestStreak}d` : undefined}
+                            icon={<IconFire />}
+                            accent="text-orange-400"
+                        />
+                    </>
+                )}
+            </div>
+
+            {/* WeeklyChart + GamificationPanel */}
+            {/* En móvil se apilan 100%, en escritorio dividen el espacio */}
+            <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-4 sm:gap-6">
+                <WeeklyChart />
+                <GamificationPanel />
+            </div>
+
+            {/* Currículo Activo */}
+            <div>
+                <div className="mb-4">
+                    <h2 className="text-sm font-bold tracking-widest text-white uppercase">Currículo Activo</h2>
+                    <p className="text-xs text-neutral-500 tracking-wider mt-0.5">
+                        Planes de estudio principales y progreso modular
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    {loadingPlanes ? (
                         <>
-                            <StatCardSkeleton />
-                            <StatCardSkeleton />
-                            <StatCardSkeleton />
-                            <StatCardSkeleton />
-                            <StatCardSkeleton />
+                            <CurriculumCardSkeleton />
+                            <CurriculumCardSkeleton />
+                            <CurriculumCardSkeleton />
                         </>
                     ) : (
-                        <>
-                            <StatCard
-                                label="Horas Enfocadas"
-                                value={horasEnfocadas ?? '—'}
-                                unit={horasEnfocadas != null ? 'HRS' : undefined}
-                                badge={summary?.focusedMinutesWeek != null ? `${(summary.focusedMinutesWeek / 60).toFixed(1)}h semana` : undefined}
-                                badgeColor="green"
-                                icon={<IconClock />}
-                                accent="text-violet-400"
-                            />
-                            <StatCard
-                                label="XP Trabajo Profundo"
-                                value={perfil ? perfil.xpTotal.toLocaleString('es-CL') : '—'}
-                                badge={perfil ? `NIV ${perfil.nivel}` : undefined}
-                                badgeColor="neutral"
-                                icon={<IconTarget />}
-                                accent="text-violet-400"
-                            />
-                            <StatCard
-                                label="Sesiones Hoy"
-                                value={summary?.sessionsToday ?? '—'}
-                                unit={summary?.sessionsToday != null ? 'HOY' : undefined}
-                                badge={summary?.focusedMinutesToday != null ? `${summary.focusedMinutesToday} min` : undefined}
-                                badgeColor="neutral"
-                                icon={<IconStar />}
-                                accent="text-yellow-400"
-                            />
-                            <StatCard
-                                label="Tasa de Retención"
-                                value={tasaRetencion != null ? tasaRetencion.toFixed(1) : '—'}
-                                unit={tasaRetencion != null ? '%' : undefined}
-                                icon={<IconShield />}
-                                accent="text-emerald-400"
-                            />
-                            <StatCard
-                                label="Racha Activa"
-                                value={rachaActiva ?? '—'}
-                                unit={rachaActiva != null ? 'DÍAS' : undefined}
-                                badge={summary?.longestStreak != null ? `Récord: ${summary.longestStreak}d` : undefined}
-                                icon={<IconFire />}
-                                accent="text-orange-400"
-                            />
-                        </>
+                        curriculumItems.map((c) => (
+                            <CurriculumCard key={c.code} {...c} />
+                        ))
                     )}
                 </div>
-
-                {/* WeeklyChart + GamificationPanel */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
-                    <WeeklyChart />
-                    <GamificationPanel />
-                </div>
-
-                {/* Currículo Activo */}
-                <div>
-                    <div className="mb-4">
-                        <h2 className="text-sm font-bold tracking-widest text-white uppercase">Currículo Activo</h2>
-                        <p className="text-xs text-neutral-500 tracking-wider mt-0.5">
-                            Planes de estudio principales y progreso modular
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {loadingPlanes ? (
-                            <>
-                                <CurriculumCardSkeleton />
-                                <CurriculumCardSkeleton />
-                                <CurriculumCardSkeleton />
-                            </>
-                        ) : (
-                            curriculumItems.map((c) => (
-                                <CurriculumCard key={c.code} {...c} />
-                            ))
-                        )}
-                    </div>
-                </div>
+            </div>
 
         </div>
     );

@@ -99,20 +99,22 @@ export default function LegalModal({ tipo, onClose }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4 sm:px-6"
             onClick={e => { if (e.target === e.currentTarget) onClose(); }}
         >
-            <div className="bg-[#0a0a0a] border border-neutral-800 rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl">
+            {/* Ocupa hasta el 90% de alto en móvil (max-h-[90vh]) para que el teclado/barras del navegador no corten todo */}
+            <div className="bg-[#0a0a0a] border border-neutral-800 rounded-2xl w-full max-w-2xl max-h-[90vh] sm:max-h-[85vh] flex flex-col shadow-2xl">
 
-                {/* Header */}
-                <div className="flex items-start justify-between px-8 py-6 border-b border-neutral-800 flex-shrink-0">
-                    <div>
-                        <h2 className="text-xl font-bold text-white">{contenido.titulo}</h2>
-                        <p className="text-xs text-neutral-500 mt-1">{contenido.fecha}</p>
+                {/* Header: px-5 py-4 en móvil para optimizar espacio, vuelve a px-8 py-6 en desktop */}
+                <div className="flex items-start justify-between px-5 sm:px-8 py-4 sm:py-6 border-b border-neutral-800 flex-shrink-0">
+                    <div className="pr-2">
+                        <h2 className="text-lg sm:text-xl font-bold text-white leading-tight">{contenido.titulo}</h2>
+                        <p className="text-[10px] sm:text-xs text-neutral-500 mt-1">{contenido.fecha}</p>
                     </div>
+                    {/* p-2 para mayor área táctil en celular */}
                     <button
                         onClick={onClose}
-                        className="text-neutral-600 hover:text-white transition-colors p-1 ml-4 flex-shrink-0"
+                        className="text-neutral-600 hover:text-white transition-colors p-2 sm:p-1 ml-2 flex-shrink-0"
                         aria-label="Cerrar"
                     >
                         <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -121,17 +123,18 @@ export default function LegalModal({ tipo, onClose }) {
                     </button>
                 </div>
 
-                {/* Contenido scrollable */}
-                <div className="overflow-y-auto px-8 py-6 flex flex-col gap-6">
+                {/* Contenido scrollable: px-5 py-5 en móvil */}
+                <div className="overflow-y-auto custom-scrollbar px-5 sm:px-8 py-5 sm:py-6 flex flex-col gap-5 sm:gap-6">
                     {contenido.secciones.map((sec, i) => (
                         <div key={i}>
-                            <h3 className="text-sm font-bold text-white mb-2">{sec.titulo}</h3>
-                            <p className="text-sm text-neutral-400 leading-relaxed">{sec.texto}</p>
+                            <h3 className="text-sm font-bold text-white mb-1.5 sm:mb-2">{sec.titulo}</h3>
+                            {/* Ajuste de lectura: text-xs en móvil es suficiente para documentos largos */}
+                            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed text-justify sm:text-left">{sec.texto}</p>
                         </div>
                     ))}
 
-                    <div className="mt-2 pt-6 border-t border-neutral-800">
-                        <p className="text-xs text-neutral-600 text-center">
+                    <div className="mt-2 pt-5 sm:pt-6 border-t border-neutral-800">
+                        <p className="text-[10px] sm:text-xs text-neutral-600 text-center">
                             Enfoca · Chile · {new Date().getFullYear()} · legal@enfoca.online
                         </p>
                     </div>

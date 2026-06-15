@@ -30,14 +30,16 @@ export default function FocusModePage() {
     const state = location.state || {};
     const topic = state.topic || null;
     const [plan, setPlan] = useState(state.plan ?? null);
-    const [panelVisible, setPanelVisible] = useState(true);
+
+    // En móviles, inicializamos el panel oculto por defecto para que no estorbe
+    const [panelVisible, setPanelVisible] = useState(window.innerWidth > 768);
+
     const focusDuration      = state.focusDuration || 25 * 60;
     const shortBreakDuration = state.shortBreakDuration || 5 * 60;
     const longBreakFreq      = state.longBreakFreq || 4;
     const longBreakDuration  = state.longBreakDuration || 15 * 60;
     const totalRounds        = state.totalRounds || 4;
 
-    // Si viene del Pomodoro con timer activo, retomar desde donde iba
     const resuming = state.currentPhase === 'RUNNING' || state.currentPhase === 'PAUSED' || state.currentPhase === 'BREAK';
 
     const [mode, setMode] = useState(state.currentPhase === 'BREAK' ? 'shortBreak' : 'focus');
@@ -51,6 +53,7 @@ export default function FocusModePage() {
     const [timeLeft, setTimeLeft] = useState(state.currentTimeLeft ?? focusDuration);
 
     const [volume, setVolume]     = useState(0.7);
+    const lastVolume              = useRef(0.7);
     const audioRef                = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -158,7 +161,6 @@ export default function FocusModePage() {
         return () => { clearInterval(id); audioRef.current?.pause(); };
     }, [phase, mode]);
 
-    // ── LÓGICA DE TRANSICIONES Y FIN DE SESIÓN ──
     useEffect(() => {
         if (phase === 'RUNNING' && timeLeft <= 0) {
             if (mode === 'focus') {
@@ -166,7 +168,7 @@ export default function FocusModePage() {
                 setSesionesCompletadas(nextSesiones);
                 if (nextSesiones >= totalRounds) {
                     setPhase('IDLE');
-                    triggerEndSession(); // Abrir modal al terminar rondas
+                    triggerEndSession();
                 } else {
                     const isLongBreak = nextSesiones % longBreakFreq === 0;
                     setMode(isLongBreak ? 'longBreak' : 'shortBreak');
@@ -190,20 +192,19 @@ export default function FocusModePage() {
     const triggerEndSession = () => {
         audioRef.current?.pause();
         setPhase('PAUSED');
-        setIsModalOpen(true); // Abrir modal forzosamente
+        setIsModalOpen(true);
     };
 
     const handleClose = () => {
         audioRef.current?.pause();
         setPhase('PAUSED');
-        setIsModalOpen(true); // Abrir el modal siempre
+        setIsModalOpen(true);
 
-        // Navegar al dashboard después de cerrar el modal
         if (!topic) {
             setTimeout(() => {
                 if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
                 navigate('/dashboard');
-            }, 300); // Ajusta el tiempo según la animación del modal
+            }, 300);
         }
     };
 
@@ -226,7 +227,6 @@ export default function FocusModePage() {
         return 'Descanso Largo';
     };
 
-
     return (
         <div className="h-screen w-screen bg-black text-white flex flex-col overflow-hidden select-none">
             <audio ref={audioRef} src={STREAM_URL} loop />
@@ -236,24 +236,32 @@ export default function FocusModePage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
             </div>
 
-            <div className="relative z-10 flex-shrink-0 px-8 py-4 flex justify-between items-center">
-                <div className="flex items-center gap-5">
-                    <span className="uppercase tracking-[0.3em] text-[10px] font-bold text-neutral-400">ENFOCA</span>
-                    <div className="flex items-center gap-3">
+            {/* HEADER RESPONSIVO */}
+            <div className="relative z-10 flex-shrink-0 px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
+                <div className="flex items-center gap-2 sm:gap-5">
+                    <span className="uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] font-bold text-neutral-400">ENFOCA</span>
+
+                    {/* Controles de Lofi y Volumen */}
+                    <div className="flex items-center gap-1 sm:gap-3 ml-2 sm:ml-0">
                         <div className={`flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest transition-colors ${phase === 'RUNNING' && mode === 'focus' ? 'text-violet-400' : 'text-neutral-600'}`}>
-                            <span>LOFI RADIO</span>
+                            {/* Ocultamos la palabra LOFI RADIO en móviles muy pequeños si estorba */}
+                            <span className="hidden sm:inline">LOFI RADIO</span>
                             {phase === 'RUNNING' && mode === 'focus' && volume > 0 && (
                                 <span className="flex gap-px ml-0.5">
                                     {[1, 2, 3].map(i => <span key={i} className="w-px bg-violet-400 rounded-full animate-pulse" style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.15}s` }} />)}
                                 </span>
                             )}
                         </div>
-                        <button onClick={toggleMute} className="text-neutral-600 hover:text-violet-400 transition-colors"><IconVolume muted={volume === 0} /></button>
-                        <input type="range" min="0" max="1" step="0.05" value={volume} onChange={e => setVolume(parseFloat(e.target.value))} className="w-20 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full" />
+                        <button onClick={toggleMute} className="text-neutral-600 hover:text-violet-400 transition-colors p-1.5 sm:p-0">
+                            <IconVolume muted={volume === 0} />
+                        </button>
+                        {/* El slider de volumen solo se ve desde tablets en adelante (sm:block) */}
+                        <input type="range" min="0" max="1" step="0.05" value={volume} onChange={e => setVolume(parseFloat(e.target.value))} className="hidden sm:block w-20 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full" />
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                {/* Botones de Finalizar y Pantalla Completa */}
+                <div className="flex items-center gap-1 sm:gap-2">
                     <button
                         onClick={toggleFullscreen}
                         title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
@@ -268,11 +276,15 @@ export default function FocusModePage() {
                 </div>
             </div>
 
-            <div className="relative z-10 flex-1 flex flex-row min-h-0">
+            <div className="relative z-10 flex-1 flex flex-row min-h-0 relative">
 
-                {/* Panel lateral del plan de estudio */}
+                {/* PANEL LATERAL DEL PLAN DE ESTUDIO (Mobile: Flotante absolute / Desktop: Fijo relative) */}
                 {plan && (
-                    <div className={`flex-shrink-0 flex flex-col transition-all duration-300 ${panelVisible ? 'w-64' : 'w-10'} bg-black/40 border-r border-white/5 backdrop-blur-sm overflow-hidden`}>
+                    <div className={`
+                        absolute md:relative z-50 h-full flex-shrink-0 flex flex-col transition-all duration-300
+                        ${panelVisible ? 'w-[80%] max-w-[300px] sm:w-72 md:w-64 translate-x-0' : 'w-10 sm:w-12 md:w-10 -translate-x-full md:translate-x-0'}
+                        bg-black/90 md:bg-black/40 border-r border-white/10 md:border-white/5 backdrop-blur-md md:backdrop-blur-sm overflow-hidden
+                    `}>
                         {panelVisible ? (
                             <div className="flex flex-col h-full">
                                 <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-white/5">
@@ -280,7 +292,7 @@ export default function FocusModePage() {
                                         <p className="text-[9px] font-mono text-neutral-600 uppercase tracking-widest mb-0.5">Plan activo</p>
                                         <p className="text-xs font-bold text-white truncate">{plan.titulo}</p>
                                     </div>
-                                    <button onClick={() => setPanelVisible(false)} className="flex-shrink-0 ml-2 text-neutral-600 hover:text-white transition-colors">
+                                    <button onClick={() => setPanelVisible(false)} className="flex-shrink-0 ml-2 p-2 -mr-2 text-neutral-600 hover:text-white transition-colors">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
                                     </button>
                                 </div>
@@ -336,80 +348,83 @@ export default function FocusModePage() {
                                 </div>
                             </div>
                         ) : (
-                            <button onClick={() => setPanelVisible(true)} className="h-full flex items-center justify-center text-neutral-600 hover:text-white transition-colors">
+                            <button
+                                onClick={() => setPanelVisible(true)}
+                                // El botón de apertura se ajusta y se despega del borde en móvil
+                                className="absolute md:relative top-4 md:top-0 left-0 h-10 w-10 md:h-full md:w-full flex items-center justify-center bg-black/40 md:bg-transparent rounded-r-lg md:rounded-none border border-l-0 border-white/10 md:border-none text-neutral-600 hover:text-white transition-colors z-50"
+                            >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
                             </button>
                         )}
                     </div>
                 )}
 
-                {/* Timer centrado */}
-                <div className="flex-1 flex flex-col items-center justify-center min-h-0">
+                {/* TIMER PRINCIPAL CENTRADO */}
+                <div className="flex-1 flex flex-col items-center justify-center min-h-0 px-4">
 
-                {/* ── INDICADOR DINÁMICO DE RONDAS TOTALES ── */}
-                <div className="flex gap-3 mb-8">
-                    {Array.from({ length: totalRounds }, (_, i) => i + 1).map(dot => {
-                        const isCompleted = sesionesCompletadas >= dot;
-                        // El punto palpita si es la ronda en curso
-                        const isCurrent = sesionesCompletadas + 1 === dot && phase !== 'IDLE';
+                    {/* INDICADOR DINÁMICO DE RONDAS TOTALES */}
+                    <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-8">
+                        {Array.from({ length: totalRounds }, (_, i) => i + 1).map(dot => {
+                            const isCompleted = sesionesCompletadas >= dot;
+                            const isCurrent = sesionesCompletadas + 1 === dot && phase !== 'IDLE';
 
-                        return (
-                            <div
-                                key={dot}
-                                className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${
-                                    isCompleted ? 'bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]' :
-                                        isCurrent ? 'bg-violet-500/50 animate-pulse' :
-                                            'bg-neutral-800'
-                                }`}
-                            />
-                        );
-                    })}
+                            return (
+                                <div
+                                    key={dot}
+                                    className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-500 ${
+                                        isCompleted ? 'bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]' :
+                                            isCurrent ? 'bg-violet-500/50 animate-pulse' :
+                                                'bg-neutral-800'
+                                    }`}
+                                />
+                            );
+                        })}
+                    </div>
+
+                    <h2 className={`text-[9px] sm:text-[10px] uppercase tracking-[0.3em] sm:tracking-[0.4em] font-medium mb-3 sm:mb-4 text-center ${phase === 'IDLE' ? 'text-violet-400' : (mode === 'focus' ? 'text-neutral-500' : 'text-emerald-500')}`}>
+                        {getStatusText()}
+                    </h2>
+
+                    {phase === 'PREPARING' ? (
+                        <div className="font-light leading-none tracking-tighter tabular-nums text-violet-400 animate-pulse mb-6 sm:mb-8" style={{ fontSize: 'clamp(64px, min(18vw, 24vh), 200px)' }}>
+                            {prepLeft}
+                        </div>
+                    ) : (
+                        <div className={`font-light leading-none tracking-tighter tabular-nums transition-colors mb-6 sm:mb-8 ${phase === 'PAUSED' || phase === 'IDLE' ? 'text-neutral-500' : (mode === 'focus' ? 'text-white' : 'text-emerald-400')}`} style={{ fontSize: 'clamp(64px, min(18vw, 24vh), 180px)' }}>
+                            {m}:{s}
+                        </div>
+                    )}
+
+                    {(phase === 'RUNNING' || phase === 'PAUSED') && (
+                        <button onClick={handlePlayPause} className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full border flex items-center justify-center transition-all backdrop-blur-sm ${mode === 'focus' ? 'border-neutral-700/50 text-neutral-300 hover:text-white hover:bg-white/10' : 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10'}`}>
+                            {phase === 'RUNNING' ? <IconPause /> : <IconPlay />}
+                        </button>
+                    )}
+
+                    {phase === 'IDLE' && (
+                        <button onClick={handleClose} className="px-8 sm:px-10 py-3 sm:py-3 rounded-full border border-violet-500/50 bg-violet-500/10 text-xs sm:text-sm text-violet-300 hover:text-white hover:bg-violet-500/30 transition-all tracking-[0.2em] uppercase mt-4">
+                            Terminar y Guardar
+                        </button>
+                    )}
+
+                    {topic && <p className="mt-6 sm:mt-8 text-[10px] sm:text-xs font-mono text-neutral-500 tracking-widest uppercase text-center px-4 line-clamp-2">{topic.titulo}</p>}
+
+                    {/* BARRA DE PROGRESO */}
+                    {phase !== 'PREPARING' && (
+                        <div className="w-full max-w-xs sm:max-w-sm px-2 sm:px-4 pb-4 sm:pb-6 mt-6 sm:mt-8">
+                            <div className="h-px w-full bg-neutral-800 rounded-full mb-2 sm:mb-3 overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-1000 ${phase === 'IDLE' ? 'bg-violet-500' : (mode === 'focus' ? 'bg-violet-500' : 'bg-emerald-500')}`} style={{ width: `${progress}%` }} />
+                            </div>
+                            <div className="flex justify-between text-[8px] sm:text-[9px] font-mono text-neutral-600 uppercase tracking-widest">
+                                <span>{fmt(elapsed).m}m {fmt(elapsed).s}s transcurrido</span>
+                                <span>{m}m {s}s restante</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
+            </div>
 
-                <h2 className={`text-[10px] uppercase tracking-[0.4em] font-medium mb-4 ${phase === 'IDLE' ? 'text-violet-400' : (mode === 'focus' ? 'text-neutral-500' : 'text-emerald-500')}`}>
-                    {getStatusText()}
-                </h2>
-
-                {phase === 'PREPARING' ? (
-                    <div className="font-light leading-none tracking-tighter tabular-nums text-violet-400 animate-pulse mb-8" style={{ fontSize: 'clamp(80px, min(20vw, 28vh), 200px)' }}>
-                        {prepLeft}
-                    </div>
-                ) : (
-                    <div className={`font-light leading-none tracking-tighter tabular-nums transition-colors mb-8 ${phase === 'PAUSED' || phase === 'IDLE' ? 'text-neutral-500' : (mode === 'focus' ? 'text-white' : 'text-emerald-400')}`} style={{ fontSize: 'clamp(72px, min(18vw, 26vh), 180px)' }}>
-                        {m}:{s}
-                    </div>
-                )}
-
-                {(phase === 'RUNNING' || phase === 'PAUSED') && (
-                    <button onClick={handlePlayPause} className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all backdrop-blur-sm ${mode === 'focus' ? 'border-neutral-700/50 text-neutral-300 hover:text-white hover:bg-white/10' : 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10'}`}>
-                        {phase === 'RUNNING' ? <IconPause /> : <IconPlay />}
-                    </button>
-                )}
-
-                {/* Cuando termina la sesión, muestra el botón para salir */}
-                {phase === 'IDLE' && (
-                    <button onClick={handleClose} className="px-10 py-3 rounded-full border border-violet-500/50 bg-violet-500/10 text-sm text-violet-300 hover:text-white hover:bg-violet-500/30 transition-all tracking-[0.2em] uppercase mt-4">
-                        Terminar y Guardar
-                    </button>
-                )}
-
-                {topic && <p className="mt-8 text-xs font-mono text-neutral-500 tracking-widest uppercase">{topic.titulo}</p>}
-
-                {/* Barra de progreso — dentro del timer para mantener el centrado */}
-                {phase !== 'PREPARING' && (
-                    <div className="w-full max-w-sm px-4 pb-6 mt-8">
-                        <div className="h-px w-full bg-neutral-800 rounded-full mb-3 overflow-hidden">
-                            <div className={`h-full rounded-full transition-all duration-1000 ${phase === 'IDLE' ? 'bg-violet-500' : (mode === 'focus' ? 'bg-violet-500' : 'bg-emerald-500')}`} style={{ width: `${progress}%` }} />
-                        </div>
-                        <div className="flex justify-between text-[9px] font-mono text-neutral-600 uppercase tracking-widest">
-                            <span>{fmt(elapsed).m}m {fmt(elapsed).s}s transcurrido</span>
-                            <span>{m}m {s}s restante</span>
-                        </div>
-                    </div>
-                )}
-                </div>{/* fin timer centrado */}
-            </div>{/* fin flex-row */}
-
+            {/* MODALES */}
             <SessionEndModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
@@ -439,6 +454,6 @@ export default function FocusModePage() {
                 loading={quizLoading}
             />
 
-            </div>
+        </div>
     );
 }

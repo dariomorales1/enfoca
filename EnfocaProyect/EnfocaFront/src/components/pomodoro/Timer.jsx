@@ -48,28 +48,28 @@ export default function Timer() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8">
+        <div className="flex flex-col items-center justify-center gap-6 sm:gap-8 p-4">
             {/* Visualización del estado y tiempo */}
             <div className="text-center">
-                <span className="text-violet-400 text-sm font-bold uppercase tracking-widest">
+                <span className="text-violet-400 text-xs sm:text-sm font-bold uppercase tracking-widest">
                     {phase === 'PREPARING' ? 'Prepárate' : 'Tiempo de Enfoque'}
                 </span>
-                <h2 className="text-7xl font-mono text-white mt-2">
+                <h2 className="text-6xl sm:text-7xl md:text-8xl font-mono text-white mt-2 transition-all">
                     {phase === 'PREPARING' ? `${prepSeconds}s` : formatTime(seconds)}
                 </h2>
             </div>
 
-            {/* El botón con el icono centrado que corregimos */}
+            {/* El botón con el icono centrado que corregimos, ahora escalable */}
             <button
                 onClick={handleStartClick}
-                className={`w-20 h-20 flex items-center justify-center rounded-full bg-[#9d84fd] hover:bg-[#b09dfd] text-black shadow-[0_0_30px_rgba(139,92,246,0.3)] transition-all transform hover:scale-105 active:scale-95`}
+                className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-[#9d84fd] hover:bg-[#b09dfd] text-black shadow-[0_0_30px_rgba(139,92,246,0.3)] transition-all transform hover:scale-105 active:scale-95"
             >
                 {isActive && phase === 'WORKING' ? (
-                    <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-current" viewBox="0 0 24 24">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                     </svg>
                 ) : (
-                    <svg className="w-8 h-8 fill-current transform translate-x-0.5" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-current transform translate-x-[1px] sm:translate-x-0.5" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 )}

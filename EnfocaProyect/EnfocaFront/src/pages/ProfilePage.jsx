@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext.jsx'; // ✅ Ruta correcta
 import { profileService, gamificationService, metricsService, certService } from '../services/api';
 import { User, Flame, Clock, BookOpen, Trophy, Shield, Settings, LayoutDashboard } from 'lucide-react';
 

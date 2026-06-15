@@ -34,16 +34,16 @@ const IconLock   = () => (
 function XPBar({ xpActual, xpSiguienteNivel, nivel }) {
     const pct = Math.min(100, Math.round((xpActual / xpSiguienteNivel) * 100));
     return (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5 sm:gap-2">
             <div className="flex items-center justify-between">
-                <span className="text-[10px] text-neutral-500 tracking-widest uppercase font-semibold">
+                <span className="text-[9px] sm:text-[10px] text-neutral-500 tracking-widest uppercase font-semibold">
                     XP al nivel {nivel + 1}
                 </span>
-                <span className="text-[10px] font-mono text-neutral-400">
+                <span className="text-[9px] sm:text-[10px] font-mono text-neutral-400">
                     {xpActual.toLocaleString()} / {xpSiguienteNivel.toLocaleString()}
                 </span>
             </div>
-            <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
+            <div className="h-1.5 sm:h-2 bg-neutral-900 rounded-full overflow-hidden">
                 <div
                     className="h-full bg-violet-500 rounded-full transition-all duration-700"
                     style={{ width: `${pct}%` }}
@@ -58,7 +58,7 @@ function RachaBadge({ dias }) {
         : dias >= 3  ? 'text-orange-400 bg-orange-400/10 border-orange-500/20'
             :              'text-neutral-500 bg-neutral-800 border-neutral-700';
     return (
-        <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-bold ${color}`}>
+        <div className={`flex items-center gap-1.5 px-2.5 py-1 sm:py-1.5 rounded-lg border text-xs font-bold ${color} shrink-0`}>
             <IconFlame />
             <span>{dias}d</span>
         </div>
@@ -70,15 +70,18 @@ function LogroChip({ logro }) {
     return (
         <div
             title={logro.descripcion}
-            className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border text-center w-[72px] flex-shrink-0 transition-colors ${
+            // En móvil, ancho fijo ligeramente menor (w-[68px])
+            className={`flex flex-col items-center justify-center gap-1 p-2 sm:p-2.5 rounded-xl border text-center w-[68px] sm:w-[72px] h-[68px] sm:h-[72px] flex-shrink-0 transition-colors ${
                 bloqueado
                     ? 'border-neutral-800 bg-neutral-900/50 opacity-40'
                     : 'border-violet-500/20 bg-violet-500/5 hover:bg-violet-500/10'
             }`}
         >
-            <span className="text-lg leading-none">{logro.emoji}</span>
-            <span className="text-[9px] text-neutral-500 leading-tight line-clamp-2">{logro.nombre}</span>
-            {bloqueado && <IconLock />}
+            <span className="text-xl sm:text-lg leading-none shrink-0 mb-0.5">{logro.emoji}</span>
+            <span className="text-[8px] sm:text-[9px] text-neutral-400 sm:text-neutral-500 leading-tight line-clamp-2 px-0.5 w-full">
+                {logro.nombre}
+            </span>
+            {bloqueado && <div className="absolute opacity-50"><IconLock /></div>}
         </div>
     );
 }
@@ -88,17 +91,17 @@ export default function GamificationPanel() {
     const { perfil, loading, error } = useGamification();
 
     if (loading) return (
-        <div className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-5 flex items-center justify-center h-32">
+        <div className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-4 sm:p-5 flex items-center justify-center h-40">
             <div className="w-5 h-5 border-2 border-neutral-800 border-t-violet-600 rounded-full animate-spin"/>
         </div>
     );
 
     if (error || !perfil) return (
-        <section className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-5 flex flex-col gap-4">
+        <section className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-4 sm:p-5 flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-xs font-bold tracking-widest text-white uppercase">Progresión</h2>
-                    <p className="text-[10px] text-neutral-600 tracking-wider mt-0.5">Nivel · Racha · Logros</p>
+                    <h2 className="text-[11px] sm:text-xs font-bold tracking-widest text-white uppercase">Progresión</h2>
+                    <p className="text-[9px] sm:text-[10px] text-neutral-600 tracking-wider mt-0.5">Nivel · Racha · Logros</p>
                 </div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2 py-8">
@@ -125,30 +128,30 @@ export default function GamificationPanel() {
     const logrosRecientes = logros.slice(0, 6);
 
     return (
-        <section className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-5 flex flex-col gap-5">
+        <section className="rounded-2xl border border-neutral-900 bg-[#0d0d0d] p-4 sm:p-5 flex flex-col gap-5 sm:gap-6">
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-start sm:items-center justify-between gap-2">
                 <div>
-                    <h2 className="text-xs font-bold tracking-widest text-white uppercase">Progresión</h2>
-                    <p className="text-[10px] text-neutral-600 tracking-wider mt-0.5">Nivel · Racha · Logros</p>
+                    <h2 className="text-[11px] sm:text-xs font-bold tracking-widest text-white uppercase">Progresión</h2>
+                    <p className="text-[9px] sm:text-[10px] text-neutral-600 tracking-wider mt-0.5">Nivel · Racha · Logros</p>
                 </div>
                 <RachaBadge dias={rachaDias} />
             </div>
 
             {/* Nivel + XP */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
                 {/* Badge de nivel */}
-                <div className="w-14 h-14 flex-shrink-0 rounded-xl bg-violet-600/10 border border-violet-500/20 flex flex-col items-center justify-center gap-0.5">
-                    <span className="text-[9px] text-violet-400 tracking-widest uppercase font-semibold">NIV</span>
-                    <span className="text-xl font-black text-white leading-none">{nivel}</span>
+                <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-xl bg-violet-600/10 border border-violet-500/20 flex flex-col items-center justify-center gap-0.5">
+                    <span className="text-[8px] sm:text-[9px] text-violet-400 tracking-widest uppercase font-semibold">NIV</span>
+                    <span className="text-lg sm:text-xl font-black text-white leading-none">{nivel}</span>
                 </div>
 
                 {/* Info + barra */}
-                <div className="flex-1 flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white">{rangNombre}</span>
-                        <span className="flex items-center gap-1 text-[10px] text-violet-400 font-mono">
+                <div className="flex-1 flex flex-col gap-1.5 sm:gap-2 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2">
+                        <span className="text-sm font-bold text-white truncate">{rangNombre}</span>
+                        <span className="flex items-center gap-1 text-[9px] sm:text-[10px] text-violet-400 font-mono">
                             <IconZap />
                             {xpTotal.toLocaleString()} XP total
                         </span>
@@ -161,15 +164,16 @@ export default function GamificationPanel() {
             {logrosRecientes.length > 0 && (
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest text-neutral-500 uppercase">
+                        <span className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-semibold tracking-widest text-neutral-500 uppercase">
                             <IconTrophy />
                             Logros
                         </span>
-                        <span className="text-[10px] text-neutral-700 font-mono">
+                        <span className="text-[9px] sm:text-[10px] text-neutral-700 font-mono">
                             {logros.filter(l => l.desbloqueado).length}/{logros.length}
                         </span>
                     </div>
-                    <div className="flex gap-2 flex-wrap">
+                    {/* Scroll horizontal forzado en móviles para evitar acumulación vertical infinita */}
+                    <div className="flex gap-2 sm:flex-wrap overflow-x-auto pb-1 sm:pb-0 scrollbar-hide -mx-2 px-2 sm:mx-0 sm:px-0">
                         {logrosRecientes.map((logro) => (
                             <LogroChip key={logro.id} logro={logro} />
                         ))}
@@ -178,19 +182,25 @@ export default function GamificationPanel() {
             )}
 
             {/* Mini-stats */}
-            <div className="grid grid-cols-3 gap-2 pt-1 border-t border-neutral-900">
+            <div className="grid grid-cols-3 gap-2 pt-3 sm:pt-4 border-t border-neutral-900">
                 {[
                     { label: 'Sesiones', value: perfil.totalSesiones ?? '—', icon: <IconStar /> },
                     { label: 'Mejor racha', value: `${perfil.mejorRacha ?? 0}d`, icon: <IconFlame /> },
                     { label: 'Certificados', value: perfil.certificados ?? 0, icon: <IconTrophy /> },
                 ].map(({ label, value, icon }) => (
-                    <div key={label} className="flex flex-col items-center gap-1 py-2">
-                        <span className="text-neutral-600">{icon}</span>
-                        <span className="text-sm font-bold text-white tabular-nums">{value}</span>
-                        <span className="text-[9px] text-neutral-700 tracking-wider uppercase">{label}</span>
+                    <div key={label} className="flex flex-col items-center justify-center gap-1 py-1 px-1 text-center bg-neutral-900/30 rounded-lg border border-neutral-800/50">
+                        <span className="text-neutral-500 mb-0.5">{icon}</span>
+                        <span className="text-xs sm:text-sm font-bold text-white tabular-nums">{value}</span>
+                        <span className="text-[8px] sm:text-[9px] text-neutral-600 tracking-wider uppercase line-clamp-1 w-full">{label}</span>
                     </div>
                 ))}
             </div>
+
+            {/* CSS helper para esconder el scrollbar en webkit/móvil */}
+            <style>{`
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
+                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
         </section>
     );
 }
