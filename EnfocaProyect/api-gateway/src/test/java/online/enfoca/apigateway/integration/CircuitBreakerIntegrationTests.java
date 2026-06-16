@@ -3,7 +3,11 @@ package online.enfoca.apigateway.integration;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import online.enfoca.apigateway.client.MetricsClient;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,6 +21,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(properties = {
         "spring.cloud.gateway.discovery.locator.enabled=false",
         "eureka.client.enabled=false",
@@ -32,7 +37,13 @@ class CircuitBreakerIntegrationTests {
     @MockitoBean
     private MetricsClient metricsClient;
 
+    @BeforeEach
+    void resetCircuitBreaker() {
+        circuitBreakerRegistry.circuitBreaker("metrics-service").reset();
+    }
+
     @Test
+    @Order(1)
     void circuitBreakerShouldBeRegistered() {
         CircuitBreaker cb = circuitBreakerRegistry.circuitBreaker("metrics-service");
         assertThat(cb).isNotNull();

@@ -12,16 +12,23 @@ import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ProfilePage from '../pages/ProfilePage';
 import LibraryPage from '../pages/LibraryPage';
 import WeeklyCalendarPage from "../pages/WeeklyCalendarPage.jsx";
-import PlanDetailPage  from '../pages/PlanDetailPage';
-import ExamPage        from '../pages/ExamPage';
-import ExamResultPage  from '../pages/ExamResultPage';
+import PlanDetailPage     from '../pages/PlanDetailPage';
+import ExamPage           from '../pages/ExamPage';
+import ExamResultPage     from '../pages/ExamResultPage';
+import VerificacionPage   from '../pages/VerificacionPage';
 
+// Rutas que redirigen a /dashboard si el usuario ya está autenticado
 export const PUBLIC_ROUTES = [
-    { path: '/',               element: LandingPage,        name: 'Inicio' },
-    { path: '/login',          element: LoginPage,           name: 'Login' },
-    { path: '/register',       element: RegisterPage,        name: 'Registro' },
-    { path: '/recover',        element: RecoverAccountPage,  name: 'Recuperar Cuenta' },
-    { path: '/reset-password', element: ResetPasswordPage,   name: 'Restablecer Contraseña' },
+    { path: '/',                    element: LandingPage,       name: 'Inicio' },
+    { path: '/login',               element: LoginPage,          name: 'Login' },
+    { path: '/register',            element: RegisterPage,       name: 'Registro' },
+    { path: '/recover',             element: RecoverAccountPage, name: 'Recuperar Cuenta' },
+    { path: '/reset-password',      element: ResetPasswordPage,  name: 'Restablecer Contraseña' },
+];
+
+// Rutas accesibles para cualquier visitante sin importar autenticación
+export const OPEN_ROUTES = [
+    { path: '/verificar/:codigo',   element: VerificacionPage,  name: 'Verificar Certificado' },
 ];
 
 export const PRIVATE_ROUTES = [
@@ -42,4 +49,4 @@ export const FULLSCREEN_ROUTES = [
     { path: '/focus-mode', element: FocusModePage, name: 'Deep Focus' },
 ];
 
-export const allRoutes = [...PUBLIC_ROUTES, ...PRIVATE_ROUTES, ...FULLSCREEN_ROUTES];
+export const allRoutes = [...OPEN_ROUTES, ...PUBLIC_ROUTES, ...PRIVATE_ROUTES, ...FULLSCREEN_ROUTES];

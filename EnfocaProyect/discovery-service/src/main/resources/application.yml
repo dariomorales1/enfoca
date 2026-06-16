@@ -28,6 +28,7 @@ eureka:
   server:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 15000
+    response-cache-update-interval-ms: 5000
 
 management:
   endpoints:

@@ -1,6 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS auth;
+CREATE SCHEMA IF NOT EXISTS auth_ms;
 
-SET search_path TO auth;
+SET search_path TO auth_ms;
 
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGSERIAL PRIMARY KEY,

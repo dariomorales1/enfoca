@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -30,7 +31,7 @@ class CorrelationIdFilterTests {
         MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
         when(chain.filter(any())).thenAnswer(inv -> {
-            MockServerWebExchange mutated = inv.getArgument(0);
+            ServerWebExchange mutated = inv.getArgument(0);
             String id = mutated.getRequest().getHeaders().getFirst(CorrelationIdFilter.HEADER_CORRELATION_ID);
             assertThat(id).isNotNull().isNotBlank();
             return Mono.empty();
@@ -49,7 +50,7 @@ class CorrelationIdFilterTests {
         MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
         when(chain.filter(any())).thenAnswer(inv -> {
-            MockServerWebExchange mutated = inv.getArgument(0);
+            ServerWebExchange mutated = inv.getArgument(0);
             String id = mutated.getRequest().getHeaders().getFirst(CorrelationIdFilter.HEADER_CORRELATION_ID);
             assertThat(id).isEqualTo(existingId);
             return Mono.empty();

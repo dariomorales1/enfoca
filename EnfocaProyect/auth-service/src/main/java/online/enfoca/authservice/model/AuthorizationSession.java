@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "authorization_sessions", schema = "auth")
+@Table(name = "authorization_sessions", schema = "auth_ms")
 @Getter
 @Setter
 @NoArgsConstructor

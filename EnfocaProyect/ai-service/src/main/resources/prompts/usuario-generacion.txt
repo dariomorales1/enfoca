@@ -15,6 +15,8 @@ REGLAS:
    - "que_investigar": 2-3 conceptos clave que el estudiante debe buscar por su cuenta.
    - "diferencias_clave": 1-2 comparaciones que suelen confundir (ej. "X vs Y").
    - "preguntas_guia": 2-3 preguntas abiertas para evaluar si realmente entendió.
+6. Por cada tema genera 3-4 subtemas breves (máx. 8 palabras cada uno) que expliquen
+   qué cubre el tema en concreto. Ejemplo: ["Definición y propiedades", "Operaciones básicas", "Casos de uso"].
 
 Devuelve SOLO este JSON (sin texto adicional, sin bloques ```):
 {
@@ -28,6 +30,7 @@ Devuelve SOLO este JSON (sin texto adicional, sin bloques ```):
           "titulo": "string",
           "orden": 1,
           "pomodoros_estimados": 3,
+          "subtemas": ["subtema 1", "subtema 2", "subtema 3"],
           "guia_socratica": {
             "que_investigar": ["concepto A", "concepto B"],
             "diferencias_clave": ["X vs Y"],

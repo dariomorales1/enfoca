@@ -11,9 +11,15 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
+    properties:
+      hibernate:
+        default_schema: auth_ms
+
   flyway:
     enabled: true
-    locations: classpath:db/migration
+    schemas: auth_ms
+    default-schema: auth_ms
+    locations: classpath:db/migration,classpath:db/seeds
     baseline-on-migrate: true
 
 eureka:
@@ -28,6 +34,10 @@ eureka:
 app:
   jwt:
     secret: ${JWT_SECRET_KEY}
+  resend:
+    api-key: ${APP_RESEND_API_KEY}
+    from: ${APP_RESEND_FROM:noreply@enfoca.online}
+    frontend-url: ${APP_RESEND_FRONTEND_URL:https://enfoca.online}
 
 management:
   health:

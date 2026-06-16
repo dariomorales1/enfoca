@@ -13,12 +13,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/pomodoro-sessions")
 public class PomodoroController {
 
     @Autowired
     private PomodoroService service;
+
+    @GetMapping
+    public ResponseEntity<List<PomodoroSessionResponse>> getHistory(
+            @RequestHeader("X-User-Id") String userId) {
+        List<PomodoroSession> sessions = service.getSessionsByUser(userId);
+        List<PomodoroSessionResponse> response = sessions.stream()
+                .map(PomodoroMapper::toResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/start")
     public ResponseEntity<PomodoroSessionResponse> start(@Valid @RequestBody StartSessionRequest request) {

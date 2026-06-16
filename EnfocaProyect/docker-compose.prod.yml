@@ -1,5 +1,32 @@
 services:
 
+  # ================================================================
+  # MENSAJERÍA
+  # ================================================================
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: enfoca-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - enfoca-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================================================
+  # DESCUBRIMIENTO
+  # ================================================================
+
   discovery-service:
     image: ${ECR_REGISTRY}/enfoca/discovery-service:${IMAGE_TAG:-latest}
     container_name: enfoca-discovery
@@ -16,6 +43,10 @@ services:
       timeout: 10s
       retries: 5
     restart: unless-stopped
+
+  # ================================================================
+  # API GATEWAY
+  # ================================================================
 
   api-gateway:
     image: ${ECR_REGISTRY}/enfoca/api-gateway:${IMAGE_TAG:-latest}
@@ -40,6 +71,10 @@ services:
       timeout: 10s
       retries: 5
     restart: unless-stopped
+
+  # ================================================================
+  # MICROSERVICIOS
+  # ================================================================
 
   auth-service:
     image: ${ECR_REGISTRY}/enfoca/auth-service:${IMAGE_TAG:-latest}
@@ -93,20 +128,107 @@ services:
       retries: 5
     restart: unless-stopped
 
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: enfoca-rabbitmq
+  ai-service:
+    image: ${ECR_REGISTRY}/enfoca/ai-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-ai
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-    ports:
-      - "5672:5672"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      AI_DB_URL: ${AI_DB_URL}
+      AI_DB_USERNAME: ${AI_DB_USERNAME}
+      AI_DB_PASSWORD: ${AI_DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     networks:
       - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  gamification-service:
+    image: ${ECR_REGISTRY}/enfoca/gamification-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-gamification
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      DB_URL: ${GAMIFICATION_DB_URL}
+      DB_USERNAME: ${GAMIFICATION_DB_USERNAME}
+      DB_PASSWORD: ${GAMIFICATION_DB_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  metrics-service:
+    image: ${ECR_REGISTRY}/enfoca/metrics-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-metrics
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      DB_URL: ${METRICS_DB_URL}
+      DB_USERNAME: ${METRICS_DB_USERNAME}
+      DB_PASSWORD: ${METRICS_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      POMODORO_SERVICE_URL: http://pomodoro-service:8082
+      METRICS_TIMEZONE: America/Santiago
+      GROQ_API_KEY: ${GROQ_API_KEY}
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  certification-service:
+    image: ${ECR_REGISTRY}/enfoca/certification-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-certification
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CERT_DB_URL: ${CERT_DB_URL}
+      CERT_DB_USERNAME: ${CERT_DB_USERNAME}
+      CERT_DB_PASSWORD: ${CERT_DB_PASSWORD}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+    networks:
+      - enfoca-net
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5

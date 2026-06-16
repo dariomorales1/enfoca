@@ -1,0 +1,262 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: enfoca-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - enfoca-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  discovery-service:
+    image: ${ECR_REGISTRY}/enfoca/discovery-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-discovery
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_HOSTNAME: discovery-service
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx192m"
+    ports:
+      - "8761:8761"
+    networks:
+      - enfoca-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep -q UP || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 15
+      start_period: 40s
+    restart: unless-stopped
+
+  auth-service:
+    image: ${ECR_REGISTRY}/enfoca/auth-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-auth
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      DB_URL: ${AUTH_DB_URL}
+      DB_USERNAME: ${AUTH_DB_USERNAME}
+      DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      APP_RESEND_API_KEY: ${RESEND_API_KEY}
+      APP_RESEND_FROM: noreply@enfoca.online
+      APP_RESEND_FRONTEND_URL: https://enfoca.online
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8081:8081"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  pomodoro-service:
+    image: ${ECR_REGISTRY}/enfoca/pomodoro-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-pomodoro
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      DB_URL: ${POMODORO_DB_URL}
+      DB_USERNAME: ${POMODORO_DB_USERNAME}
+      DB_PASSWORD: ${POMODORO_DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8082:8082"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  ai-service:
+    image: ${ECR_REGISTRY}/enfoca/ai-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-ai
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      AI_DB_URL: ${AI_DB_URL}
+      AI_DB_USERNAME: ${AI_DB_USERNAME}
+      AI_DB_PASSWORD: ${AI_DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GROQ_URL: https://api.groq.com/openai/v1/chat/completions
+      GROQ_MODELO: llama-3.3-70b-versatile
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8085:8085"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  gamification-service:
+    image: ${ECR_REGISTRY}/enfoca/gamification-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-gamification
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      DB_URL: ${GAMIFICATION_DB_URL}
+      DB_USERNAME: ${GAMIFICATION_DB_USERNAME}
+      DB_PASSWORD: ${GAMIFICATION_DB_PASSWORD}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8088:8088"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8088/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  metrics-service:
+    image: ${ECR_REGISTRY}/enfoca/metrics-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-metrics
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      DB_URL: ${METRICS_DB_URL}
+      DB_USERNAME: ${METRICS_DB_USERNAME}
+      DB_PASSWORD: ${METRICS_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      POMODORO_SERVICE_URL: http://pomodoro-service:8082
+      METRICS_TIMEZONE: America/Santiago
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GROQ_URL: https://api.groq.com/openai/v1/chat/completions
+      GROQ_MODELO: llama-3.3-70b-versatile
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8083:8083"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z -w 5 localhost 8083"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    restart: unless-stopped
+
+  certification-service:
+    image: ${ECR_REGISTRY}/enfoca/certification-service:${IMAGE_TAG:-latest}
+    container_name: enfoca-certification
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: ${BACKEND_PRIVATE_IP}
+      CERT_DB_URL: ${CERT_DB_URL}
+      CERT_DB_USERNAME: ${CERT_DB_USERNAME}
+      CERT_DB_PASSWORD: ${CERT_DB_PASSWORD}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GROQ_URL: https://api.groq.com/openai/v1/chat/completions
+      GROQ_MODELO: llama-3.3-70b-versatile
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 2
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 1
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx192m"
+    networks:
+      - enfoca-net
+    ports:
+      - "8086:8086"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z -w 5 localhost 8086"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    restart: unless-stopped
+
+networks:
+  enfoca-net:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:

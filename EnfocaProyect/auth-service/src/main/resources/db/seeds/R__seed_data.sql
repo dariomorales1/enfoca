@@ -4,7 +4,7 @@
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-SET search_path TO auth, public;
+SET search_path TO auth_ms, public;
 
 INSERT INTO users (id, nombre, last_name, email, password_hash, role, active, created_at, updated_at) VALUES
   (100, 'Felipe',    'Ulloa',     'felipe@test.com',     crypt('Enfoca2026!', gen_salt('bf', 10)), 'USER', true, NOW() - INTERVAL '60 days', NOW()),

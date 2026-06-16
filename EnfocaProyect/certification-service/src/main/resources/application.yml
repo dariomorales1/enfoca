@@ -42,6 +42,9 @@ eureka:
     prefer-ip-address: false
     instance-id: ${spring.application.name}:8086
 
+enfoca:
+  base-url: ${ENFOCA_BASE_URL:https://enfoca.online}
+
 app:
   groq:
     api-key: ${GROQ_API_KEY}

@@ -29,8 +29,10 @@ export default function RegisterPage() {
         setIsLoading(true);
 
         try {
+            const parts = nombre.trim().split(/\s+/);
             const registerData = {
-                firstName: nombre,
+                firstName: parts[0] || nombre.trim(),
+                lastName: parts.length > 1 ? parts.slice(1).join(' ') : '',
                 email,
                 password
             };

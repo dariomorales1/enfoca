@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -19,6 +20,10 @@ public class PomodoroService {
 
     @Autowired
     private PomodoroRepository repository;
+
+    public List<PomodoroSession> getSessionsByUser(String userId) {
+        return repository.findByUserIdOrderByStartTimeDesc(userId);
+    }
 
     @CircuitBreaker(name = "pomodoroService", fallbackMethod = "fallbackFinishSession")
     public PomodoroSession startSession(StartSessionRequest request) {

@@ -264,16 +264,30 @@ function ModuleSection({ modulo }) {
             {open && (
                 <div className="border-t border-neutral-800/60 divide-y divide-neutral-800/40">
                     {modulo.temas?.map((tema, i) => (
-                        <div key={tema.id} className="flex items-center gap-3 px-5 py-3 hover:bg-neutral-900/20 transition-colors">
-                            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${tema.completado ? 'bg-violet-600' : 'border border-neutral-700'}`}>
-                                {tema.completado ? <IconCheck /> : <span className="text-[9px] text-neutral-600">{i + 1}</span>}
+                        <div key={tema.id} className="px-5 py-3 hover:bg-neutral-900/20 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${tema.completado ? 'bg-violet-600' : 'border border-neutral-700'}`}>
+                                    {tema.completado ? <IconCheck /> : <span className="text-[9px] text-neutral-600">{i + 1}</span>}
+                                </div>
+                                <span className={`text-sm flex-1 font-medium ${tema.completado ? 'text-neutral-500 line-through' : 'text-neutral-200'}`}>
+                                    {tema.titulo}
+                                </span>
+                                <span className="text-[10px] font-mono text-neutral-700 flex-shrink-0">
+                                    {tema.pomodorosEstimados}🍅
+                                </span>
                             </div>
-                            <span className={`text-sm flex-1 ${tema.completado ? 'text-neutral-500 line-through' : 'text-neutral-200'}`}>
-                                {tema.titulo}
-                            </span>
-                            <span className="text-[10px] font-mono text-neutral-700 flex-shrink-0">
-                                {tema.pomodorosEstimados}🍅
-                            </span>
+                            {tema.subtemas?.length > 0 && (
+                                <div className="mt-1.5 ml-8 flex flex-col gap-0.5">
+                                    {tema.subtemas.map((sub, j) => (
+                                        <div key={j} className="flex items-start gap-1.5">
+                                            <span className="w-1 h-1 rounded-full bg-violet-500/50 flex-shrink-0 mt-1.5"/>
+                                            <span className={`text-[11px] leading-snug ${tema.completado ? 'text-neutral-700' : 'text-neutral-500'}`}>
+                                                {sub}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

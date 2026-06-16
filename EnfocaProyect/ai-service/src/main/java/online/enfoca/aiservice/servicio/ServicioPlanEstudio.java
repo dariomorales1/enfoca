@@ -457,6 +457,7 @@ public class ServicioPlanEstudio {
                         .titulo(temaOrig.getTitulo())
                         .pomodorosEstimados(temaOrig.getPomodorosEstimados())
                         .guiaSocratica(temaOrig.getGuiaSocratica())
+                        .subtemas(temaOrig.getSubtemas())
                         .build();
                 temas.add(temaRepositorio.save(tema));
             }
@@ -544,12 +545,18 @@ public class ServicioPlanEstudio {
                     if (!nodoGuia.isMissingNode() && !nodoGuia.isNull()) {
                         try { guiaSocratica = objectMapper.writeValueAsString(nodoGuia); } catch (Exception ignored) {}
                     }
+                    String subtemas = null;
+                    JsonNode nodoSubtemas = nodoTema.path("subtemas");
+                    if (!nodoSubtemas.isMissingNode() && !nodoSubtemas.isNull() && nodoSubtemas.isArray()) {
+                        try { subtemas = objectMapper.writeValueAsString(nodoSubtemas); } catch (Exception ignored) {}
+                    }
                     Tema tema = Tema.builder()
                             .modulo(modulo)
                             .orden(nodoTema.path("orden").asInt(temas.size() + 1))
                             .titulo(nodoTema.path("titulo").asText("Tema sin título"))
                             .pomodorosEstimados(Math.max(1, nodoTema.path("pomodoros_estimados").asInt(3)))
                             .guiaSocratica(guiaSocratica)
+                            .subtemas(subtemas)
                             .build();
                     temas.add(temaRepositorio.save(tema));
                 }

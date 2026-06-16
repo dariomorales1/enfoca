@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext.jsx'; // ✅ Ruta correcta
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { profileService, gamificationService, metricsService, certService } from '../services/api';
-import { User, Flame, Clock, BookOpen, Trophy, Shield, Settings, LayoutDashboard } from 'lucide-react';
+import { Flame, Clock, BookOpen, Trophy, Shield, Settings, LayoutDashboard } from 'lucide-react';
 
-import StatCard      from '../components/profile/StatCard';
+import StatCard       from '../components/profile/StatCard';
 import BadgeGenerator from '../components/badges/BadgeGenerator';
+
+const IconPdf      = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>;
+const IconLinkedin = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>;
+const IconTwitter  = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>;
+const IconCopy     = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>;
+const IconVerify   = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
 
 // ── Componentes del formulario ──────────────────────────────────────
 const IconEye = ({ open }) => open ? (
@@ -76,6 +82,48 @@ export default function ProfilePage() {
             setCerts(c);
         }).finally(() => setLoadingData(false));
     }, []);
+
+    // ── Acciones certificados ────────────────────────────────────────
+    const [descargandoId, setDescargandoId] = useState(null);
+    const [copiadoId,     setCopiadoId]     = useState(null);
+
+    const handleDownloadPdf = async (cert) => {
+        setDescargandoId(cert.id);
+        try {
+            const nombre = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || 'Participante';
+            const res = await certService.descargarPdf(cert.id, nombre);
+            const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+            const a   = document.createElement('a');
+            a.href     = url;
+            a.download = `certificado-enfoca-${cert.codigoVerificacion}.pdf`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error('Error descargando PDF', e);
+        } finally {
+            setDescargandoId(null);
+        }
+    };
+
+    const handleCopyLink = async (cert) => {
+        const url = `https://enfoca.online/verificar/${cert.codigoVerificacion}`;
+        try {
+            await navigator.clipboard.writeText(url);
+            setCopiadoId(cert.id);
+            setTimeout(() => setCopiadoId(null), 2000);
+        } catch { /* fallback silencioso */ }
+    };
+
+    const shareLinkedin = (cert) => {
+        const url = `https://enfoca.online/verificar/${cert.codigoVerificacion}`;
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer');
+    };
+
+    const shareTwitter = (cert) => {
+        const url  = `https://enfoca.online/verificar/${cert.codigoVerificacion}`;
+        const text = encodeURIComponent(`Obtuve mi certificado en "${cert.planTitulo}" con @EnfocaApp 🎓`);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer');
+    };
 
     // ── Formulario perfil ────────────────────────────────────────────
     const [nombre,    setNombre]    = useState(user?.first_name ?? user?.nombre    ?? '');
@@ -243,19 +291,69 @@ export default function ProfilePage() {
                                     {[0,1,2].map(i => <Skeleton key={i} className="h-48"/>)}
                                 </div>
                             ) : certs.length > 0 ? (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                                     {certs.map(cert => (
                                         <div key={cert.id}
-                                            className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-6 flex flex-col items-center justify-center hover:border-violet-500/50 hover:bg-violet-500/5 transition-all">
-                                            <div className="w-full max-w-[180px]">
+                                            className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-5 flex gap-5 hover:border-violet-500/30 transition-all">
+
+                                            {/* Badge */}
+                                            <div className="w-24 shrink-0 self-start">
                                                 <BadgeGenerator title={cert.planTitulo}/>
                                             </div>
-                                            <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mt-3 text-center truncate w-full">
-                                                {cert.planTitulo}
-                                            </p>
-                                            <p className="text-[9px] text-neutral-700 mt-0.5">
-                                                {cert.puntaje}/10 · {new Date(cert.emitidoEn).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                            </p>
+
+                                            {/* Info + acciones */}
+                                            <div className="flex flex-col justify-between flex-1 min-w-0 gap-3">
+                                                <div>
+                                                    <p className="text-sm font-semibold text-white leading-snug line-clamp-2">
+                                                        {cert.planTitulo}
+                                                    </p>
+                                                    <p className="text-[10px] text-neutral-500 mt-1">
+                                                        {cert.puntaje}/10 &nbsp;·&nbsp;
+                                                        {new Date(cert.emitidoEn).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                    </p>
+                                                </div>
+
+                                                {/* Botones de acción */}
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    <button
+                                                        onClick={() => handleDownloadPdf(cert)}
+                                                        disabled={descargandoId === cert.id}
+                                                        title="Descargar PDF"
+                                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-medium hover:bg-amber-500/20 transition-all disabled:opacity-50"
+                                                    >
+                                                        <IconPdf/> {descargandoId === cert.id ? '...' : 'PDF'}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => shareLinkedin(cert)}
+                                                        title="Compartir en LinkedIn"
+                                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#0A66C2]/10 border border-[#0A66C2]/20 text-[#5BA4F5] text-[10px] font-medium hover:bg-[#0A66C2]/20 transition-all"
+                                                    >
+                                                        <IconLinkedin/> LinkedIn
+                                                    </button>
+                                                    <button
+                                                        onClick={() => shareTwitter(cert)}
+                                                        title="Compartir en X / Twitter"
+                                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-medium hover:bg-neutral-700 transition-all"
+                                                    >
+                                                        <IconTwitter/> X
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleCopyLink(cert)}
+                                                        title="Copiar enlace de verificación"
+                                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-medium hover:bg-neutral-700 transition-all"
+                                                    >
+                                                        <IconCopy/> {copiadoId === cert.id ? '¡Copiado!' : 'Enlace'}
+                                                    </button>
+                                                </div>
+
+                                                {/* Enlace de verificación */}
+                                                <Link
+                                                    to={`/verificar/${cert.codigoVerificacion}`}
+                                                    className="flex items-center gap-1 text-[10px] text-violet-500 hover:text-violet-400 transition-colors w-fit"
+                                                >
+                                                    <IconVerify/> Ver verificación pública
+                                                </Link>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

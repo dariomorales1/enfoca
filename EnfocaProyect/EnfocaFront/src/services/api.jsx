@@ -72,9 +72,11 @@ export const planService = {
 };
 
 export const certService = {
-    iniciar:      (data)      => api.post('/certificacion/examenes/iniciar', data),
-    responder:    (id, data)  => api.post(`/certificacion/examenes/${id}/responder`, data),
-    certificados: ()          => api.get('/certificacion/certificados'),
+    iniciar:      (data)           => api.post('/certificacion/examenes/iniciar', data),
+    responder:    (id, data)       => api.post(`/certificacion/examenes/${id}/responder`, data),
+    certificados: ()               => api.get('/certificacion/certificados'),
+    verificar:    (codigo)         => api.get(`/certificacion/verificar/${codigo}`),
+    descargarPdf: (id, nombre)     => api.get(`/certificacion/certificados/${id}/pdf`, { params: { nombre }, responseType: 'blob' }),
 };
 
 export const metricsService = {

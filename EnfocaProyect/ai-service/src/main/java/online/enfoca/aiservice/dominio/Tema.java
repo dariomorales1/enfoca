@@ -47,6 +47,9 @@ public class Tema {
     @Column(name = "guia_socratica", columnDefinition = "TEXT")
     private String guiaSocratica;
 
+    @Column(columnDefinition = "TEXT")
+    private String subtemas;
+
     // --- NUEVO: Relación con las fechas programadas ---
     @OneToMany(mappedBy = "tema", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderBy("fecha ASC")

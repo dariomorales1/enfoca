@@ -4,7 +4,13 @@ import SessionEndModal from '../components/timer/SessionEndModal';
 import QuizModal from '../components/study/QuizModal';
 import { planService } from '../services/api';
 
-const STREAM_URL  = 'https://stream.zeno.fm/f3wvbbqmdg8uv';
+const TRACKS = [
+    { name: 'Lofi Hip Hop',   url: 'https://stream.zeno.fm/f3wvbbqmdg8uv'        },
+    { name: 'Chillhop',       url: 'https://ice3.somafm.com/groovesalad-128-mp3' },
+    { name: 'Lofi Chill',     url: 'https://lofi.stream.laut.fm/lofi'            },
+    { name: 'Jazz & Fusion',  url: 'https://ice3.somafm.com/sonicuniverse-128-mp3' },
+    { name: 'Deep Focus',     url: 'https://stream.zeno.fm/0r0xa792kwzuv'        },
+];
 
 function fmt(secs) {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
@@ -42,6 +48,13 @@ export default function FocusModePage() {
 
     const resuming = state.currentPhase === 'RUNNING' || state.currentPhase === 'PAUSED' || state.currentPhase === 'BREAK';
 
+    useEffect(() => {
+        if (!state.plan && !state.topic && !resuming) {
+            navigate('/study-plan', { replace: true });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const [mode, setMode] = useState(state.currentPhase === 'BREAK' ? 'shortBreak' : 'focus');
     const [sesionesCompletadas, setSesionesCompletadas] = useState(
         state.currentRoundsLeft != null
@@ -54,7 +67,9 @@ export default function FocusModePage() {
 
     const [volume, setVolume]     = useState(0.7);
     const lastVolume              = useRef(0.7);
+    const [trackIdx, setTrackIdx] = useState(0);
     const audioRef                = useRef(null);
+    const shouldPlayAudio         = useRef(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [quiz, setQuiz]         = useState(null);
@@ -119,6 +134,20 @@ export default function FocusModePage() {
     }, [volume]);
 
     useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+        audio.pause();
+        audio.src = '';
+        audio.src = TRACKS[trackIdx].url;
+        audio.load();
+        if (shouldPlayAudio.current) audio.play().catch(() => {});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [trackIdx]);
+
+    const prevTrack = () => setTrackIdx(i => (i - 1 + TRACKS.length) % TRACKS.length);
+    const nextTrack = () => setTrackIdx(i => (i + 1) % TRACKS.length);
+
+    useEffect(() => {
         const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
         document.addEventListener('fullscreenchange', onFsChange);
         return () => {
@@ -152,13 +181,23 @@ export default function FocusModePage() {
 
     useEffect(() => {
         if (phase !== 'RUNNING') return;
-        if (mode === 'focus') audioRef.current?.play().catch(() => {});
+
+        if (mode === 'focus') {
+            shouldPlayAudio.current = true;
+            audioRef.current?.play().catch(() => {});
+        } else {
+            shouldPlayAudio.current = false;
+        }
 
         const id = setInterval(() => {
             setTimeLeft((prev) => prev - 1);
         }, 1000);
 
-        return () => { clearInterval(id); audioRef.current?.pause(); };
+        return () => {
+            clearInterval(id);
+            shouldPlayAudio.current = false;
+            audioRef.current?.pause();
+        };
     }, [phase, mode]);
 
     useEffect(() => {
@@ -229,38 +268,17 @@ export default function FocusModePage() {
 
     return (
         <div className="h-screen w-screen bg-black text-white flex flex-col overflow-hidden select-none">
-            <audio ref={audioRef} src={STREAM_URL} loop />
+            <audio ref={audioRef} />
 
             <div className="absolute inset-0 z-0 transition-opacity duration-1000">
                 <img src="/focus-bg.webp" alt="" className={`w-full h-full object-cover mix-blend-luminosity grayscale ${mode === 'focus' ? 'opacity-20' : 'opacity-10'}`} />
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
             </div>
 
-            {/* HEADER RESPONSIVO */}
+            {/* HEADER */}
             <div className="relative z-10 flex-shrink-0 px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
-                <div className="flex items-center gap-2 sm:gap-5">
-                    <span className="uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] font-bold text-neutral-400">ENFOCA</span>
+                <span className="uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] font-bold text-neutral-400">ENFOCA</span>
 
-                    {/* Controles de Lofi y Volumen */}
-                    <div className="flex items-center gap-1 sm:gap-3 ml-2 sm:ml-0">
-                        <div className={`flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest transition-colors ${phase === 'RUNNING' && mode === 'focus' ? 'text-violet-400' : 'text-neutral-600'}`}>
-                            {/* Ocultamos la palabra LOFI RADIO en móviles muy pequeños si estorba */}
-                            <span className="hidden sm:inline">LOFI RADIO</span>
-                            {phase === 'RUNNING' && mode === 'focus' && volume > 0 && (
-                                <span className="flex gap-px ml-0.5">
-                                    {[1, 2, 3].map(i => <span key={i} className="w-px bg-violet-400 rounded-full animate-pulse" style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.15}s` }} />)}
-                                </span>
-                            )}
-                        </div>
-                        <button onClick={toggleMute} className="text-neutral-600 hover:text-violet-400 transition-colors p-1.5 sm:p-0">
-                            <IconVolume muted={volume === 0} />
-                        </button>
-                        {/* El slider de volumen solo se ve desde tablets en adelante (sm:block) */}
-                        <input type="range" min="0" max="1" step="0.05" value={volume} onChange={e => setVolume(parseFloat(e.target.value))} className="hidden sm:block w-20 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full" />
-                    </div>
-                </div>
-
-                {/* Botones de Finalizar y Pantalla Completa */}
                 <div className="flex items-center gap-1 sm:gap-2">
                     <button
                         onClick={toggleFullscreen}
@@ -322,11 +340,11 @@ export default function FocusModePage() {
                                                                 title={tema.completado
                                                                     ? (!canToggle ? 'Desmarca los temas siguientes primero' : 'Desmarcar')
                                                                     : (!canToggle ? 'Completa los anteriores primero' : 'Marcar como completado')}
-                                                                className={`flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full ${
+                                                                className={`flex items-start gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full ${
                                                                     tema.completado ? 'bg-violet-600/10' : canToggle ? 'hover:bg-white/5 cursor-pointer' : 'cursor-not-allowed opacity-40'
                                                                 }`}
                                                             >
-                                                                <div className={`w-3 h-3 rounded flex-shrink-0 border flex items-center justify-center transition-all ${
+                                                                <div className={`w-3 h-3 rounded flex-shrink-0 border flex items-center justify-center transition-all mt-0.5 ${
                                                                     tema.completado ? 'bg-violet-500 border-violet-500' : canToggle ? 'border-neutral-500' : 'border-neutral-700'
                                                                 }`}>
                                                                     {tema.completado && (
@@ -335,9 +353,20 @@ export default function FocusModePage() {
                                                                         </svg>
                                                                     )}
                                                                 </div>
-                                                                <span className={`text-[10px] leading-tight ${tema.completado ? 'text-neutral-500 line-through' : 'text-neutral-300'}`}>
-                                                                    {tema.titulo}
-                                                                </span>
+                                                                <div className="flex flex-col min-w-0 flex-1">
+                                                                    <span className={`text-[10px] leading-tight ${tema.completado ? 'text-neutral-500 line-through' : 'text-neutral-300'}`}>
+                                                                        {tema.titulo}
+                                                                    </span>
+                                                                    {tema.subtemas?.length > 0 && (
+                                                                        <div className="mt-0.5 flex flex-col gap-px">
+                                                                            {tema.subtemas.map((sub, j) => (
+                                                                                <span key={j} className={`text-[9px] leading-snug ${tema.completado ? 'text-neutral-700' : 'text-neutral-600'}`}>
+                                                                                    · {sub}
+                                                                                </span>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </button>
                                                         );
                                                     })}
@@ -407,7 +436,65 @@ export default function FocusModePage() {
                         </button>
                     )}
 
-                    {topic && <p className="mt-6 sm:mt-8 text-[10px] sm:text-xs font-mono text-neutral-500 tracking-widest uppercase text-center px-4 line-clamp-2">{topic.titulo}</p>}
+                    {/* REPRODUCTOR LOFI — centrado, siempre visible */}
+                    <div className="mt-6 flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.07]">
+                        <button
+                            onClick={prevTrack}
+                            title="Pista anterior"
+                            className="w-7 h-7 flex items-center justify-center rounded-full text-neutral-500 hover:text-violet-400 hover:bg-white/10 transition-all"
+                        >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+                            </svg>
+                        </button>
+
+                        <div className="flex flex-col items-center min-w-[90px] sm:min-w-[110px]">
+                            <div className="flex items-center gap-1.5">
+                                {phase === 'RUNNING' && mode === 'focus' && volume > 0 && (
+                                    <span className="flex gap-px">
+                                        {[1,2,3].map(i => (
+                                            <span key={i} className="w-px bg-violet-400 rounded-full animate-pulse" style={{ height: `${4+i*2}px`, animationDelay: `${i*0.15}s` }} />
+                                        ))}
+                                    </span>
+                                )}
+                                <span className={`text-[11px] font-mono truncate transition-colors ${phase==='RUNNING' && mode==='focus' ? 'text-violet-400' : 'text-neutral-500'}`}>
+                                    {TRACKS[trackIdx].name}
+                                </span>
+                            </div>
+                            <div className="flex gap-1 mt-1">
+                                {TRACKS.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setTrackIdx(i)}
+                                        className={`rounded-full transition-all ${i===trackIdx ? 'w-2.5 h-1.5 bg-violet-500' : 'w-1.5 h-1.5 bg-neutral-700 hover:bg-neutral-500'}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={nextTrack}
+                            title="Pista siguiente"
+                            className="w-7 h-7 flex items-center justify-center rounded-full text-neutral-500 hover:text-violet-400 hover:bg-white/10 transition-all"
+                        >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/>
+                            </svg>
+                        </button>
+
+                        <div className="w-px h-3.5 bg-white/10" />
+
+                        <button onClick={toggleMute} className="text-neutral-500 hover:text-violet-400 transition-colors p-1">
+                            <IconVolume muted={volume===0} />
+                        </button>
+                        <input
+                            type="range" min="0" max="1" step="0.05" value={volume}
+                            onChange={e => setVolume(parseFloat(e.target.value))}
+                            className="w-14 sm:w-16 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full"
+                        />
+                    </div>
+
+                    {topic && <p className="mt-5 sm:mt-6 text-[10px] sm:text-xs font-mono text-neutral-500 tracking-widest uppercase text-center px-4 line-clamp-2">{topic.titulo}</p>}
 
                     {/* BARRA DE PROGRESO */}
                     {phase !== 'PREPARING' && (

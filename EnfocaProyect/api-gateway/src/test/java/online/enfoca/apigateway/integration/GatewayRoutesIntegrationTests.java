@@ -1,9 +1,11 @@
 package online.enfoca.apigateway.integration;
 
 import online.enfoca.apigateway.ApiGatewayApplication;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -19,7 +21,14 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 class GatewayRoutesIntegrationTests {
 
     @Autowired
+    private ApplicationContext applicationContext;
+
     private WebTestClient webTestClient;
+
+    @BeforeEach
+    void setUp() {
+        webTestClient = WebTestClient.bindToApplicationContext(applicationContext).build();
+    }
 
     @Test
     void shouldReturn401ForProtectedRouteWithoutToken() {

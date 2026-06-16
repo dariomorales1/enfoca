@@ -62,6 +62,9 @@ enfoca:
     - /planes-estudio/catalogo
     - /planes-estudio/ping
     - /certificacion/verificar/**
+    - /certificacion/issuer
+    - /certificacion/badges/**
+    - /certificacion/assertions/**
     - /verify/**
     - /api-docs/**
     - /swagger-ui/**

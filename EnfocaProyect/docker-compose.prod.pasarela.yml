@@ -1,0 +1,29 @@
+services:
+
+  # ================================================================
+  # API GATEWAY — conecta a Eureka en el backend (IP privada)
+  # ================================================================
+
+  api-gateway:
+    image: ${ECR_REGISTRY}/enfoca/api-gateway:${IMAGE_TAG:-latest}
+    container_name: enfoca-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      # Eureka está en la EC2 backend (IP privada de la VPC)
+      EUREKA_URL: http://${BACKEND_PRIVATE_IP}:8761/eureka/
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m"
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "backend:${BACKEND_PRIVATE_IP}"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped

@@ -54,6 +54,10 @@ eureka:
     fetch-registry: false
   instance:
     hostname: localhost
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
 
 #configuraciones preestablecidas
 enfoca:

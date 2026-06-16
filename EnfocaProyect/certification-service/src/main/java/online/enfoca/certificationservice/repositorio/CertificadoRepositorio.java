@@ -14,4 +14,6 @@ public interface CertificadoRepositorio extends JpaRepository<Certificado, UUID>
     boolean existsByUsuarioIdAndPlanMaestroId(String usuarioId, UUID planMaestroId);
 
     Optional<Certificado> findByCodigoVerificacion(UUID codigo);
+
+    Optional<Certificado> findFirstByPlanMaestroId(UUID planMaestroId);
 }

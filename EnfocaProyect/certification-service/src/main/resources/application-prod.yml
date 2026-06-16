@@ -1,0 +1,68 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+  datasource:
+    url: ${CERT_DB_URL}
+    username: ${CERT_DB_USERNAME}
+    password: ${CERT_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: certificacion
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    schemas: certificacion
+    default-schema: certificacion
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+server:
+  port: 8086
+
+eureka:
+  instance:
+    hostname: ${HOSTNAME:certification-service}
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:8086
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
+    register-with-eureka: true
+    fetch-registry: false
+
+app:
+  groq:
+    api-key: ${GROQ_API_KEY}
+    url: ${GROQ_URL:https://api.groq.com/openai/v1/chat/completions}
+    modelo: ${GROQ_MODELO:llama-3.3-70b-versatile}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: never
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    diskSpace:
+      enabled: true
+    db:
+      enabled: true
+
+logging:
+  level:
+    root: WARN
+    online.enfoca.certificationservice: INFO

@@ -1,6 +1,6 @@
 -- V3: OAuth2/PKCE support — registered clients and authorization sessions
 
-CREATE TABLE IF NOT EXISTS auth.oauth2_clients (
+CREATE TABLE IF NOT EXISTS auth_ms.oauth2_clients (
     id               UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
     client_id        VARCHAR(255)  NOT NULL UNIQUE,
     client_name      VARCHAR(255)  NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS auth.oauth2_clients (
 
 -- Tracks a full PKCE authorization session from initiation through token exchange.
 -- Status progression: PENDING → CODE_ISSUED → COMPLETED
-CREATE TABLE IF NOT EXISTS auth.authorization_sessions (
+CREATE TABLE IF NOT EXISTS auth_ms.authorization_sessions (
     id                      UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
     client_id               VARCHAR(255)  NOT NULL,
     redirect_uri            VARCHAR(500)  NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS auth.authorization_sessions (
     scope                   VARCHAR(500),
     state                   VARCHAR(255),
     nonce                   VARCHAR(255),
-    user_id                 BIGINT        REFERENCES auth.users(id),
+    user_id                 BIGINT        REFERENCES auth_ms.users(id),
     authorization_code      VARCHAR(255)  UNIQUE,
     code_used               BOOLEAN       NOT NULL DEFAULT FALSE,
     status                  VARCHAR(20)   NOT NULL DEFAULT 'PENDING',
@@ -29,11 +29,11 @@ CREATE TABLE IF NOT EXISTS auth.authorization_sessions (
     created_at              TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_auth_sessions_code      ON auth.authorization_sessions(authorization_code);
-CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires   ON auth.authorization_sessions(expires_at);
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_code      ON auth_ms.authorization_sessions(authorization_code);
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires   ON auth_ms.authorization_sessions(expires_at);
 
 -- Seed default Enfoca frontend client for development
-INSERT INTO auth.oauth2_clients (client_id, client_name, redirect_uris, allowed_scopes)
+INSERT INTO auth_ms.oauth2_clients (client_id, client_name, redirect_uris, allowed_scopes)
 VALUES (
     'enfoca-frontend',
     'Enfoca React App',

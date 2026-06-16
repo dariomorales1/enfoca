@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MainTimerCard from '../components/timer/MainTimerCard';
 import SessionEndModal from '../components/timer/SessionEndModal';
@@ -6,6 +6,25 @@ import SocraticGuidePanel from '../components/study/SocraticGuidePanel';
 import QuizModal from '../components/study/QuizModal';
 import { planService } from '../services/api';
 import { Maximize2 } from 'lucide-react';
+
+const TRACKS = [
+    { name: 'Lofi Hip Hop',  url: 'https://stream.zeno.fm/f3wvbbqmdg8uv'         },
+    { name: 'Chillhop',      url: 'https://ice3.somafm.com/groovesalad-128-mp3'  },
+    { name: 'Lofi Chill',    url: 'https://lofi.stream.laut.fm/lofi'             },
+    { name: 'Jazz & Fusion', url: 'https://ice3.somafm.com/sonicuniverse-128-mp3' },
+    { name: 'Deep Focus',    url: 'https://stream.zeno.fm/0r0xa792kwzuv'         },
+];
+
+const IconVolumePom = ({ muted }) => muted ? (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+    </svg>
+) : (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    </svg>
+);
 
 const IconChevron = ({ open }) => (
     <svg className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -101,6 +120,15 @@ function ModuleItem({ modulo, temaActivo, moduleUnlocked, onToggle, onSelectTema
                                     }`}>
                                         {tema.titulo}
                                     </span>
+                                    {tema.subtemas?.length > 0 && (
+                                        <div className="mt-0.5 flex flex-col gap-px">
+                                            {tema.subtemas.map((sub, j) => (
+                                                <span key={j} className={`block text-[9px] leading-snug ${tema.completado ? 'text-neutral-700' : 'text-neutral-600'}`}>
+                                                    · {sub}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </button>
 
                                 {isActive && !tema.completado && (
@@ -132,6 +160,12 @@ export default function PomodoroPage() {
     const [quizLoading, setQuizLoading]   = useState(false);
     const [showQuiz, setShowQuiz]         = useState(false);
 
+    // Lofi player
+    const pomAudioRef   = useRef(null);
+    const pomLastVol    = useRef(0.7);
+    const [pomVolume, setPomVolume]       = useState(0.7);
+    const [pomTrackIdx, setPomTrackIdx]   = useState(0);
+
     const [timerConfig, setTimerConfig] = useState({
         focus: 25, break: 5, longBreakFreq: 4, longBreak: 15, rounds: 4
     });
@@ -139,6 +173,41 @@ export default function PomodoroPage() {
     const handleConfigChange = useCallback((config) => {
         setTimerConfig(config);
     }, []);
+
+    // Lofi: volumen
+    useEffect(() => {
+        if (pomAudioRef.current) pomAudioRef.current.volume = pomVolume;
+    }, [pomVolume]);
+
+    // Lofi: cambio de pista
+    useEffect(() => {
+        const audio = pomAudioRef.current;
+        if (!audio) return;
+        audio.pause();
+        audio.src = '';
+        audio.src = TRACKS[pomTrackIdx].url;
+        audio.load();
+        if (timerPhase === 'RUNNING') audio.play().catch(() => {});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pomTrackIdx]);
+
+    // Lofi: play/pause según fase del timer
+    useEffect(() => {
+        const audio = pomAudioRef.current;
+        if (!audio) return;
+        if (timerPhase === 'RUNNING') {
+            audio.play().catch(() => {});
+        } else {
+            audio.pause();
+        }
+    }, [timerPhase]);
+
+    const pomPrevTrack   = () => setPomTrackIdx(i => (i - 1 + TRACKS.length) % TRACKS.length);
+    const pomNextTrack   = () => setPomTrackIdx(i => (i + 1) % TRACKS.length);
+    const pomToggleMute  = () => {
+        if (pomVolume > 0) pomLastVol.current = pomVolume;
+        setPomVolume(pomVolume > 0 ? 0 : pomLastVol.current);
+    };
 
     const toggleTopic = async (temaId) => {
         if (!plan) return;
@@ -274,6 +343,7 @@ export default function PomodoroPage() {
 
     return (
         <div className="h-full flex flex-col p-4 md:p-6 lg:p-8 text-white font-sans selection:bg-violet-500/30">
+            <audio ref={pomAudioRef} />
 
             <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-4">
                 <h1 className="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">Active_Terminal</h1>
@@ -317,6 +387,53 @@ export default function PomodoroPage() {
                         onPhaseChange={setTimerPhase}
                         stopRequested={stopRequested}
                     />
+
+                    {/* Reproductor Lofi */}
+                    <div className="bg-[#0c0c0c] border border-neutral-800 rounded-2xl px-4 py-3 flex items-center gap-2.5">
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <span className="text-[9px] font-mono text-neutral-600 uppercase tracking-widest">Lofi</span>
+                            {timerPhase === 'RUNNING' && pomVolume > 0 && (
+                                <span className="flex gap-px">
+                                    {[1,2,3].map(i => (
+                                        <span key={i} className="w-px bg-violet-400 rounded-full animate-pulse" style={{ height: `${4+i*2}px`, animationDelay: `${i*0.15}s` }} />
+                                    ))}
+                                </span>
+                            )}
+                        </div>
+
+                        <button onClick={pomPrevTrack} title="Pista anterior"
+                            className="w-7 h-7 flex items-center justify-center rounded-full text-neutral-600 hover:text-violet-400 hover:bg-white/5 transition-all flex-shrink-0">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                        </button>
+
+                        <div className="flex-1 flex flex-col items-center min-w-0">
+                            <span className={`text-[11px] font-mono truncate w-full text-center transition-colors ${timerPhase==='RUNNING' ? 'text-violet-400' : 'text-neutral-500'}`}>
+                                {TRACKS[pomTrackIdx].name}
+                            </span>
+                            <div className="flex gap-1 mt-1">
+                                {TRACKS.map((_, i) => (
+                                    <button key={i} onClick={() => setPomTrackIdx(i)}
+                                        className={`rounded-full transition-all ${i===pomTrackIdx ? 'w-2.5 h-1.5 bg-violet-500' : 'w-1.5 h-1.5 bg-neutral-700 hover:bg-neutral-500'}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <button onClick={pomNextTrack} title="Pista siguiente"
+                            className="w-7 h-7 flex items-center justify-center rounded-full text-neutral-600 hover:text-violet-400 hover:bg-white/5 transition-all flex-shrink-0">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/></svg>
+                        </button>
+
+                        <div className="w-px h-4 bg-neutral-800 flex-shrink-0" />
+
+                        <button onClick={pomToggleMute}
+                            className="text-neutral-600 hover:text-violet-400 transition-colors p-1 flex-shrink-0">
+                            <IconVolumePom muted={pomVolume===0} />
+                        </button>
+                        <input type="range" min="0" max="1" step="0.05" value={pomVolume}
+                            onChange={e => setPomVolume(parseFloat(e.target.value))}
+                            className="w-14 accent-violet-500 cursor-pointer h-px bg-white/10 rounded-full flex-shrink-0" />
+                    </div>
 
                     {(timerPhase === 'RUNNING' || timerPhase === 'PAUSED' || timerPhase === 'BREAK') && (
                         <button

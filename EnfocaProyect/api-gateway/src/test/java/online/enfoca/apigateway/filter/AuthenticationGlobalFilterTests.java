@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -86,7 +87,7 @@ class AuthenticationGlobalFilterTests {
         MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
         when(chain.filter(any())).thenAnswer(inv -> {
-            MockServerWebExchange mutated = inv.getArgument(0);
+            ServerWebExchange mutated = inv.getArgument(0);
             assertThat(mutated.getRequest().getHeaders().getFirst("X-User-Id")).isEqualTo("user-123");
             assertThat(mutated.getRequest().getHeaders().getFirst("X-User-Role")).isEqualTo("ESTUDIANTE");
             return Mono.empty();

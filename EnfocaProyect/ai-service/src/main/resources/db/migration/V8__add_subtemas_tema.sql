@@ -1,0 +1,1 @@
+ALTER TABLE planes.tema ADD COLUMN IF NOT EXISTS subtemas TEXT;
